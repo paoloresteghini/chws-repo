@@ -49,7 +49,7 @@ class VersionController extends Controller
             ->orderBy('versions.model_number')
             ->select('versions.*');
 
-        $versions = $query->get();
+        $versions = $query->paginate(15)->withQueryString();
 
         // Get filter options
         $products = Product::orderBy('name')->get();
@@ -71,13 +71,51 @@ class VersionController extends Controller
             'category_id' => 'nullable|exists:version_categories,id',
             'has_vessel_options' => 'boolean',
             'status' => 'boolean',
-            'specifications' => 'nullable|array',
+            'spec_keys' => 'nullable|array',
+            'spec_values' => 'nullable|array',
+            'specifications_json' => 'nullable|string',
         ]);
 
         // Ensure model number is unique per product
         $request->validate([
             'model_number' => "unique:versions,model_number,NULL,id,product_id,{$validated['product_id']}"
         ]);
+
+        // Process specifications
+        $specifications = null;
+        
+        // If JSON specifications are provided, use those
+        if (!empty($validated['specifications_json'])) {
+            $decoded = json_decode($validated['specifications_json'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $specifications = $decoded;
+            }
+        } else {
+            // Process key-value pairs
+            if (!empty($validated['spec_keys']) && !empty($validated['spec_values'])) {
+                $keys = $validated['spec_keys'];
+                $values = $validated['spec_values'];
+                $specifications = [];
+                
+                for ($i = 0; $i < count($keys); $i++) {
+                    $key = trim($keys[$i]);
+                    $value = isset($values[$i]) ? trim($values[$i]) : '';
+                    
+                    if (!empty($key) && !empty($value)) {
+                        $specifications[$key] = $value;
+                    }
+                }
+                
+                // If no valid specifications, set to null
+                if (empty($specifications)) {
+                    $specifications = null;
+                }
+            }
+        }
+
+        // Remove specification-related fields from validated data and add processed specifications
+        unset($validated['spec_keys'], $validated['spec_values'], $validated['specifications_json']);
+        $validated['specifications'] = $specifications;
 
         $version = Version::create($validated);
 
@@ -179,6 +217,21 @@ class VersionController extends Controller
     }
 
     /**
+     * Get categories for a specific product (AJAX endpoint)
+     */
+    public function getCategoriesForProduct(Request $request)
+    {
+        $productId = $request->product_id;
+
+        $categories = VersionCategory::where('product_id', $productId)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        return response()->json($categories);
+    }
+
+    /**
      * Bulk operations on versions
      */
     public function bulkAction(Request $request): RedirectResponse
@@ -226,13 +279,51 @@ class VersionController extends Controller
             'category_id' => 'nullable|exists:version_categories,id',
             'has_vessel_options' => 'boolean',
             'status' => 'boolean',
-            'specifications' => 'nullable|array',
+            'spec_keys' => 'nullable|array',
+            'spec_values' => 'nullable|array',
+            'specifications_json' => 'nullable|string',
         ]);
 
         // Ensure model number is unique per product (excluding current version)
         $request->validate([
             'model_number' => "unique:versions,model_number,{$version->id},id,product_id,{$validated['product_id']}"
         ]);
+
+        // Process specifications
+        $specifications = null;
+        
+        // If JSON specifications are provided, use those
+        if (!empty($validated['specifications_json'])) {
+            $decoded = json_decode($validated['specifications_json'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $specifications = $decoded;
+            }
+        } else {
+            // Process key-value pairs
+            if (!empty($validated['spec_keys']) && !empty($validated['spec_values'])) {
+                $keys = $validated['spec_keys'];
+                $values = $validated['spec_values'];
+                $specifications = [];
+                
+                for ($i = 0; $i < count($keys); $i++) {
+                    $key = trim($keys[$i]);
+                    $value = isset($values[$i]) ? trim($values[$i]) : '';
+                    
+                    if (!empty($key) && !empty($value)) {
+                        $specifications[$key] = $value;
+                    }
+                }
+                
+                // If no valid specifications, set to null
+                if (empty($specifications)) {
+                    $specifications = null;
+                }
+            }
+        }
+
+        // Remove specification-related fields from validated data and add processed specifications
+        unset($validated['spec_keys'], $validated['spec_values'], $validated['specifications_json']);
+        $validated['specifications'] = $specifications;
 
         $version->update($validated);
 

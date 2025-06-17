@@ -94,7 +94,7 @@
                                     <div class="md:col-span-2">
                                         <label for="description" class="kt-label">Description</label>
                                         <textarea name="description" id="description" rows="3"
-                                                  class="kt-input @error('description') border-danger @enderror"
+                                                  class="kt-textarea @error('description') border-danger @enderror"
                                                   placeholder="Optional description of this category">{{ old('description', $versionCategory->description) }}</textarea>
                                         @error('description')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
@@ -138,7 +138,7 @@
                                 <div class="mt-6 pt-6 border-t border-gray-200">
                                     <label class="kt-label">Raw JSON (Advanced)</label>
                                     <textarea name="category_specs_json" id="category_specs_json" rows="4"
-                                              class="kt-input font-mono text-sm"
+                                              class="kt-textarea font-mono text-sm"
                                               placeholder='{"capacity_range": "100-500kW", "applications": ["heating", "cooling"]}'>{{ old('category_specs_json', $versionCategory->category_specs ? json_encode($versionCategory->category_specs, JSON_PRETTY_PRINT) : '') }}</textarea>
                                     <div class="text-xs text-gray-500 mt-1">
                                         Optional: Enter category specifications as JSON. This will override individual fields above.

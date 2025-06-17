@@ -32,8 +32,8 @@
                                     <!-- Product and Version Selection -->
                                     <div class="grid md:grid-cols-2 gap-6">
                                         <!-- Product Selection -->
-                                        <div>
-                                            <label for="product_id" class="kt-label">Product *</label>
+                                        <div class="kt-form-item">
+                                            <label for="product_id" class="kt-form-label">Product *</label>
                                             <select name="product_id" id="product_id"
                                                     class="kt-select @error('product_id') border-danger @enderror"
                                                     onchange="loadVersionsForProduct()">
@@ -125,7 +125,7 @@
                                     <div>
                                         <label for="description" class="kt-label">Description</label>
                                         <textarea name="description" id="description" rows="3"
-                                                  class="kt-input @error('description') border-danger @enderror"
+                                                  class="kt-textarea @error('description') border-danger @enderror"
                                                   placeholder="Optional description of this vessel configuration">{{ old('description') }}</textarea>
                                         @error('description')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
@@ -193,6 +193,21 @@
                             </div>
                         </div>
 
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Create Vessel Configuration
+                                    </button>
+                                    <a href="{{ route('vessel-configurations.index') }}" class="kt-btn kt-btn-secondary w-full">
+                                        <i class="ki-filled ki-cross"></i>
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Name Suggestions -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -251,20 +266,7 @@
                         </div>
 
                         <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Create Vessel Configuration
-                                    </button>
-                                    <a href="{{ route('vessel-configurations.index') }}" class="kt-btn kt-btn-secondary w-full">
-                                        <i class="ki-filled ki-cross"></i>
-                                        Cancel
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </form>

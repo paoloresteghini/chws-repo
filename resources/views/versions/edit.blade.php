@@ -112,7 +112,7 @@
                                     <div class="md:col-span-2">
                                         <label for="description" class="kt-label">Description</label>
                                         <textarea name="description" id="description" rows="3"
-                                                  class="kt-input @error('description') border-danger @enderror"
+                                                  class="kt-textarea @error('description') border-danger @enderror"
                                                   placeholder="Optional description of this version">{{ old('description', $version->description) }}</textarea>
                                         @error('description')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
@@ -168,9 +168,9 @@
                                             @foreach($version->specifications as $key => $value)
                                                 <div class="flex gap-3">
                                                     <input type="text" name="spec_keys[]" value="{{ $key }}"
-                                                           placeholder="Key" class="kt-input flex-1">
+                                                           placeholder="Key" class="kt-input flex-1" onkeypress="handleSpecKeyPress(event)">
                                                     <input type="text" name="spec_values[]" value="{{ $value }}"
-                                                           placeholder="Value" class="kt-input flex-1">
+                                                           placeholder="Value" class="kt-input flex-1" onkeypress="handleSpecKeyPress(event)">
                                                     <button type="button" onclick="this.parentElement.remove()"
                                                             class="kt-btn kt-btn-sm kt-btn-danger">
                                                         <i class="ki-filled ki-trash"></i>
@@ -189,7 +189,7 @@
                                 <div class="mt-6 pt-6 border-t border-gray-200">
                                     <label class="kt-label">Raw JSON (Advanced)</label>
                                     <textarea name="specifications_json" id="specifications_json" rows="4"
-                                              class="kt-input font-mono text-sm"
+                                              class="kt-textarea font-mono text-sm"
                                               placeholder='{"key": "value", "another_key": "another_value"}'>{{ old('specifications_json', $version->specifications ? json_encode($version->specifications, JSON_PRETTY_PRINT) : '') }}</textarea>
                                     <div class="text-xs text-gray-500 mt-1">
                                         Optional: Enter specifications as JSON. This will override individual fields above.
@@ -291,11 +291,11 @@
                                         <i class="ki-filled ki-check"></i>
                                         Update Version
                                     </button>
-                                    <a href="{{ route('versions.show', $version->id) }}" class="kt-btn kt-btn-secondary w-full">
+                                    <a href="{{ route('versions.show', $version->id) }}" class="kt-btn kt-btn-outline w-full">
                                         <i class="ki-filled ki-eye"></i>
                                         View Version
                                     </a>
-                                    <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-light w-full">
+                                    <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-outline w-full">
                                         <i class="ki-filled ki-arrow-left"></i>
                                         Back to List
                                     </a>
@@ -318,20 +318,21 @@
                                             <strong>Warning:</strong> This version has associated data that will also be deleted.
                                         </div>
                                     @endif
-                                    <form method="POST" action="{{ route('versions.destroy', $version->id) }}"
-                                          onsubmit="return confirm('Are you sure you want to delete this version? This action cannot be undone and will delete all associated data.')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="kt-btn kt-btn-danger w-full">
-                                            <i class="ki-filled ki-trash"></i>
-                                            Delete Version
-                                        </button>
-                                    </form>
+                                    <button type="button" onclick="deleteVersion()" class="kt-btn kt-btn-destructive w-full">
+                                        <i class="ki-filled ki-trash"></i>
+                                        Delete Version
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </form>
+
+            <!-- Separate Delete Form -->
+            <form id="delete-form" method="POST" action="{{ route('versions.destroy', $version->id) }}" style="display: none;">
+                @csrf
+                @method('DELETE')
             </form>
         </div>
     </main>
@@ -385,14 +386,47 @@
             const div = document.createElement('div');
             div.className = 'flex gap-3';
             div.innerHTML = `
-                <input type="text" name="spec_keys[]" placeholder="Key" class="kt-input flex-1">
-                <input type="text" name="spec_values[]" placeholder="Value" class="kt-input flex-1">
+                <input type="text" name="spec_keys[]" placeholder="Key" class="kt-input flex-1" onkeypress="handleSpecKeyPress(event)">
+                <input type="text" name="spec_values[]" placeholder="Value" class="kt-input flex-1" onkeypress="handleSpecKeyPress(event)">
                 <button type="button" onclick="this.parentElement.remove()" class="kt-btn kt-btn-sm kt-btn-danger">
                     <i class="ki-filled ki-trash"></i>
                 </button>
             `;
             container.appendChild(div);
             specificationCount++;
+        }
+
+        // Handle Enter key in specification fields
+        function handleSpecKeyPress(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+
+                // If we're in a value field and it has content, add a new specification
+                if (event.target.name === 'spec_values[]' && event.target.value.trim() !== '') {
+                    addSpecification();
+                    // Focus on the new key field
+                    setTimeout(() => {
+                        const newFields = document.querySelectorAll('input[name="spec_keys[]"]');
+                        const lastField = newFields[newFields.length - 1];
+                        if (lastField) {
+                            lastField.focus();
+                        }
+                    }, 100);
+                } else if (event.target.name === 'spec_keys[]') {
+                    // If we're in a key field, move to the value field
+                    const valueField = event.target.parentElement.querySelector('input[name="spec_values[]"]');
+                    if (valueField) {
+                        valueField.focus();
+                    }
+                }
+            }
+        }
+
+        // Handle delete version
+        function deleteVersion() {
+            if (confirm('Are you sure you want to delete this version? This action cannot be undone and will delete all associated data.')) {
+                document.getElementById('delete-form').submit();
+            }
         }
 
         // Initialize on page load

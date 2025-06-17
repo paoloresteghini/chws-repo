@@ -7,25 +7,25 @@
         2025©
        </span>
                 <a class="text-secondary-foreground hover:text-primary" href="https://keenthemes.com">
-                    Keenthemes Inc.
+                    CHWS Ltd.
                 </a>
             </div>
             <nav class="flex order-1 md:order-2 gap-4 font-normal text-sm text-secondary-foreground">
-                <a class="hover:text-primary" href="https://keenthemes.com/metronic/tailwind/docs">
-                    Docs
+                <a class="hover:text-primary" href="https://paolor.co.uk" target="_blank">
+                    Created by PaoloR
                 </a>
-                <a class="hover:text-primary" href="https://1.envato.market/Vm7VRE">
-                    Purchase
-                </a>
-                <a class="hover:text-primary" href="https://keenthemes.com/metronic/tailwind/docs/getting-started/license">
-                    FAQ
-                </a>
-                <a class="hover:text-primary" href="https://devs.keenthemes.com">
-                    Support
-                </a>
-                <a class="hover:text-primary" href="https://keenthemes.com/metronic/tailwind/docs/getting-started/license">
-                    License
-                </a>
+{{--                <a class="hover:text-primary" href="https://1.envato.market/Vm7VRE">--}}
+{{--                    Purchase--}}
+{{--                </a>--}}
+{{--                <a class="hover:text-primary" href="https://keenthemes.com/metronic/tailwind/docs/getting-started/license">--}}
+{{--                    FAQ--}}
+{{--                </a>--}}
+{{--                <a class="hover:text-primary" href="https://devs.keenthemes.com">--}}
+{{--                    Support--}}
+{{--                </a>--}}
+{{--                <a class="hover:text-primary" href="https://keenthemes.com/metronic/tailwind/docs/getting-started/license">--}}
+{{--                    License--}}
+{{--                </a>--}}
             </nav>
         </div>
     </div>

@@ -99,7 +99,8 @@ class VesselConfigurationController extends Controller
             'capacity' => 'nullable|numeric|min:0|max:999999.99',
             'capacity_unit' => 'required|string|max:10',
             'description' => 'nullable|string',
-            'specifications' => 'nullable|array',
+            'spec_keys' => 'nullable|array',
+            'spec_values' => 'nullable|array',
         ]);
 
         // Verify the version supports vessel configurations
@@ -115,6 +116,32 @@ class VesselConfigurationController extends Controller
         if ($existing) {
             return back()->withErrors(['name' => 'A vessel configuration with this name already exists for this version.'])->withInput();
         }
+
+        // Process specifications
+        $specifications = null;
+        if (!empty($validated['spec_keys']) && !empty($validated['spec_values'])) {
+            $keys = $validated['spec_keys'];
+            $values = $validated['spec_values'];
+            $specifications = [];
+            
+            for ($i = 0; $i < count($keys); $i++) {
+                $key = trim($keys[$i]);
+                $value = isset($values[$i]) ? trim($values[$i]) : '';
+                
+                if (!empty($key) && !empty($value)) {
+                    $specifications[$key] = $value;
+                }
+            }
+            
+            // If no valid specifications, set to null
+            if (empty($specifications)) {
+                $specifications = null;
+            }
+        }
+
+        // Remove specification-related fields from validated data and add processed specifications
+        unset($validated['spec_keys'], $validated['spec_values']);
+        $validated['specifications'] = $specifications;
 
         $configuration = VesselConfiguration::create($validated);
 
@@ -203,7 +230,8 @@ class VesselConfigurationController extends Controller
             'capacity' => 'nullable|numeric|min:0|max:999999.99',
             'capacity_unit' => 'required|string|max:10',
             'description' => 'nullable|string',
-            'specifications' => 'nullable|array',
+            'spec_keys' => 'nullable|array',
+            'spec_values' => 'nullable|array',
         ]);
 
         // Verify the version supports vessel configurations
@@ -220,6 +248,32 @@ class VesselConfigurationController extends Controller
         if ($existing) {
             return back()->withErrors(['name' => 'A vessel configuration with this name already exists for this version.'])->withInput();
         }
+
+        // Process specifications
+        $specifications = null;
+        if (!empty($validated['spec_keys']) && !empty($validated['spec_values'])) {
+            $keys = $validated['spec_keys'];
+            $values = $validated['spec_values'];
+            $specifications = [];
+            
+            for ($i = 0; $i < count($keys); $i++) {
+                $key = trim($keys[$i]);
+                $value = isset($values[$i]) ? trim($values[$i]) : '';
+                
+                if (!empty($key) && !empty($value)) {
+                    $specifications[$key] = $value;
+                }
+            }
+            
+            // If no valid specifications, set to null
+            if (empty($specifications)) {
+                $specifications = null;
+            }
+        }
+
+        // Remove specification-related fields from validated data and add processed specifications
+        unset($validated['spec_keys'], $validated['spec_values']);
+        $validated['specifications'] = $specifications;
 
         $vesselConfiguration->update($validated);
 

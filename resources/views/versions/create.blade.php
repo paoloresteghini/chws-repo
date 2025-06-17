@@ -105,7 +105,7 @@
                                     <div class="md:col-span-2">
                                         <label for="description" class="kt-label">Description</label>
                                         <textarea name="description" id="description" rows="3"
-                                                  class="kt-input @error('description') border-danger @enderror"
+                                                  class="kt-textarea @error('description') border-danger @enderror"
                                                   placeholder="Optional description of this version">{{ old('description') }}</textarea>
                                         @error('description')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
@@ -160,7 +160,7 @@
                                 <div class="mt-6 pt-6 border-t border-gray-200">
                                     <label class="kt-label">Raw JSON (Advanced)</label>
                                     <textarea name="specifications_json" id="specifications_json" rows="4"
-                                              class="kt-input font-mono text-sm"
+                                              class="kt-textarea font-mono text-sm"
                                               placeholder='{"key": "value", "another_key": "another_value"}'>{{ old('specifications_json') }}</textarea>
                                     <div class="text-xs text-gray-500 mt-1">
                                         Optional: Enter specifications as JSON. This will override individual fields above.

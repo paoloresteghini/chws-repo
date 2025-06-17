@@ -126,7 +126,7 @@
                                     <div>
                                         <label for="description" class="kt-label">Description</label>
                                         <textarea name="description" id="description" rows="3"
-                                                  class="kt-input @error('description') border-danger @enderror"
+                                                  class="kt-textarea @error('description') border-danger @enderror"
                                                   placeholder="Optional description of this vessel configuration">{{ old('description', $vesselConfiguration->description) }}</textarea>
                                         @error('description')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
@@ -222,7 +222,27 @@
 
                     <!-- Sidebar -->
                     <div class="space-y-6">
+
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Update Vessel Configuration
+                                    </button>
+                                    <a href="{{ route('vessel-configurations.show', $vesselConfiguration->id) }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-eye"></i>
+                                        View Configuration
+                                    </a>
+                                    <a href="{{ route('vessel-configurations.index') }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-arrow-left"></i>
+                                        Back to List
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Current Configuration Info -->
+
                         <div class="kt-card">
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Current Configuration</h3>
@@ -284,24 +304,7 @@
                         </div>
 
                         <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Update Vessel Configuration
-                                    </button>
-                                    <a href="{{ route('vessel-configurations.show', $vesselConfiguration->id) }}" class="kt-btn kt-btn-secondary w-full">
-                                        <i class="ki-filled ki-eye"></i>
-                                        View Configuration
-                                    </a>
-                                    <a href="{{ route('vessel-configurations.index') }}" class="kt-btn kt-btn-light w-full">
-                                        <i class="ki-filled ki-arrow-left"></i>
-                                        Back to List
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!-- Danger Zone -->
                         @if($vesselConfiguration->performanceData->count() == 0)
@@ -420,7 +423,7 @@
 
                 suggestionsContainer.innerHTML = suggestions.map(suggestion =>
                     `<button type="button" onclick="document.getElementById('name').value='${suggestion}'"
-                             class="kt-btn kt-btn-xs kt-btn-light w-full text-left">${suggestion}</button>`
+                             class="kt-btn kt-btn-xs kt-btn-outline w-full text-left">${suggestion}</button>`
                 ).join('');
             } else {
                 suggestionsContainer.innerHTML = '<div class="text-sm text-gray-500">Enter capacity to see name suggestions</div>';

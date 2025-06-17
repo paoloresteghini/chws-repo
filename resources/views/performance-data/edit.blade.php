@@ -211,7 +211,7 @@
                                 <div>
                                     <label for="additional_metrics" class="kt-label">Additional Metrics (JSON)</label>
                                     <textarea name="additional_metrics" id="additional_metrics" rows="4"
-                                              class="kt-input font-mono text-sm @error('additional_metrics') border-danger @enderror"
+                                              class="kt-textarea font-mono text-sm @error('additional_metrics') border-danger @enderror"
                                               placeholder='{"custom_metric": "value", "another_metric": 123}'>{{ old('additional_metrics', json_encode($performanceData->additional_metrics, JSON_PRETTY_PRINT)) }}</textarea>
                                     @error('additional_metrics')
                                     <div class="text-sm text-danger mt-1">{{ $message }}</div>
