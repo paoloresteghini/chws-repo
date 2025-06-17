@@ -33,72 +33,82 @@
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
-                                    <div class="md:col-span-2">
-                                        <label for="product_id" class="kt-label">Product *</label>
-                                        <select name="product_id" id="product_id"
-                                                class="kt-select @error('product_id') border-danger @enderror"
-                                                required onchange="updateProductInfo()">
-                                            <option value="">Select a product</option>
-                                            @foreach($products as $product)
-                                                <option value="{{ $product->id }}"
-                                                        data-type="{{ $product->type }}"
-                                                    {{ (old('product_id', $versionCategory->product_id) == $product->id) ? 'selected' : '' }}>
-                                                    {{ $product->name }} ({{ $product->type }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('product_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="md:col-span-2 kt-form-item">
+                                        <label for="product_id" class="kt-form-label">Product *</label>
+                                        <div class="kt-form-control">
+                                            <select name="product_id" id="product_id"
+                                                    class="kt-select @error('product_id') border-danger @enderror"
+                                                    required onchange="updateProductInfo()">
+                                                <option value="">Select a product</option>
+                                                @foreach($products as $product)
+                                                    <option value="{{ $product->id }}"
+                                                            data-type="{{ $product->type }}"
+                                                        {{ (old('product_id', $versionCategory->product_id) == $product->id) ? 'selected' : '' }}>
+                                                        {{ $product->name }} ({{ $product->type }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('product_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Category Name -->
-                                    <div>
-                                        <label for="name" class="kt-label">Category Name *</label>
-                                        <input type="text" name="name" id="name"
-                                               class="kt-input @error('name') border-danger @enderror"
-                                               value="{{ old('name', $versionCategory->name) }}"
-                                               required>
-                                        @error('name')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Descriptive name for the category</div>
+                                    <div class="kt-form-item">
+                                        <label for="name" class="kt-form-label">Category Name *</label>
+                                        <div class="kt-form-control">
+                                            <input type="text" name="name" id="name"
+                                                   class="kt-input @error('name') border-danger @enderror"
+                                                   value="{{ old('name', $versionCategory->name) }}"
+                                                   required>
+                                            @error('name')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Descriptive name for the category</div>
+                                        </div>
                                     </div>
 
                                     <!-- Prefix -->
-                                    <div>
-                                        <label for="prefix" class="kt-label">Prefix</label>
-                                        <input type="text" name="prefix" id="prefix"
-                                               class="kt-input @error('prefix') border-danger @enderror"
-                                               value="{{ old('prefix', $versionCategory->prefix) }}">
-                                        @error('prefix')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Optional prefix for model numbers</div>
+                                    <div class="kt-form-item">
+                                        <label for="prefix" class="kt-form-label">Prefix</label>
+                                        <div class="kt-form-control">
+                                            <input type="text" name="prefix" id="prefix"
+                                                   class="kt-input @error('prefix') border-danger @enderror"
+                                                   value="{{ old('prefix', $versionCategory->prefix) }}">
+                                            @error('prefix')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Optional prefix for model numbers</div>
+                                        </div>
                                     </div>
 
                                     <!-- Sort Order -->
-                                    <div>
-                                        <label for="sort_order" class="kt-label">Sort Order</label>
-                                        <input type="number" name="sort_order" id="sort_order"
-                                               class="kt-input @error('sort_order') border-danger @enderror"
-                                               value="{{ old('sort_order', $versionCategory->sort_order) }}"
-                                               min="0" max="999">
-                                        @error('sort_order')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Order for displaying categories</div>
+                                    <div class="kt-form-item">
+                                        <label for="sort_order" class="kt-form-label">Sort Order</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="sort_order" id="sort_order"
+                                                   class="kt-input @error('sort_order') border-danger @enderror"
+                                                   value="{{ old('sort_order', $versionCategory->sort_order) }}"
+                                                   min="0" max="999">
+                                            @error('sort_order')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Order for displaying categories</div>
+                                        </div>
                                     </div>
 
                                     <!-- Description -->
-                                    <div class="md:col-span-2">
-                                        <label for="description" class="kt-label">Description</label>
-                                        <textarea name="description" id="description" rows="3"
-                                                  class="kt-textarea @error('description') border-danger @enderror"
-                                                  placeholder="Optional description of this category">{{ old('description', $versionCategory->description) }}</textarea>
-                                        @error('description')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="md:col-span-2 kt-form-item">
+                                        <label for="description" class="kt-form-label">Description</label>
+                                        <div class="kt-form-control">
+                                            <textarea name="description" id="description" rows="3"
+                                                      class="kt-textarea @error('description') border-danger @enderror"
+                                                      placeholder="Optional description of this category">{{ old('description', $versionCategory->description) }}</textarea>
+                                            @error('description')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -135,13 +145,15 @@
                                 </div>
 
                                 <!-- Raw JSON Input (Advanced) -->
-                                <div class="mt-6 pt-6 border-t border-gray-200">
-                                    <label class="kt-label">Raw JSON (Advanced)</label>
-                                    <textarea name="category_specs_json" id="category_specs_json" rows="4"
-                                              class="kt-textarea font-mono text-sm"
-                                              placeholder='{"capacity_range": "100-500kW", "applications": ["heating", "cooling"]}'>{{ old('category_specs_json', $versionCategory->category_specs ? json_encode($versionCategory->category_specs, JSON_PRETTY_PRINT) : '') }}</textarea>
-                                    <div class="text-xs text-gray-500 mt-1">
-                                        Optional: Enter category specifications as JSON. This will override individual fields above.
+                                <div class="mt-6 pt-6 border-t border-gray-200 kt-form-item">
+                                    <label class="kt-form-label">Raw JSON (Advanced)</label>
+                                    <div class="kt-form-control">
+                                        <textarea name="category_specs_json" id="category_specs_json" rows="4"
+                                                  class="kt-textarea font-mono text-sm"
+                                                  placeholder='{"capacity_range": "100-500kW", "applications": ["heating", "cooling"]}'>{{ old('category_specs_json', $versionCategory->category_specs ? json_encode($versionCategory->category_specs, JSON_PRETTY_PRINT) : '') }}</textarea>
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            Optional: Enter category specifications as JSON. This will override individual fields above.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -190,6 +202,26 @@
 
                     <!-- Sidebar -->
                     <div class="space-y-6">
+                        <!-- Actions -->
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Update Category
+                                    </button>
+                                    <a href="{{ route('version-categories.show', $versionCategory->id) }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-eye"></i>
+                                        View Category
+                                    </a>
+                                    <a href="{{ route('version-categories.index') }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-arrow-left"></i>
+                                        Back to List
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Current Category Info -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -227,25 +259,7 @@
                             </div>
                         </div>
 
-                        <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Update Category
-                                    </button>
-                                    <a href="{{ route('version-categories.show', $versionCategory->id) }}" class="kt-btn kt-btn-secondary w-full">
-                                        <i class="ki-filled ki-eye"></i>
-                                        View Category
-                                    </a>
-                                    <a href="{{ route('version-categories.index') }}" class="kt-btn kt-btn-light w-full">
-                                        <i class="ki-filled ki-arrow-left"></i>
-                                        Back to List
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!-- Danger Zone -->
                         @if($versionCategory->versions_count == 0)
@@ -258,15 +272,10 @@
                                         <div class="text-sm text-gray-600">
                                             Delete this category permanently. This action cannot be undone.
                                         </div>
-                                        <form method="POST" action="{{ route('version-categories.destroy', $versionCategory->id) }}"
-                                              onsubmit="return confirm('Are you sure you want to delete this category? This action cannot be undone.')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="kt-btn kt-btn-danger w-full">
-                                                <i class="ki-filled ki-trash"></i>
-                                                Delete Category
-                                            </button>
-                                        </form>
+                                        <button type="button" onclick="deleteCategory()" class="kt-btn kt-btn-destructive w-full">
+                                            <i class="ki-filled ki-trash"></i>
+                                            Delete Category
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -285,6 +294,12 @@
                         @endif
                     </div>
                 </div>
+            </form>
+
+            <!-- Separate Delete Form -->
+            <form id="delete-form" method="POST" action="{{ route('version-categories.destroy', $versionCategory->id) }}" style="display: none;">
+                @csrf
+                @method('DELETE')
             </form>
         </div>
     </main>
@@ -323,6 +338,13 @@
             `;
             container.appendChild(div);
             specificationCount++;
+        }
+
+        // Handle delete category
+        function deleteCategory() {
+            if (confirm('Are you sure you want to delete this category? This action cannot be undone.')) {
+                document.getElementById('delete-form').submit();
+            }
         }
 
         // Initialize on page load

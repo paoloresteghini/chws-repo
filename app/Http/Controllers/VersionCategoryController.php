@@ -68,7 +68,9 @@ class VersionCategoryController extends Controller
             'prefix' => 'nullable|string|max:10',
             'description' => 'nullable|string',
             'sort_order' => 'integer|min:0|max:999',
-            'category_specs' => 'nullable|array',
+            'spec_keys' => 'nullable|array',
+            'spec_values' => 'nullable|array',
+            'category_specs_json' => 'nullable|string',
         ]);
 
         // Set default sort order if not provided
@@ -87,6 +89,42 @@ class VersionCategoryController extends Controller
                 return back()->withErrors(['prefix' => 'This prefix is already used for this product.'])->withInput();
             }
         }
+
+        // Process specifications
+        $specifications = null;
+        
+        // If JSON specifications are provided, use those
+        if (!empty($validated['category_specs_json'])) {
+            $decoded = json_decode($validated['category_specs_json'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $specifications = $decoded;
+            }
+        } else {
+            // Process key-value pairs
+            if (!empty($validated['spec_keys']) && !empty($validated['spec_values'])) {
+                $keys = $validated['spec_keys'];
+                $values = $validated['spec_values'];
+                $specifications = [];
+                
+                for ($i = 0; $i < count($keys); $i++) {
+                    $key = trim($keys[$i]);
+                    $value = isset($values[$i]) ? trim($values[$i]) : '';
+                    
+                    if (!empty($key) && !empty($value)) {
+                        $specifications[$key] = $value;
+                    }
+                }
+                
+                // If no valid specifications, set to null
+                if (empty($specifications)) {
+                    $specifications = null;
+                }
+            }
+        }
+
+        // Remove specification-related fields from validated data and add processed specifications
+        unset($validated['spec_keys'], $validated['spec_values'], $validated['category_specs_json']);
+        $validated['category_specs'] = $specifications;
 
         $category = VersionCategory::create($validated);
 
@@ -248,7 +286,9 @@ class VersionCategoryController extends Controller
             'prefix' => 'nullable|string|max:10',
             'description' => 'nullable|string',
             'sort_order' => 'integer|min:0|max:999',
-            'category_specs' => 'nullable|array',
+            'spec_keys' => 'nullable|array',
+            'spec_values' => 'nullable|array',
+            'category_specs_json' => 'nullable|string',
         ]);
 
         // Validate prefix uniqueness within product (excluding current category)
@@ -262,6 +302,42 @@ class VersionCategoryController extends Controller
                 return back()->withErrors(['prefix' => 'This prefix is already used for this product.'])->withInput();
             }
         }
+
+        // Process specifications
+        $specifications = null;
+        
+        // If JSON specifications are provided, use those
+        if (!empty($validated['category_specs_json'])) {
+            $decoded = json_decode($validated['category_specs_json'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $specifications = $decoded;
+            }
+        } else {
+            // Process key-value pairs
+            if (!empty($validated['spec_keys']) && !empty($validated['spec_values'])) {
+                $keys = $validated['spec_keys'];
+                $values = $validated['spec_values'];
+                $specifications = [];
+                
+                for ($i = 0; $i < count($keys); $i++) {
+                    $key = trim($keys[$i]);
+                    $value = isset($values[$i]) ? trim($values[$i]) : '';
+                    
+                    if (!empty($key) && !empty($value)) {
+                        $specifications[$key] = $value;
+                    }
+                }
+                
+                // If no valid specifications, set to null
+                if (empty($specifications)) {
+                    $specifications = null;
+                }
+            }
+        }
+
+        // Remove specification-related fields from validated data and add processed specifications
+        unset($validated['spec_keys'], $validated['spec_values'], $validated['category_specs_json']);
+        $validated['category_specs'] = $specifications;
 
         $versionCategory->update($validated);
 

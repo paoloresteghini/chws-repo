@@ -52,85 +52,95 @@
                                         </div>
 
                                         <!-- Version Selection -->
-                                        <div>
-                                            <label for="version_id" class="kt-label">Version *</label>
-                                            <select name="version_id" id="version_id"
-                                                    class="kt-select @error('version_id') border-danger @enderror"
-                                                    required onchange="updateVersionInfo()">
-                                                <option value="">Select a version</option>
-                                                @foreach($versions as $version)
-                                                    <option value="{{ $version->id }}"
-                                                            data-product-id="{{ $version->product_id }}"
-                                                            data-model="{{ $version->model_number }}"
-                                                            data-name="{{ $version->name }}"
-                                                        {{ ($selectedVersion && $selectedVersion->id == $version->id) || old('version_id') == $version->id ? 'selected' : '' }}>
-                                                        {{ $version->model_number }} - {{ $version->name ?: 'Version ' . $version->model_number }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('version_id')
-                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                            @enderror
-                                            <div class="text-xs text-gray-500 mt-1">Choose the version to add vessel configuration to</div>
+                                        <div class="kt-form-item">
+                                            <label for="version_id" class="kt-form-label">Version *</label>
+                                            <div class="kt-form-control">
+                                                <select name="version_id" id="version_id"
+                                                        class="kt-select @error('version_id') border-danger @enderror"
+                                                        required onchange="updateVersionInfo()">
+                                                    <option value="">Select a version</option>
+                                                    @foreach($versions as $version)
+                                                        <option value="{{ $version->id }}"
+                                                                data-product-id="{{ $version->product_id }}"
+                                                                data-model="{{ $version->model_number }}"
+                                                                data-name="{{ $version->name }}"
+                                                            {{ ($selectedVersion && $selectedVersion->id == $version->id) || old('version_id') == $version->id ? 'selected' : '' }}>
+                                                            {{ $version->model_number }} - {{ $version->name ?: 'Version ' . $version->model_number }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('version_id')
+                                                <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                                @enderror
+                                                <div class="text-xs text-gray-500 mt-1">Choose the version to add vessel configuration to</div>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <!-- Configuration Name -->
-                                    <div>
-                                        <label for="name" class="kt-label">Configuration Name *</label>
-                                        <input type="text" name="name" id="name"
-                                               class="kt-input @error('name') border-danger @enderror"
-                                               value="{{ old('name') }}"
-                                               placeholder="e.g., 1000L, Large Tank, Standard"
-                                               required>
-                                        @error('name')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Unique name for this vessel configuration</div>
+                                    <div class="kt-form-item">
+                                        <label for="name" class="kt-form-label">Configuration Name *</label>
+                                        <div class="kt-form-control">
+                                            <input type="text" name="name" id="name"
+                                                   class="kt-input @error('name') border-danger @enderror"
+                                                   value="{{ old('name') }}"
+                                                   placeholder="e.g., 1000L, Large Tank, Standard"
+                                                   required>
+                                            @error('name')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Unique name for this vessel configuration</div>
+                                        </div>
                                     </div>
 
                                     <!-- Capacity Configuration -->
                                     <div class="grid md:grid-cols-3 gap-4">
-                                        <div class="md:col-span-2">
-                                            <label for="capacity" class="kt-label">Capacity</label>
-                                            <input type="number" name="capacity" id="capacity"
-                                                   class="kt-input @error('capacity') border-danger @enderror"
-                                                   value="{{ old('capacity') }}"
-                                                   step="0.01" min="0" max="999999.99"
-                                                   placeholder="Enter capacity value"
-                                                   onchange="updateNameSuggestion()">
-                                            @error('capacity')
-                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                            @enderror
-                                            <div class="text-xs text-gray-500 mt-1">Vessel capacity (optional if using custom naming)</div>
+                                        <div class="md:col-span-2 kt-form-item">
+                                            <label for="capacity" class="kt-form-label">Capacity</label>
+                                            <div class="kt-form-control">
+                                                <input type="number" name="capacity" id="capacity"
+                                                       class="kt-input @error('capacity') border-danger @enderror"
+                                                       value="{{ old('capacity') }}"
+                                                       step="0.01" min="0" max="999999.99"
+                                                       placeholder="Enter capacity value"
+                                                       onchange="updateNameSuggestion()">
+                                                @error('capacity')
+                                                <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                                @enderror
+                                                <div class="text-xs text-gray-500 mt-1">Vessel capacity (optional if using custom naming)</div>
+                                            </div>
                                         </div>
 
-                                        <div>
-                                            <label for="capacity_unit" class="kt-label">Unit *</label>
-                                            <select name="capacity_unit" id="capacity_unit"
-                                                    class="kt-select @error('capacity_unit') border-danger @enderror"
-                                                    required onchange="updateNameSuggestion()">
-                                                <option value="L" {{ old('capacity_unit', 'L') == 'L' ? 'selected' : '' }}>Liters (L)</option>
-                                                <option value="kL" {{ old('capacity_unit') == 'kL' ? 'selected' : '' }}>Kiloliters (kL)</option>
-                                                <option value="gal" {{ old('capacity_unit') == 'gal' ? 'selected' : '' }}>Gallons (gal)</option>
-                                                <option value="m³" {{ old('capacity_unit') == 'm³' ? 'selected' : '' }}>Cubic Meters (m³)</option>
-                                            </select>
-                                            @error('capacity_unit')
-                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                            @enderror
+                                        <div class="kt-form-item">
+                                            <label for="capacity_unit" class="kt-form-label">Unit *</label>
+                                            <div class="kt-form-control">
+                                                <select name="capacity_unit" id="capacity_unit"
+                                                        class="kt-select @error('capacity_unit') border-danger @enderror"
+                                                        required onchange="updateNameSuggestion()">
+                                                    <option value="L" {{ old('capacity_unit', 'L') == 'L' ? 'selected' : '' }}>Liters (L)</option>
+                                                    <option value="kL" {{ old('capacity_unit') == 'kL' ? 'selected' : '' }}>Kiloliters (kL)</option>
+                                                    <option value="gal" {{ old('capacity_unit') == 'gal' ? 'selected' : '' }}>Gallons (gal)</option>
+                                                    <option value="m³" {{ old('capacity_unit') == 'm³' ? 'selected' : '' }}>Cubic Meters (m³)</option>
+                                                </select>
+                                                @error('capacity_unit')
+                                                <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
 
                                     <!-- Description -->
-                                    <div>
-                                        <label for="description" class="kt-label">Description</label>
-                                        <textarea name="description" id="description" rows="3"
-                                                  class="kt-textarea @error('description') border-danger @enderror"
-                                                  placeholder="Optional description of this vessel configuration">{{ old('description') }}</textarea>
-                                        @error('description')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Additional details about this vessel option</div>
+                                    <div class="kt-form-item">
+                                        <label for="description" class="kt-form-label">Description</label>
+                                        <div class="kt-form-control">
+                                            <textarea name="description" id="description" rows="3"
+                                                      class="kt-textarea @error('description') border-danger @enderror"
+                                                      placeholder="Optional description of this vessel configuration">{{ old('description') }}</textarea>
+                                            @error('description')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Additional details about this vessel option</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -154,9 +164,10 @@
                                 </div>
 
                                 <!-- Common Specifications Presets -->
-                                <div class="mt-6 pt-6 border-t border-gray-200">
-                                    <label class="kt-label mb-3">Common Specifications</label>
-                                    <div class="grid md:grid-cols-2 gap-3">
+                                <div class="mt-6 pt-6 border-t border-gray-200 kt-form-item">
+                                    <label class="kt-form-label mb-3">Common Specifications</label>
+                                    <div class="kt-form-control">
+                                        <div class="grid md:grid-cols-2 gap-3">
                                         <button type="button" onclick="addCommonSpec('material', 'Stainless Steel')"
                                                 class="kt-btn kt-btn-sm kt-btn-light text-left">
                                             Add Material Specification
@@ -173,6 +184,7 @@
                                                 class="kt-btn kt-btn-sm kt-btn-light text-left">
                                             Add Max Temperature
                                         </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

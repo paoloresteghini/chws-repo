@@ -30,73 +30,83 @@
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
-                                    <div class="md:col-span-2">
-                                        <label for="product_id" class="kt-label">Product *</label>
-                                        <select name="product_id" id="product_id"
-                                                class="kt-select @error('product_id') border-danger @enderror"
-                                                required onchange="updateProductInfo()">
-                                            <option value="">Select a product</option>
-                                            @foreach($products as $product)
-                                                <option value="{{ $product->id }}"
-                                                        data-type="{{ $product->type }}"
-                                                    {{ old('product_id') == $product->id ? 'selected' : '' }}>
-                                                    {{ $product->name }} ({{ $product->type }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('product_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="md:col-span-2 kt-form-item">
+                                        <label for="product_id" class="kt-form-label">Product *</label>
+                                        <div class="kt-form-control">
+                                            <select name="product_id" id="product_id"
+                                                    class="kt-select @error('product_id') border-danger @enderror"
+                                                    required onchange="updateProductInfo()">
+                                                <option value="">Select a product</option>
+                                                @foreach($products as $product)
+                                                    <option value="{{ $product->id }}"
+                                                            data-type="{{ $product->type }}"
+                                                        {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                                                        {{ $product->name }} ({{ $product->type }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('product_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Category Name -->
-                                    <div>
-                                        <label for="name" class="kt-label">Category Name *</label>
-                                        <input type="text" name="name" id="name"
-                                               class="kt-input @error('name') border-danger @enderror"
-                                               value="{{ old('name') }}"
-                                               placeholder="e.g., 3000 Series" required>
-                                        @error('name')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Descriptive name for the category</div>
+                                    <div class="kt-form-item">
+                                        <label for="name" class="kt-form-label">Category Name *</label>
+                                        <div class="kt-form-control">
+                                            <input type="text" name="name" id="name"
+                                                   class="kt-input @error('name') border-danger @enderror"
+                                                   value="{{ old('name') }}"
+                                                   placeholder="e.g., 3000 Series" required>
+                                            @error('name')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Descriptive name for the category</div>
+                                        </div>
                                     </div>
 
                                     <!-- Prefix -->
-                                    <div>
-                                        <label for="prefix" class="kt-label">Prefix</label>
-                                        <input type="text" name="prefix" id="prefix"
-                                               class="kt-input @error('prefix') border-danger @enderror"
-                                               value="{{ old('prefix') }}"
-                                               placeholder="e.g., 30">
-                                        @error('prefix')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Optional prefix for model numbers (e.g., "30" for 3000 series)</div>
+                                    <div class="kt-form-item">
+                                        <label for="prefix" class="kt-form-label">Prefix</label>
+                                        <div class="kt-form-control">
+                                            <input type="text" name="prefix" id="prefix"
+                                                   class="kt-input @error('prefix') border-danger @enderror"
+                                                   value="{{ old('prefix') }}"
+                                                   placeholder="e.g., 30">
+                                            @error('prefix')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Optional prefix for model numbers (e.g., "30" for 3000 series)</div>
+                                        </div>
                                     </div>
 
                                     <!-- Sort Order -->
-                                    <div>
-                                        <label for="sort_order" class="kt-label">Sort Order</label>
-                                        <input type="number" name="sort_order" id="sort_order"
-                                               class="kt-input @error('sort_order') border-danger @enderror"
-                                               value="{{ old('sort_order', 10) }}"
-                                               min="0" max="999">
-                                        @error('sort_order')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Order for displaying categories (lower numbers first)</div>
+                                    <div class="kt-form-item">
+                                        <label for="sort_order" class="kt-form-label">Sort Order</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="sort_order" id="sort_order"
+                                                   class="kt-input @error('sort_order') border-danger @enderror"
+                                                   value="{{ old('sort_order', 10) }}"
+                                                   min="0" max="999">
+                                            @error('sort_order')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Order for displaying categories (lower numbers first)</div>
+                                        </div>
                                     </div>
 
                                     <!-- Description -->
-                                    <div class="md:col-span-2">
-                                        <label for="description" class="kt-label">Description</label>
-                                        <textarea name="description" id="description" rows="3"
-                                                  class="kt-textarea @error('description') border-danger @enderror"
-                                                  placeholder="Optional description of this category">{{ old('description') }}</textarea>
-                                        @error('description')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="md:col-span-2 kt-form-item">
+                                        <label for="description" class="kt-form-label">Description</label>
+                                        <div class="kt-form-control">
+                                            <textarea name="description" id="description" rows="3"
+                                                      class="kt-textarea @error('description') border-danger @enderror"
+                                                      placeholder="Optional description of this category">{{ old('description') }}</textarea>
+                                            @error('description')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -120,13 +130,15 @@
                                 </div>
 
                                 <!-- Raw JSON Input (Advanced) -->
-                                <div class="mt-6 pt-6 border-t border-gray-200">
-                                    <label class="kt-label">Raw JSON (Advanced)</label>
-                                    <textarea name="category_specs_json" id="category_specs_json" rows="4"
-                                              class="kt-textarea font-mono text-sm"
-                                              placeholder='{"capacity_range": "100-500kW", "applications": ["heating", "cooling"]}'>{{ old('category_specs_json') }}</textarea>
-                                    <div class="text-xs text-gray-500 mt-1">
-                                        Optional: Enter category specifications as JSON. This will override individual fields above.
+                                <div class="mt-6 pt-6 border-t border-gray-200 kt-form-item">
+                                    <label class="kt-form-label">Raw JSON (Advanced)</label>
+                                    <div class="kt-form-control">
+                                        <textarea name="category_specs_json" id="category_specs_json" rows="4"
+                                                  class="kt-textarea font-mono text-sm"
+                                                  placeholder='{"capacity_range": "100-500kW", "applications": ["heating", "cooling"]}'>{{ old('category_specs_json') }}</textarea>
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            Optional: Enter category specifications as JSON. This will override individual fields above.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -135,6 +147,22 @@
 
                     <!-- Sidebar -->
                     <div class="space-y-6">
+                        <!-- Actions -->
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Create Category
+                                    </button>
+                                    <a href="{{ route('version-categories.index') }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-cross"></i>
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Product Info Preview -->
                         <div class="kt-card" id="product-preview" style="display: none;">
                             <div class="kt-card-header">
@@ -197,21 +225,7 @@
                             </div>
                         </div>
 
-                        <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Create Category
-                                    </button>
-                                    <a href="{{ route('version-categories.index') }}" class="kt-btn kt-btn-secondary w-full">
-                                        <i class="ki-filled ki-cross"></i>
-                                        Cancel
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </form>

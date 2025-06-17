@@ -25,7 +25,7 @@
                         <div class="kt-card">
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Temperature Configuration</h3>
-                                <div class="text-sm text-gray-500">Set flow and return temperatures for primary and secondary circuits</div>
+                                <div class="text-xs text-gray-500">Set flow and return temperatures for primary and secondary circuits</div>
                             </div>
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-8">
@@ -79,30 +79,34 @@
                                             <span class="text-sm text-gray-500">(Cold side)</span>
                                         </div>
 
-                                        <div>
-                                            <label for="secondary_flow_temp" class="kt-label">Flow Temperature (°C) *</label>
-                                            <input type="number" name="secondary_flow_temp" id="secondary_flow_temp"
-                                                   class="kt-input @error('secondary_flow_temp') border-danger @enderror"
-                                                   value="{{ old('secondary_flow_temp') }}"
-                                                   step="0.1" min="-50" max="200" required
-                                                   onchange="updatePreview()">
-                                            @error('secondary_flow_temp')
-                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                            @enderror
-                                            <div class="text-xs text-gray-500 mt-1">Temperature entering the heat exchanger</div>
+                                        <div class="kt-form-item">
+                                            <label for="secondary_flow_temp" class="kt-form-label">Flow Temperature (°C) *</label>
+                                            <div class="kt-form-control">
+                                                <input type="number" name="secondary_flow_temp" id="secondary_flow_temp"
+                                                       class="kt-input @error('secondary_flow_temp') border-danger @enderror"
+                                                       value="{{ old('secondary_flow_temp') }}"
+                                                       step="0.1" min="-50" max="200" required
+                                                       onchange="updatePreview()">
+                                                @error('secondary_flow_temp')
+                                                <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                                @enderror
+                                                <div class="text-xs text-gray-500 mt-1">Temperature entering the heat exchanger</div>
+                                            </div>
                                         </div>
 
-                                        <div>
-                                            <label for="secondary_return_temp" class="kt-label">Return Temperature (°C) *</label>
-                                            <input type="number" name="secondary_return_temp" id="secondary_return_temp"
-                                                   class="kt-input @error('secondary_return_temp') border-danger @enderror"
-                                                   value="{{ old('secondary_return_temp') }}"
-                                                   step="0.1" min="-50" max="200" required
-                                                   onchange="updatePreview()">
-                                            @error('secondary_return_temp')
-                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                            @enderror
-                                            <div class="text-xs text-gray-500 mt-1">Temperature leaving the heat exchanger</div>
+                                        <div class="kt-form-item">
+                                            <label for="secondary_return_temp" class="kt-form-label">Return Temperature (°C) *</label>
+                                            <div class="kt-form-control">
+                                                <input type="number" name="secondary_return_temp" id="secondary_return_temp"
+                                                       class="kt-input @error('secondary_return_temp') border-danger @enderror"
+                                                       value="{{ old('secondary_return_temp') }}"
+                                                       step="0.1" min="-50" max="200" required
+                                                       onchange="updatePreview()">
+                                                @error('secondary_return_temp')
+                                                <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                                @enderror
+                                                <div class="text-xs text-gray-500 mt-1">Temperature leaving the heat exchanger</div>
+                                            </div>
                                         </div>
 
                                         <div class="p-3 bg-green-50 border border-green-200 rounded">
@@ -162,52 +166,60 @@
                         <div class="kt-card">
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Profile Information</h3>
-                                <div class="text-sm text-gray-500">Optional details and settings</div>
+                                <div class="text-xs text-gray-500">Optional details and settings</div>
                             </div>
                             <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <!-- Auto-generated name preview -->
-                                    <div>
-                                        <label class="kt-label">Auto-generated Name</label>
-                                        <div class="kt-input bg-gray-50" id="auto-name-preview">Enter temperatures to see generated name</div>
-                                        <div class="text-xs text-gray-500 mt-1">This name will be used if you don't provide a custom name below</div>
+                                    <div class="kt-form-item">
+                                        <label class="kt-form-label">Auto-generated Name</label>
+                                        <div class="kt-form-control">
+                                            <div class="kt-input bg-gray-50" id="auto-name-preview">Enter temperatures to see generated name</div>
+                                            <div class="text-xs text-gray-500 mt-1">This name will be used if you don't provide a custom name below</div>
+                                        </div>
                                     </div>
 
                                     <!-- Custom name -->
-                                    <div>
-                                        <label for="name" class="kt-label">Custom Name (Optional)</label>
-                                        <input type="text" name="name" id="name"
-                                               class="kt-input @error('name') border-danger @enderror"
-                                               value="{{ old('name') }}"
-                                               placeholder="Leave empty to use auto-generated name">
-                                        @error('name')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Override the auto-generated name with your own</div>
+                                    <div class="kt-form-item">
+                                        <label for="name" class="kt-form-label">Custom Name (Optional)</label>
+                                        <div class="kt-form-control">
+                                            <input type="text" name="name" id="name"
+                                                   class="kt-input @error('name') border-danger @enderror"
+                                                   value="{{ old('name') }}"
+                                                   placeholder="Leave empty to use auto-generated name">
+                                            @error('name')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Override the auto-generated name with your own</div>
+                                        </div>
                                     </div>
 
                                     <!-- Description -->
-                                    <div>
-                                        <label for="description" class="kt-label">Description (Optional)</label>
-                                        <textarea name="description" id="description" rows="3"
-                                                  class="kt-textarea @error('description') border-danger @enderror"
-                                                  placeholder="Optional description of this temperature profile">{{ old('description') }}</textarea>
-                                        @error('description')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="description" class="kt-form-label">Description (Optional)</label>
+                                        <div class="kt-form-control">
+                                            <textarea name="description" id="description" rows="3"
+                                                      class="kt-textarea @error('description') border-danger @enderror"
+                                                      placeholder="Optional description of this temperature profile">{{ old('description') }}</textarea>
+                                            @error('description')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Status -->
-                                    <div>
-                                        <div class="flex items-center gap-3">
-                                            <input type="checkbox" name="is_active" id="is_active"
-                                                   class="kt-checkbox" value="1"
-                                                {{ old('is_active', true) ? 'checked' : '' }}>
-                                            <label for="is_active" class="kt-label mb-0">
-                                                Active Profile
-                                            </label>
+                                    <div class="kt-form-item">
+                                        <div class="kt-form-control">
+                                            <div class="flex items-center gap-3">
+                                                <input type="checkbox" name="is_active" id="is_active"
+                                                       class="kt-checkbox" value="1"
+                                                    {{ old('is_active', true) ? 'checked' : '' }}>
+                                                <label for="is_active" class="kt-form-label mb-0">
+                                                    Active Profile
+                                                </label>
+                                            </div>
+                                            <div class="text-xs text-gray-500 mt-1">Only active profiles will be available for use in performance data</div>
                                         </div>
-                                        <div class="text-xs text-gray-500 mt-1">Only active profiles will be available for use in performance data</div>
                                     </div>
                                 </div>
                             </div>
@@ -216,6 +228,22 @@
 
                     <!-- Sidebar -->
                     <div class="space-y-6">
+                        <!-- Actions -->
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Create Temperature Profile
+                                    </button>
+                                    <a href="{{ route('temperature-profiles.index') }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-cross"></i>
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Live Preview -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -304,21 +332,7 @@
                             </div>
                         </div>
 
-                        <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Create Temperature Profile
-                                    </button>
-                                    <a href="{{ route('temperature-profiles.index') }}" class="kt-btn kt-btn-secondary w-full">
-                                        <i class="ki-filled ki-cross"></i>
-                                        Cancel
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </form>

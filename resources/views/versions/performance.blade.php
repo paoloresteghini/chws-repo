@@ -114,9 +114,9 @@
                                     <div class="kt-card-header">
                                         <div>
                                             <h3 class="kt-card-title">{{ $profileData['profile']->name }}</h3>
-                                            <div class="text-sm text-gray-600">{{ $profileData['profile']->display_name }}</div>
+                                            <div class="text-xs text-gray-600 pt-2">{{ $profileData['profile']->display_name }}</div>
                                         </div>
-                                        <div class="text-sm text-gray-500">
+                                        <div class="text-xs text-gray-500">
                                             {{ $profileData['vessel_data']->count() }}
                                             {{ $version->has_vessel_options ? 'vessel configurations' : 'data point(s)' }}
                                         </div>

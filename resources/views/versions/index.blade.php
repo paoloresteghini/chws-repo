@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     @include('partials.toolbar', [
-        'title' => 'Product Versions',
+        'title' => 'Product Models',
         'subTitle' => "Manage product models, specifications, and performance configurations",
         'buttonText' => 'Create Version',
         'buttonUrl' => "/versions/create",

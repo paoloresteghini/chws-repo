@@ -106,7 +106,7 @@
                                                 </div>
                                                 <div class="text-3xl text-gray-400">→</div>
                                                 <div class="w-24 h-16 border-2 border-gray-400 rounded flex items-center justify-center font-bold text-gray-600">
-                                                    HEAT<br>EXCHANGER
+                                                    HX
                                                 </div>
                                                 <div class="text-3xl text-gray-400">→</div>
                                                 <div class="flex-1 bg-blue-300 h-12 rounded flex items-center justify-center text-white font-medium">
@@ -136,7 +136,7 @@
                                                 </div>
                                                 <div class="text-3xl text-gray-400">→</div>
                                                 <div class="w-24 h-16 border-2 border-gray-400 rounded flex items-center justify-center font-bold text-gray-600 bg-gray-100">
-                                                    HEAT<br>EXCHANGER
+                                                    HX
                                                 </div>
                                                 <div class="text-3xl text-gray-400">→</div>
                                                 <div class="flex-1 bg-green-500 h-12 rounded flex items-center justify-center text-white font-medium">

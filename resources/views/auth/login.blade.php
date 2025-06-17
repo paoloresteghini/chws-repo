@@ -62,12 +62,16 @@
                         </button>
                     </div>
                 </div>
-                <label class="kt-label">
-                    <input class="kt-checkbox kt-checkbox-sm" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <span class="kt-checkbox-label">
-       Remember me
-      </span>
-                </label>
+                <div class="kt-form-item">
+                    <div class="kt-form-control">
+                        <label class="kt-form-label">
+                            <input class="kt-checkbox kt-checkbox-sm" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                            <span class="kt-checkbox-label">
+               Remember me
+              </span>
+                        </label>
+                    </div>
+                </div>
 
                 <button class="kt-btn kt-btn-primary flex justify-center grow">
                     Sign In

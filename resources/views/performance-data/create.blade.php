@@ -30,80 +30,88 @@
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
-                                    <div>
-                                        <label for="product_id" class="kt-label">Product *</label>
-                                        <select name="product_id" id="product_id"
-                                                class="kt-select @error('product_id') border-danger @enderror"
-                                                required onchange="loadVersions()">
-                                            <option value="">Select a product</option>
-                                            @foreach($products as $product)
-                                                <option value="{{ $product->id }}"
-                                                        data-type="{{ $product->type }}"
-                                                        data-has-vessels="{{ $product->has_vessel_options ? 'true' : 'false' }}"
-                                                    {{ old('product_id', $selectedVersion?->product_id) == $product->id ? 'selected' : '' }}>
-                                                    {{ $product->name }} ({{ $product->type }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('product_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="product_id" class="kt-form-label">Product *</label>
+                                        <div class="kt-form-control">
+                                            <select name="product_id" id="product_id"
+                                                    class="kt-select @error('product_id') border-danger @enderror"
+                                                    required onchange="loadVersions()">
+                                                <option value="">Select a product</option>
+                                                @foreach($products as $product)
+                                                    <option value="{{ $product->id }}"
+                                                            data-type="{{ $product->type }}"
+                                                            data-has-vessels="{{ $product->has_vessel_options ? 'true' : 'false' }}"
+                                                        {{ old('product_id', $selectedVersion?->product_id) == $product->id ? 'selected' : '' }}>
+                                                        {{ $product->name }} ({{ $product->type }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('product_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Version Selection -->
-                                    <div>
-                                        <label for="version_id" class="kt-label">Version *</label>
-                                        <select name="version_id" id="version_id"
-                                                class="kt-select @error('version_id') border-danger @enderror"
-                                                required onchange="loadVesselConfigurations()">
-                                            <option value="">Select a version</option>
-                                            @if($selectedVersion)
-                                                <option value="{{ $selectedVersion->id }}" selected>
-                                                    {{ $selectedVersion->model_number }}
-                                                    @if($selectedVersion->name)
-                                                        ({{ $selectedVersion->name }})
-                                                    @endif
-                                                </option>
-                                            @endif
-                                        </select>
-                                        @error('version_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="version_id" class="kt-form-label">Version *</label>
+                                        <div class="kt-form-control">
+                                            <select name="version_id" id="version_id"
+                                                    class="kt-select @error('version_id') border-danger @enderror"
+                                                    required onchange="loadVesselConfigurations()">
+                                                <option value="">Select a version</option>
+                                                @if($selectedVersion)
+                                                    <option value="{{ $selectedVersion->id }}" selected>
+                                                        {{ $selectedVersion->model_number }}
+                                                        @if($selectedVersion->name)
+                                                            ({{ $selectedVersion->name }})
+                                                        @endif
+                                                    </option>
+                                                @endif
+                                            </select>
+                                            @error('version_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Temperature Profile -->
-                                    <div>
-                                        <label for="temperature_profile_id" class="kt-label">Temperature Profile</label>
-                                        <select name="temperature_profile_id" id="temperature_profile_id"
-                                                class="kt-select @error('temperature_profile_id') border-danger @enderror"
-                                                onchange="updateTemperatureInfo()">
-                                            <option value="">Select temperature profile (optional)</option>
-                                            @foreach($temperatureProfiles as $profile)
-                                                <option value="{{ $profile->id }}"
-                                                        data-primary-flow="{{ $profile->primary_flow_temp }}"
-                                                        data-primary-return="{{ $profile->primary_return_temp }}"
-                                                        data-secondary-flow="{{ $profile->secondary_flow_temp }}"
-                                                        data-secondary-return="{{ $profile->secondary_return_temp }}"
-                                                    {{ old('temperature_profile_id') == $profile->id ? 'selected' : '' }}>
-                                                    {{ $profile->name }} - {{ $profile->display_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('temperature_profile_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="temperature_profile_id" class="kt-form-label">Temperature Profile</label>
+                                        <div class="kt-form-control">
+                                            <select name="temperature_profile_id" id="temperature_profile_id"
+                                                    class="kt-select @error('temperature_profile_id') border-danger @enderror"
+                                                    onchange="updateTemperatureInfo()">
+                                                <option value="">Select temperature profile (optional)</option>
+                                                @foreach($temperatureProfiles as $profile)
+                                                    <option value="{{ $profile->id }}"
+                                                            data-primary-flow="{{ $profile->primary_flow_temp }}"
+                                                            data-primary-return="{{ $profile->primary_return_temp }}"
+                                                            data-secondary-flow="{{ $profile->secondary_flow_temp }}"
+                                                            data-secondary-return="{{ $profile->secondary_return_temp }}"
+                                                        {{ old('temperature_profile_id') == $profile->id ? 'selected' : '' }}>
+                                                        {{ $profile->name }} - {{ $profile->display_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('temperature_profile_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Vessel Configuration -->
-                                    <div id="vessel-configuration-section" style="display: none;">
-                                        <label for="vessel_configuration_id" class="kt-label">Vessel Configuration</label>
-                                        <select name="vessel_configuration_id" id="vessel_configuration_id"
-                                                class="kt-select @error('vessel_configuration_id') border-danger @enderror">
-                                            <option value="">Select vessel configuration (optional)</option>
-                                        </select>
-                                        @error('vessel_configuration_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div id="vessel-configuration-section" class="kt-form-item" style="display: none;">
+                                        <label for="vessel_configuration_id" class="kt-form-label">Vessel Configuration</label>
+                                        <div class="kt-form-control">
+                                            <select name="vessel_configuration_id" id="vessel_configuration_id"
+                                                    class="kt-select @error('vessel_configuration_id') border-danger @enderror">
+                                                <option value="">Select vessel configuration (optional)</option>
+                                            </select>
+                                            @error('vessel_configuration_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
 
@@ -135,59 +143,67 @@
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Heat Input -->
-                                    <div>
-                                        <label for="heat_input_kw" class="kt-label">Heat Input (kW) *</label>
-                                        <input type="number" name="heat_input_kw" id="heat_input_kw"
-                                               class="kt-input @error('heat_input_kw') border-danger @enderror"
-                                               value="{{ old('heat_input_kw') }}"
-                                               step="0.1" min="0" max="999999" required
-                                               onchange="calculateEfficiency()">
-                                        @error('heat_input_kw')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Total heat input to the heat exchanger</div>
+                                    <div class="kt-form-item">
+                                        <label for="heat_input_kw" class="kt-form-label">Heat Input (kW) *</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="heat_input_kw" id="heat_input_kw"
+                                                   class="kt-input @error('heat_input_kw') border-danger @enderror"
+                                                   value="{{ old('heat_input_kw') }}"
+                                                   step="0.1" min="0" max="999999" required
+                                                   onchange="calculateEfficiency()">
+                                            @error('heat_input_kw')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Total heat input to the heat exchanger</div>
+                                        </div>
                                     </div>
 
                                     <!-- Pressure Drop -->
-                                    <div>
-                                        <label for="pressure_drop_kpa" class="kt-label">Pressure Drop (kPa) *</label>
-                                        <input type="number" name="pressure_drop_kpa" id="pressure_drop_kpa"
-                                               class="kt-input @error('pressure_drop_kpa') border-danger @enderror"
-                                               value="{{ old('pressure_drop_kpa') }}"
-                                               step="0.1" min="0" max="9999" required
-                                               onchange="calculateEfficiency()">
-                                        @error('pressure_drop_kpa')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Pressure drop across the heat exchanger</div>
+                                    <div class="kt-form-item">
+                                        <label for="pressure_drop_kpa" class="kt-form-label">Pressure Drop (kPa) *</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="pressure_drop_kpa" id="pressure_drop_kpa"
+                                                   class="kt-input @error('pressure_drop_kpa') border-danger @enderror"
+                                                   value="{{ old('pressure_drop_kpa') }}"
+                                                   step="0.1" min="0" max="9999" required
+                                                   onchange="calculateEfficiency()">
+                                            @error('pressure_drop_kpa')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Pressure drop across the heat exchanger</div>
+                                        </div>
                                     </div>
 
                                     <!-- Primary Flow Rate -->
-                                    <div>
-                                        <label for="primary_flow_rate_ls" class="kt-label">Primary Flow Rate (l/s) *</label>
-                                        <input type="number" name="primary_flow_rate_ls" id="primary_flow_rate_ls"
-                                               class="kt-input @error('primary_flow_rate_ls') border-danger @enderror"
-                                               value="{{ old('primary_flow_rate_ls') }}"
-                                               step="0.001" min="0" max="9999" required
-                                               onchange="calculateEfficiency()">
-                                        @error('primary_flow_rate_ls')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Primary circuit flow rate in liters per second</div>
+                                    <div class="kt-form-item">
+                                        <label for="primary_flow_rate_ls" class="kt-form-label">Primary Flow Rate (l/s) *</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="primary_flow_rate_ls" id="primary_flow_rate_ls"
+                                                   class="kt-input @error('primary_flow_rate_ls') border-danger @enderror"
+                                                   value="{{ old('primary_flow_rate_ls') }}"
+                                                   step="0.001" min="0" max="9999" required
+                                                   onchange="calculateEfficiency()">
+                                            @error('primary_flow_rate_ls')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Primary circuit flow rate in liters per second</div>
+                                        </div>
                                     </div>
 
                                     <!-- Secondary Flow Rate -->
-                                    <div>
-                                        <label for="secondary_flow_rate_ls" class="kt-label">Secondary Flow Rate (l/s) *</label>
-                                        <input type="number" name="secondary_flow_rate_ls" id="secondary_flow_rate_ls"
-                                               class="kt-input @error('secondary_flow_rate_ls') border-danger @enderror"
-                                               value="{{ old('secondary_flow_rate_ls') }}"
-                                               step="0.001" min="0" max="9999" required
-                                               onchange="calculateEfficiency()">
-                                        @error('secondary_flow_rate_ls')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Secondary circuit flow rate in liters per second</div>
+                                    <div class="kt-form-item">
+                                        <label for="secondary_flow_rate_ls" class="kt-form-label">Secondary Flow Rate (l/s) *</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="secondary_flow_rate_ls" id="secondary_flow_rate_ls"
+                                                   class="kt-input @error('secondary_flow_rate_ls') border-danger @enderror"
+                                                   value="{{ old('secondary_flow_rate_ls') }}"
+                                                   step="0.001" min="0" max="9999" required
+                                                   onchange="calculateEfficiency()">
+                                            @error('secondary_flow_rate_ls')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Secondary circuit flow rate in liters per second</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -221,29 +237,33 @@
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- First Hour DHW Supply -->
-                                    <div>
-                                        <label for="first_hour_dhw_supply" class="kt-label">First Hour DHW Supply (L)</label>
-                                        <input type="number" name="first_hour_dhw_supply" id="first_hour_dhw_supply"
-                                               class="kt-input @error('first_hour_dhw_supply') border-danger @enderror"
-                                               value="{{ old('first_hour_dhw_supply') }}"
-                                               step="1" min="0" max="999999">
-                                        @error('first_hour_dhw_supply')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Hot water delivery capacity in the first hour</div>
+                                    <div class="kt-form-item">
+                                        <label for="first_hour_dhw_supply" class="kt-form-label">First Hour DHW Supply (L)</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="first_hour_dhw_supply" id="first_hour_dhw_supply"
+                                                   class="kt-input @error('first_hour_dhw_supply') border-danger @enderror"
+                                                   value="{{ old('first_hour_dhw_supply') }}"
+                                                   step="1" min="0" max="999999">
+                                            @error('first_hour_dhw_supply')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Hot water delivery capacity in the first hour</div>
+                                        </div>
                                     </div>
 
                                     <!-- Subsequent Hour DHW Supply -->
-                                    <div>
-                                        <label for="subsequent_hour_dhw_supply" class="kt-label">Subsequent Hour DHW Supply (L)</label>
-                                        <input type="number" name="subsequent_hour_dhw_supply" id="subsequent_hour_dhw_supply"
-                                               class="kt-input @error('subsequent_hour_dhw_supply') border-danger @enderror"
-                                               value="{{ old('subsequent_hour_dhw_supply') }}"
-                                               step="1" min="0" max="999999">
-                                        @error('subsequent_hour_dhw_supply')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Hot water delivery capacity in subsequent hours</div>
+                                    <div class="kt-form-item">
+                                        <label for="subsequent_hour_dhw_supply" class="kt-form-label">Subsequent Hour DHW Supply (L)</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="subsequent_hour_dhw_supply" id="subsequent_hour_dhw_supply"
+                                                   class="kt-input @error('subsequent_hour_dhw_supply') border-danger @enderror"
+                                                   value="{{ old('subsequent_hour_dhw_supply') }}"
+                                                   step="1" min="0" max="999999">
+                                            @error('subsequent_hour_dhw_supply')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Hot water delivery capacity in subsequent hours</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -293,6 +313,26 @@
 
                     <!-- Sidebar -->
                     <div class="space-y-6">
+
+                        <!-- Actions -->
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Save Performance Data
+                                    </button>
+                                    <button type="button" onclick="validateAndPreview()" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-eye"></i>
+                                        Preview Data
+                                    </button>
+                                    <a href="{{ route('performance-data.index') }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-cross"></i>
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Performance Preview -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -408,25 +448,7 @@
                             </div>
                         </div>
 
-                        <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Save Performance Data
-                                    </button>
-                                    <button type="button" onclick="validateAndPreview()" class="kt-btn kt-btn-info w-full">
-                                        <i class="ki-filled ki-eye"></i>
-                                        Preview Data
-                                    </button>
-                                    <a href="{{ route('performance-data.index') }}" class="kt-btn kt-btn-secondary w-full">
-                                        <i class="ki-filled ki-cross"></i>
-                                        Cancel
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </form>

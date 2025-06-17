@@ -33,75 +33,83 @@
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
-                                    <div>
-                                        <label for="product_id" class="kt-label">Product *</label>
-                                        <select id="product_id" class="kt-select @error('product_id') border-danger @enderror"
-                                                onchange="loadVersions()" disabled>
-                                            <option value="">Select a product</option>
-                                            @foreach($products as $product)
-                                                <option value="{{ $product->id }}"
-                                                    {{ $performanceData->version->product_id == $product->id ? 'selected' : '' }}>
-                                                    {{ $product->name }} ({{ $product->type }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <div class="text-xs text-gray-500 mt-1">Product cannot be changed to maintain data integrity</div>
+                                    <div class="kt-form-item">
+                                        <label for="product_id" class="kt-form-label">Product *</label>
+                                        <div class="kt-form-control">
+                                            <select id="product_id" class="kt-select @error('product_id') border-danger @enderror"
+                                                    onchange="loadVersions()" disabled>
+                                                <option value="">Select a product</option>
+                                                @foreach($products as $product)
+                                                    <option value="{{ $product->id }}"
+                                                        {{ $performanceData->version->product_id == $product->id ? 'selected' : '' }}>
+                                                        {{ $product->name }} ({{ $product->type }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <div class="text-xs text-gray-500 mt-1">Product cannot be changed to maintain data integrity</div>
+                                        </div>
                                     </div>
 
                                     <!-- Version Selection -->
-                                    <div>
-                                        <label for="version_id" class="kt-label">Version/Model *</label>
-                                        <select name="version_id" id="version_id"
-                                                class="kt-select @error('version_id') border-danger @enderror"
-                                                required onchange="loadVesselConfigurations()">
-                                            <option value="">Select a version</option>
-                                            @foreach($performanceData->version->product->versions as $version)
-                                                <option value="{{ $version->id }}"
-                                                        data-has-vessels="{{ $version->has_vessel_options ? 'true' : 'false' }}"
-                                                    {{ old('version_id', $performanceData->version_id) == $version->id ? 'selected' : '' }}>
-                                                    {{ $version->model_number }} - {{ $version->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('version_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="version_id" class="kt-form-label">Version/Model *</label>
+                                        <div class="kt-form-control">
+                                            <select name="version_id" id="version_id"
+                                                    class="kt-select @error('version_id') border-danger @enderror"
+                                                    required onchange="loadVesselConfigurations()">
+                                                <option value="">Select a version</option>
+                                                @foreach($performanceData->version->product->versions as $version)
+                                                    <option value="{{ $version->id }}"
+                                                            data-has-vessels="{{ $version->has_vessel_options ? 'true' : 'false' }}"
+                                                        {{ old('version_id', $performanceData->version_id) == $version->id ? 'selected' : '' }}>
+                                                        {{ $version->model_number }} - {{ $version->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('version_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Temperature Profile -->
-                                    <div>
-                                        <label for="temperature_profile_id" class="kt-label">Temperature Profile</label>
-                                        <select name="temperature_profile_id" id="temperature_profile_id"
-                                                class="kt-select @error('temperature_profile_id') border-danger @enderror">
-                                            <option value="">No temperature profile</option>
-                                            @foreach($temperatureProfiles as $profile)
-                                                <option value="{{ $profile->id }}"
-                                                    {{ old('temperature_profile_id', $performanceData->temperature_profile_id) == $profile->id ? 'selected' : '' }}>
-                                                    {{ $profile->name }} - {{ $profile->display_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('temperature_profile_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="temperature_profile_id" class="kt-form-label">Temperature Profile</label>
+                                        <div class="kt-form-control">
+                                            <select name="temperature_profile_id" id="temperature_profile_id"
+                                                    class="kt-select @error('temperature_profile_id') border-danger @enderror">
+                                                <option value="">No temperature profile</option>
+                                                @foreach($temperatureProfiles as $profile)
+                                                    <option value="{{ $profile->id }}"
+                                                        {{ old('temperature_profile_id', $performanceData->temperature_profile_id) == $profile->id ? 'selected' : '' }}>
+                                                        {{ $profile->name }} - {{ $profile->display_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('temperature_profile_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Vessel Configuration -->
-                                    <div id="vessel-section">
-                                        <label for="vessel_configuration_id" class="kt-label">Vessel Configuration</label>
-                                        <select name="vessel_configuration_id" id="vessel_configuration_id"
-                                                class="kt-select @error('vessel_configuration_id') border-danger @enderror">
-                                            <option value="">No vessel configuration</option>
-                                            @foreach($vesselConfigurations as $vessel)
-                                                <option value="{{ $vessel->id }}"
-                                                    {{ old('vessel_configuration_id', $performanceData->vessel_configuration_id) == $vessel->id ? 'selected' : '' }}>
-                                                    {{ $vessel->name }} ({{ $vessel->formatted_capacity }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('vessel_configuration_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div id="vessel-section" class="kt-form-item">
+                                        <label for="vessel_configuration_id" class="kt-form-label">Vessel Configuration</label>
+                                        <div class="kt-form-control">
+                                            <select name="vessel_configuration_id" id="vessel_configuration_id"
+                                                    class="kt-select @error('vessel_configuration_id') border-danger @enderror">
+                                                <option value="">No vessel configuration</option>
+                                                @foreach($vesselConfigurations as $vessel)
+                                                    <option value="{{ $vessel->id }}"
+                                                        {{ old('vessel_configuration_id', $performanceData->vessel_configuration_id) == $vessel->id ? 'selected' : '' }}>
+                                                        {{ $vessel->name }} ({{ $vessel->formatted_capacity }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('vessel_configuration_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,51 +124,59 @@
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Heat Input -->
-                                    <div>
-                                        <label for="heat_input_kw" class="kt-label">Heat Input (kW) *</label>
-                                        <input type="number" name="heat_input_kw" id="heat_input_kw"
-                                               class="kt-input @error('heat_input_kw') border-danger @enderror"
-                                               value="{{ old('heat_input_kw', $performanceData->heat_input_kw) }}"
-                                               step="0.01" min="0" max="999999" required>
-                                        @error('heat_input_kw')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="heat_input_kw" class="kt-form-label">Heat Input (kW) *</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="heat_input_kw" id="heat_input_kw"
+                                                   class="kt-input @error('heat_input_kw') border-danger @enderror"
+                                                   value="{{ old('heat_input_kw', $performanceData->heat_input_kw) }}"
+                                                   step="0.01" min="0" max="999999" required>
+                                            @error('heat_input_kw')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Pressure Drop -->
-                                    <div>
-                                        <label for="pressure_drop_kpa" class="kt-label">Pressure Drop (kPa) *</label>
-                                        <input type="number" name="pressure_drop_kpa" id="pressure_drop_kpa"
-                                               class="kt-input @error('pressure_drop_kpa') border-danger @enderror"
-                                               value="{{ old('pressure_drop_kpa', $performanceData->pressure_drop_kpa) }}"
-                                               step="0.01" min="0" max="9999" required>
-                                        @error('pressure_drop_kpa')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="pressure_drop_kpa" class="kt-form-label">Pressure Drop (kPa) *</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="pressure_drop_kpa" id="pressure_drop_kpa"
+                                                   class="kt-input @error('pressure_drop_kpa') border-danger @enderror"
+                                                   value="{{ old('pressure_drop_kpa', $performanceData->pressure_drop_kpa) }}"
+                                                   step="0.01" min="0" max="9999" required>
+                                            @error('pressure_drop_kpa')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Primary Flow Rate -->
-                                    <div>
-                                        <label for="primary_flow_rate_ls" class="kt-label">Primary Flow Rate (l/s) *</label>
+                                    <div class="kt-form-item">
+                                        <label for="primary_flow_rate_ls" class="kt-form-label">Primary Flow Rate (l/s) *</label>
+                                        <div class="kt-form-control">
                                         <input type="number" name="primary_flow_rate_ls" id="primary_flow_rate_ls"
                                                class="kt-input @error('primary_flow_rate_ls') border-danger @enderror"
                                                value="{{ old('primary_flow_rate_ls', $performanceData->primary_flow_rate_ls) }}"
                                                step="0.0001" min="0" max="9999" required>
-                                        @error('primary_flow_rate_ls')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                            @error('primary_flow_rate_ls')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Secondary Flow Rate -->
-                                    <div>
-                                        <label for="secondary_flow_rate_ls" class="kt-label">Secondary Flow Rate (l/s) *</label>
+                                    <div class="kt-form-item">
+                                        <label for="secondary_flow_rate_ls" class="kt-form-label">Secondary Flow Rate (l/s) *</label>
+                                        <div class="kt-form-control">
                                         <input type="number" name="secondary_flow_rate_ls" id="secondary_flow_rate_ls"
                                                class="kt-input @error('secondary_flow_rate_ls') border-danger @enderror"
                                                value="{{ old('secondary_flow_rate_ls', $performanceData->secondary_flow_rate_ls) }}"
                                                step="0.0001" min="0" max="9999" required>
-                                        @error('secondary_flow_rate_ls')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                            @error('secondary_flow_rate_ls')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -208,16 +224,18 @@
                                 <div class="text-sm text-gray-500">Optional additional performance data (JSON format)</div>
                             </div>
                             <div class="kt-card-body px-6 py-6">
-                                <div>
-                                    <label for="additional_metrics" class="kt-label">Additional Metrics (JSON)</label>
-                                    <textarea name="additional_metrics" id="additional_metrics" rows="4"
-                                              class="kt-textarea font-mono text-sm @error('additional_metrics') border-danger @enderror"
-                                              placeholder='{"custom_metric": "value", "another_metric": 123}'>{{ old('additional_metrics', json_encode($performanceData->additional_metrics, JSON_PRETTY_PRINT)) }}</textarea>
-                                    @error('additional_metrics')
-                                    <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                    @enderror
-                                    <div class="text-xs text-gray-500 mt-1">
-                                        Optional: Enter additional metrics as JSON. Leave empty if not needed.
+                                <div class="kt-form-item">
+                                    <label for="additional_metrics" class="kt-form-label">Additional Metrics (JSON)</label>
+                                    <div class="kt-form-control">
+                                        <textarea name="additional_metrics" id="additional_metrics" rows="4"
+                                                  class="kt-textarea font-mono text-sm @error('additional_metrics') border-danger @enderror"
+                                                  placeholder='{"custom_metric": "value", "another_metric": 123}'>{{ old('additional_metrics', json_encode($performanceData->additional_metrics, JSON_PRETTY_PRINT)) }}</textarea>
+                                        @error('additional_metrics')
+                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                        @enderror
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            Optional: Enter additional metrics as JSON. Leave empty if not needed.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -226,6 +244,26 @@
 
                     <!-- Sidebar -->
                     <div class="space-y-6">
+                        <!-- Actions -->
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Update Performance Data
+                                    </button>
+                                    <a href="{{ route('performance-data.show', $performanceData->id) }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-eye"></i>
+                                        View Performance Data
+                                    </a>
+                                    <a href="{{ route('performance-data.index') }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-arrow-left"></i>
+                                        Back to List
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Current Data Summary -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -269,25 +307,7 @@
                             </div>
                         </div>
 
-                        <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Update Performance Data
-                                    </button>
-                                    <a href="{{ route('performance-data.show', $performanceData->id) }}" class="kt-btn kt-btn-secondary w-full">
-                                        <i class="ki-filled ki-eye"></i>
-                                        View Performance Data
-                                    </a>
-                                    <a href="{{ route('performance-data.index') }}" class="kt-btn kt-btn-light w-full">
-                                        <i class="ki-filled ki-arrow-left"></i>
-                                        Back to List
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!-- Validation Info -->
                         <div class="kt-card">
@@ -320,7 +340,7 @@
                                           onsubmit="return confirm('Are you sure you want to delete this performance data? This action cannot be undone.')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="kt-btn kt-btn-danger w-full">
+                                        <button type="submit" class="kt-btn kt-btn-destructive w-full">
                                             <i class="ki-filled ki-trash"></i>
                                             Delete Performance Data
                                         </button>

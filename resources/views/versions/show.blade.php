@@ -278,7 +278,7 @@
                                     <div class="border border-gray-200 rounded-lg p-6">
                                         <div class="mb-4">
                                             <h4 class="font-medium text-gray-900">{{ $profileData['profile']->name }}</h4>
-                                            <div class="text-sm text-gray-600">{{ $profileData['profile']->display_name }}</div>
+                                            <div class="text-xs text-gray-600 pt-2">{{ $profileData['profile']->display_name }}</div>
                                         </div>
 
                                         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -343,13 +343,13 @@
                             </a>
 
                             @if($version->performanceData->count() > 0)
-                                <a href="{{ route('versions.performance', $version->id) }}" class="kt-btn kt-btn-info">
+                                <a href="{{ route('versions.performance', $version->id) }}" class="kt-btn kt-btn-outline">
                                     <i class="ki-filled ki-chart-simple"></i>
                                     Performance Data
                                 </a>
                             @endif
 
-                            <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-secondary">
+                            <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-outline">
                                 <i class="ki-filled ki-arrow-left"></i>
                                 Back to Versions
                             </a>
@@ -359,7 +359,7 @@
                                       onsubmit="return confirm('Are you sure you want to delete this version? This action cannot be undone.')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="kt-btn kt-btn-danger">
+                                    <button type="submit" class="kt-btn kt-btn-destructive">
                                         <i class="ki-filled ki-trash"></i>
                                         Delete Version
                                     </button>
