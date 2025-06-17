@@ -1,0 +1,21 @@
+/* Icon imports - must be at the top */
+@import "../vendors/keenicons/duotone/style.css";
+@import "../vendors/keenicons/filled/style.css";
+@import "../vendors/keenicons/outline/style.css";
+@import "../vendors/keenicons/solid/style.css";
+
+/* KtUI source paths */
+@source '../../dist/assets/vendors/ktui/';
+@source '../../../node_modules/@keenthemes/ktui/src/';
+
+/* Theme configs */
+@import "./config.ktui.css";
+
+/* KTUI styles */
+@import '../../../node_modules/@keenthemes/ktui/styles.css';
+
+/* Metronic components */
+@import "./components/index.css";
+
+/* Demos */
+@import "./demos/demo1.css";

@@ -1,11 +1,16 @@
+
 @import 'tailwindcss';
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
-
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-}
+@import '../metronic/vendors/keenicons/duotone/style.css';
+@import '../metronic/vendors/keenicons/filled/style.css';
+@import '../metronic/vendors/keenicons/outline/style.css';
+@import '../metronic/vendors/keenicons/solid/style.css';
+@import '../metronic/css/config.ktui.css';
+@import '../../node_modules/@keenthemes/ktui/styles.css';
+@import '../metronic/css/components/apexcharts.css';
+@import '../metronic/css/components/container.css';
+@import '../metronic/css/components/leaflet.css';
+@import '../metronic/css/components/menu.css';
+@import '../metronic/css/components/range.css';
+@import '../metronic/css/components/rating.css';
+@import '../metronic/css/components/scrollable.css';
+@import '../metronic/css/demos/demo1.css';
