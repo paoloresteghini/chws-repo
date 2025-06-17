@@ -21,10 +21,10 @@ class ProductPerformanceResource extends JsonResource
             'Heat Input (kW)' => (int) round($this->heat_input_kw),
             'Primary Flow Temp' => (int) round($this->temperatureProfile?->primary_flow_temp ?? 0),
             'Primary Return Temp' => (int) round($this->temperatureProfile?->primary_return_temp ?? 0),
-            'Primary Flow Rate (l/s)' => (float) sprintf('%.2f', $this->primary_flow_rate_ls),
+            'Primary Flow Rate (l/s)' => round($this->primary_flow_rate_ls, 2),
             'Secondary Flow Temp' => (int) round($this->temperatureProfile?->secondary_flow_temp ?? 0),
             'Secondary Return Temp' => (int) round($this->temperatureProfile?->secondary_return_temp ?? 0),
-            'Secondary Flow Rate (l/s)' => (float) sprintf('%.2f', $this->secondary_flow_rate_ls),
+            'Secondary Flow Rate (l/s)' => round($this->secondary_flow_rate_ls, 2),
             'Pressure Drop (kPA)' => (int) round($this->pressure_drop_kpa),
             'Model' => $this->version?->model_number ?? null,
         ];
