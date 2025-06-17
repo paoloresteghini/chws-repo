@@ -1,21 +1,21 @@
 @extends('layouts.app')
 @section('content')
     @include('partials.toolbar', [
-        'title' => 'Create Version',
-        'subTitle' => 'Add a new product version to the system',
-        'buttonText' => 'Back to Versions',
-        'buttonUrl' => route('versions.index'),
+        'title' => 'Create Version Category',
+        'subTitle' => 'Add a new category to organize product versions',
+        'buttonText' => 'Back to Categories',
+        'buttonUrl' => route('version-categories.index'),
     ])
     <main class="grow" id="content" role="content">
         <div class="kt-container-fixed">
             <!-- Breadcrumb -->
             <div class="flex items-center gap-2 text-sm text-gray-600 mb-6">
-                <a href="{{ route('versions.index') }}" class="hover:text-primary">Versions</a>
+                <a href="{{ route('version-categories.index') }}" class="hover:text-primary">Version Categories</a>
                 <i class="ki-filled ki-right text-xs"></i>
-                <span class="text-gray-900">Create New Version</span>
+                <span class="text-gray-900">Create New Category</span>
             </div>
 
-            <form method="POST" action="{{ route('versions.store') }}" class="space-y-6">
+            <form method="POST" action="{{ route('version-categories.store') }}" class="space-y-6">
                 @csrf
 
                 <div class="grid lg:grid-cols-3 gap-5 lg:gap-7.5">
@@ -34,12 +34,11 @@
                                         <label for="product_id" class="kt-label">Product *</label>
                                         <select name="product_id" id="product_id"
                                                 class="kt-select @error('product_id') border-danger @enderror"
-                                                required onchange="loadCategories()">
+                                                required onchange="updateProductInfo()">
                                             <option value="">Select a product</option>
                                             @foreach($products as $product)
                                                 <option value="{{ $product->id }}"
                                                         data-type="{{ $product->type }}"
-                                                        data-has-vessels="{{ $product->has_vessel_options ? 'true' : 'false' }}"
                                                     {{ old('product_id') == $product->id ? 'selected' : '' }}>
                                                     {{ $product->name }} ({{ $product->type }})
                                                 </option>
@@ -50,55 +49,43 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Model Number -->
+                                    <!-- Category Name -->
                                     <div>
-                                        <label for="model_number" class="kt-label">Model Number *</label>
-                                        <input type="text" name="model_number" id="model_number"
-                                               class="kt-input @error('model_number') border-danger @enderror"
-                                               value="{{ old('model_number') }}"
-                                               placeholder="e.g., 3017 or 30/120" required>
-                                        @error('model_number')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Unique identifier for this version</div>
-                                    </div>
-
-                                    <!-- Display Name -->
-                                    <div>
-                                        <label for="name" class="kt-label">Display Name</label>
+                                        <label for="name" class="kt-label">Category Name *</label>
                                         <input type="text" name="name" id="name"
                                                class="kt-input @error('name') border-danger @enderror"
                                                value="{{ old('name') }}"
-                                               placeholder="e.g., ProPak 3017">
+                                               placeholder="e.g., 3000 Series" required>
                                         @error('name')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
                                         @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Human-readable name (optional)</div>
+                                        <div class="text-xs text-gray-500 mt-1">Descriptive name for the category</div>
                                     </div>
 
-                                    <!-- Category -->
+                                    <!-- Prefix -->
                                     <div>
-                                        <label for="category_id" class="kt-label">Category</label>
-                                        <select name="category_id" id="category_id"
-                                                class="kt-select @error('category_id') border-danger @enderror">
-                                            <option value="">Select a category</option>
-                                            <!-- Categories will be loaded via JavaScript -->
-                                        </select>
-                                        @error('category_id')
+                                        <label for="prefix" class="kt-label">Prefix</label>
+                                        <input type="text" name="prefix" id="prefix"
+                                               class="kt-input @error('prefix') border-danger @enderror"
+                                               value="{{ old('prefix') }}"
+                                               placeholder="e.g., 30">
+                                        @error('prefix')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
                                         @enderror
+                                        <div class="text-xs text-gray-500 mt-1">Optional prefix for model numbers (e.g., "30" for 3000 series)</div>
                                     </div>
 
-                                    <!-- Status -->
+                                    <!-- Sort Order -->
                                     <div>
-                                        <label for="status" class="kt-label">Status</label>
-                                        <select name="status" id="status" class="kt-select @error('status') border-danger @enderror">
-                                            <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>Active</option>
-                                            <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactive</option>
-                                        </select>
-                                        @error('status')
+                                        <label for="sort_order" class="kt-label">Sort Order</label>
+                                        <input type="number" name="sort_order" id="sort_order"
+                                               class="kt-input @error('sort_order') border-danger @enderror"
+                                               value="{{ old('sort_order', 10) }}"
+                                               min="0" max="999">
+                                        @error('sort_order')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
                                         @enderror
+                                        <div class="text-xs text-gray-500 mt-1">Order for displaying categories (lower numbers first)</div>
                                     </div>
 
                                     <!-- Description -->
@@ -106,7 +93,7 @@
                                         <label for="description" class="kt-label">Description</label>
                                         <textarea name="description" id="description" rows="3"
                                                   class="kt-input @error('description') border-danger @enderror"
-                                                  placeholder="Optional description of this version">{{ old('description') }}</textarea>
+                                                  placeholder="Optional description of this category">{{ old('description') }}</textarea>
                                         @error('description')
                                         <div class="text-sm text-danger mt-1">{{ $message }}</div>
                                         @enderror
@@ -115,35 +102,11 @@
                             </div>
                         </div>
 
-                        <!-- Product Features -->
-                        <div class="kt-card" id="features-card" style="display: none;">
-                            <div class="kt-card-header">
-                                <h3 class="kt-card-title">Product Features</h3>
-                                <div class="text-sm text-gray-500">Configure product-specific options</div>
-                            </div>
-                            <div class="kt-card-body">
-                                <!-- Vessel Options -->
-                                <div id="vessel-options" style="display: none;">
-                                    <div class="flex items-center gap-3">
-                                        <input type="checkbox" name="has_vessel_options" id="has_vessel_options"
-                                               class="kt-checkbox" value="1"
-                                            {{ old('has_vessel_options') ? 'checked' : '' }}>
-                                        <label for="has_vessel_options" class="kt-label mb-0">
-                                            This version supports vessel configurations
-                                        </label>
-                                    </div>
-                                    <div class="text-xs text-gray-500 mt-1">
-                                        Enable this if the version can be configured with different vessel sizes
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Specifications (Optional) -->
+                        <!-- Category Specifications (Optional) -->
                         <div class="kt-card">
                             <div class="kt-card-header">
-                                <h3 class="kt-card-title">Specifications</h3>
-                                <div class="text-sm text-gray-500">Additional technical specifications (JSON format)</div>
+                                <h3 class="kt-card-title">Category Specifications</h3>
+                                <div class="text-sm text-gray-500">Additional specifications for this category (JSON format)</div>
                             </div>
                             <div class="kt-card-body">
                                 <div id="specifications-container">
@@ -159,11 +122,11 @@
                                 <!-- Raw JSON Input (Advanced) -->
                                 <div class="mt-6 pt-6 border-t border-gray-200">
                                     <label class="kt-label">Raw JSON (Advanced)</label>
-                                    <textarea name="specifications_json" id="specifications_json" rows="4"
+                                    <textarea name="category_specs_json" id="category_specs_json" rows="4"
                                               class="kt-input font-mono text-sm"
-                                              placeholder='{"key": "value", "another_key": "another_value"}'>{{ old('specifications_json') }}</textarea>
+                                              placeholder='{"capacity_range": "100-500kW", "applications": ["heating", "cooling"]}'>{{ old('category_specs_json') }}</textarea>
                                     <div class="text-xs text-gray-500 mt-1">
-                                        Optional: Enter specifications as JSON. This will override individual fields above.
+                                        Optional: Enter category specifications as JSON. This will override individual fields above.
                                     </div>
                                 </div>
                             </div>
@@ -184,6 +147,29 @@
                             </div>
                         </div>
 
+                        <!-- Category Examples -->
+                        <div class="kt-card">
+                            <div class="kt-card-header">
+                                <h3 class="kt-card-title">Category Examples</h3>
+                            </div>
+                            <div class="kt-card-body">
+                                <div class="space-y-3 text-sm">
+                                    <div>
+                                        <div class="font-medium text-gray-900">Heat Exchangers:</div>
+                                        <div class="text-gray-600">• 3000 Series (prefix: "30")</div>
+                                        <div class="text-gray-600">• 4000 Series (prefix: "40")</div>
+                                        <div class="text-gray-600">• 5000 Series (prefix: "50")</div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">DHW Systems:</div>
+                                        <div class="text-gray-600">• Standard Range</div>
+                                        <div class="text-gray-600">• High Capacity</div>
+                                        <div class="text-gray-600">• Compact Series</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Tips -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -193,19 +179,19 @@
                                 <div class="space-y-3 text-sm text-gray-600">
                                     <div class="flex gap-2">
                                         <i class="ki-filled ki-information-2 text-info mt-0.5"></i>
-                                        <div>Model numbers must be unique within each product</div>
+                                        <div>Use prefixes to automatically categorize versions by model number</div>
                                     </div>
                                     <div class="flex gap-2">
                                         <i class="ki-filled ki-information-2 text-info mt-0.5"></i>
-                                        <div>Use categories to organise versions by series (e.g., 3000 Series)</div>
+                                        <div>Sort order controls the display order in dropdowns and lists</div>
                                     </div>
                                     <div class="flex gap-2">
                                         <i class="ki-filled ki-information-2 text-info mt-0.5"></i>
-                                        <div>Enable vessel options for products that support different tank sizes</div>
+                                        <div>Categories help organise versions for easier management</div>
                                     </div>
                                     <div class="flex gap-2">
                                         <i class="ki-filled ki-information-2 text-info mt-0.5"></i>
-                                        <div>Performance data can be imported later via Excel files</div>
+                                        <div>You can assign versions to categories after creation</div>
                                     </div>
                                 </div>
                             </div>
@@ -217,9 +203,9 @@
                                 <div class="flex flex-col gap-3">
                                     <button type="submit" class="kt-btn kt-btn-primary w-full">
                                         <i class="ki-filled ki-check"></i>
-                                        Create Version
+                                        Create Category
                                     </button>
-                                    <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-secondary w-full">
+                                    <a href="{{ route('version-categories.index') }}" class="kt-btn kt-btn-secondary w-full">
                                         <i class="ki-filled ki-cross"></i>
                                         Cancel
                                     </a>
@@ -235,27 +221,19 @@
     <script>
         let specificationCount = 0;
 
-        // Load categories when product changes
-        function loadCategories() {
+        // Update product info when product changes
+        function updateProductInfo() {
             const productSelect = document.getElementById('product_id');
-            const categorySelect = document.getElementById('category_id');
-            const featuresCard = document.getElementById('features-card');
-            const vesselOptions = document.getElementById('vessel-options');
             const productPreview = document.getElementById('product-preview');
             const productInfo = document.getElementById('product-info');
 
             const selectedOption = productSelect.options[productSelect.selectedIndex];
 
             if (selectedOption.value) {
-                // Show features card
-                featuresCard.style.display = 'block';
-
-                // Show/hide vessel options based on product
-                const hasVessels = selectedOption.dataset.hasVessels === 'true';
-                vesselOptions.style.display = hasVessels ? 'block' : 'none';
-
-                // Update product preview
+                // Show product preview
                 productPreview.style.display = 'block';
+
+                // Update product info
                 productInfo.innerHTML = `
                     <div class="flex justify-between">
                         <span class="text-sm text-gray-600">Product:</span>
@@ -265,32 +243,22 @@
                         <span class="text-sm text-gray-600">Type:</span>
                         <span class="text-sm">${selectedOption.dataset.type}</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-sm text-gray-600">Vessel Support:</span>
-                        <span class="text-sm">${hasVessels ? 'Yes' : 'No'}</span>
-                    </div>
                 `;
 
-                // Load categories via AJAX
-                fetch(`/api/categories-for-product?product_id=${selectedOption.value}`)
-                    .then(response => response.json())
-                    .then(categories => {
-                        categorySelect.innerHTML = '<option value="">Select a category</option>';
-                        categories.forEach(category => {
-                            const option = document.createElement('option');
-                            option.value = category.id;
-                            option.textContent = category.name;
-                            categorySelect.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error loading categories:', error);
-                        categorySelect.innerHTML = '<option value="">Error loading categories</option>';
-                    });
+                // Auto-suggest category name based on product
+                const nameInput = document.getElementById('name');
+                if (!nameInput.value) {
+                    const productName = selectedOption.text.split(' (')[0];
+                    if (productName === 'ProPak') {
+                        nameInput.placeholder = 'e.g., 3000 Series, 4000 Series';
+                    } else if (productName === 'Aquafast') {
+                        nameInput.placeholder = 'e.g., Standard Range, High Capacity';
+                    } else if (productName === 'ProRapid') {
+                        nameInput.placeholder = 'e.g., Rapid Series, Compact Range';
+                    }
+                }
             } else {
-                featuresCard.style.display = 'none';
                 productPreview.style.display = 'none';
-                categorySelect.innerHTML = '<option value="">Select a category</option>';
             }
         }
 
@@ -310,31 +278,27 @@
             specificationCount++;
         }
 
-        // Auto-generate name based on product and model
+        // Auto-generate sort order suggestions
         document.getElementById('product_id').addEventListener('change', function() {
-            updateGeneratedName();
-        });
-
-        document.getElementById('model_number').addEventListener('input', function() {
-            updateGeneratedName();
-        });
-
-        function updateGeneratedName() {
-            const productSelect = document.getElementById('product_id');
-            const modelInput = document.getElementById('model_number');
-            const nameInput = document.getElementById('name');
-
-            if (productSelect.value && modelInput.value && !nameInput.value) {
-                const productName = productSelect.options[productSelect.selectedIndex].text.split(' (')[0];
-                nameInput.value = `${productName} ${modelInput.value}`;
+            const sortOrderInput = document.getElementById('sort_order');
+            if (!sortOrderInput.value || sortOrderInput.value == 10) {
+                // Suggest sort orders based on product type
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.dataset.type === 'heat_exchanger') {
+                    sortOrderInput.value = 10;
+                } else if (selectedOption.dataset.type === 'dhw_system') {
+                    sortOrderInput.value = 20;
+                } else {
+                    sortOrderInput.value = 30;
+                }
             }
-        }
+        });
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             const productSelect = document.getElementById('product_id');
             if (productSelect.value) {
-                loadCategories();
+                updateProductInfo();
             }
         });
     </script>

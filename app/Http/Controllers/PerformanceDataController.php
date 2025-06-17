@@ -94,7 +94,7 @@ class PerformanceDataController extends Controller
             $query->orderBy($sortField, $sortDirection);
         }
 
-        $performanceData = $query->paginate(20)->withQueryString();
+        $performanceData = $query->get();
 
         // Get filter options
         $products = Product::orderBy('name')->get();

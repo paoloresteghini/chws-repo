@@ -49,7 +49,7 @@ class VersionController extends Controller
             ->orderBy('versions.model_number')
             ->select('versions.*');
 
-        $versions = $query->paginate(15)->withQueryString();
+        $versions = $query->get();
 
         // Get filter options
         $products = Product::orderBy('name')->get();

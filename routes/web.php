@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PerformanceDataController;
 use App\Http\Controllers\TemperatureProfileController;
+use App\Http\Controllers\VersionCategoryController;
 use App\Http\Controllers\VersionController;
 use App\Http\Controllers\VesselConfigurationController;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,14 @@ Route::resource('versions', VersionController::class);
 Route::resource('temperature-profiles', TemperatureProfileController::class);
 Route::resource('temperature-profiles', TemperatureProfileController::class);
 Route::post('temperature-profiles/bulk-action', [TemperatureProfileController::class, 'bulkAction'])->name('temperature-profiles.bulk-action');
+
+Route::resource('version-categories', VersionCategoryController::class);
+
+// Additional Version Category endpoints
+Route::post('version-categories/bulk-action', [VersionCategoryController::class, 'bulkAction'])->name('version-categories.bulk-action');
+Route::post('version-categories/{versionCategory}/assign-versions', [VersionCategoryController::class, 'assignVersions'])->name('version-categories.assign-versions');
+Route::patch('version-categories/update-sort-order', [VersionCategoryController::class, 'updateSortOrder'])->name('version-categories.update-sort-order');
+Route::get('api/categories-for-product', [VersionCategoryController::class, 'getCategoriesForProduct']);
 
 Route::resource('vessel-configurations', VesselConfigurationController::class);
 Route::post('vessel-configurations/bulk-action', [VesselConfigurationController::class, 'bulkAction'])->name('vessel-configurations.bulk-action');

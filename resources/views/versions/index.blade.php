@@ -2,7 +2,7 @@
 @section('content')
     @include('partials.toolbar', [
         'title' => 'Product Versions',
-        'subTitle' => 'Manage all product models and configurations',
+        'subTitle' => "Manage product models, specifications, and performance configurations",
         'buttonText' => 'Create Version',
         'buttonUrl' => "/versions/create",
     ])
@@ -16,7 +16,7 @@
                     <div class="kt-card-header">
                         <h3 class="kt-card-title">Filters</h3>
                     </div>
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-5 py-5">
                         <form method="GET" action="{{ route('versions.index') }}" class="flex flex-wrap gap-4 items-end">
                             <!-- Product Filter -->
                             <div class="flex flex-col gap-2">
@@ -74,7 +74,6 @@
                     <div class="kt-card-header">
                         <h3 class="kt-card-title">
                             Product Versions
-                            <span class="text-sm text-gray-500 font-normal">({{ $versions->total() }} total)</span>
                         </h3>
                         <div class="kt-input max-w-48">
                             <i class="ki-filled ki-magnifier"></i>
@@ -140,7 +139,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @forelse($versions as $version)
+                                    @foreach($versions as $version)
                                         <tr>
                                             <td>
                                                 <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-row-check="true" type="checkbox" value="{{ $version->id }}">
@@ -218,38 +217,25 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="9" class="text-center py-8">
-                                                <div class="flex flex-col items-center gap-3">
-                                                    <i class="ki-filled ki-file-deleted text-4xl text-gray-400"></i>
-                                                    <div class="text-gray-500">
-                                                        <p class="font-medium">No versions found</p>
-                                                        <p class="text-sm">Try adjusting your filters or create a new version</p>
-                                                    </div>
-                                                    <a href="{{ route('versions.create') }}" class="kt-btn kt-btn-primary kt-btn-sm">
-                                                        <i class="ki-filled ki-plus"></i>
-                                                        Create Version
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
 
-                            <!-- Pagination -->
-                            @if($versions->hasPages())
-                                <div class="kt-card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-secondary-foreground text-sm font-medium">
-                                    <div class="flex items-center gap-2 order-2 md:order-1">
-                                        Showing {{ $versions->firstItem() ?? 0 }} to {{ $versions->lastItem() ?? 0 }} of {{ $versions->total() }} results
-                                    </div>
-                                    <div class="flex items-center gap-4 order-1 md:order-2">
-                                        {{ $versions->links() }}
+                            <div class="kt-card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-secondary-foreground text-sm font-medium">
+                                <div class="flex items-center gap-2 order-2 md:order-1">
+                                    Show
+                                    <select class="kt-select w-16" data-kt-datatable-size="true" data-kt-select="" name="perpage">
+                                    </select>
+                                    per page
+                                </div>
+                                <div class="flex items-center gap-4 order-1 md:order-2">
+                                    <span data-kt-datatable-info="true">
+                                    </span>
+                                    <div class="kt-datatable-pagination" data-kt-datatable-pagination="true">
                                     </div>
                                 </div>
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>

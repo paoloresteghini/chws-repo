@@ -2,7 +2,7 @@
 @section('content')
     @include('partials.toolbar', [
         'title' => 'Users',
-        'subTitle' => 'Create and manage your users',
+        'subTitle' => "Manage system users and access permissions",
         'buttonText' => 'Create User',
         'buttonUrl' => "/users/create",
     ])

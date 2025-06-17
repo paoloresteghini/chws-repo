@@ -61,8 +61,7 @@ class VesselConfigurationController extends Controller
             ->orderBy('versions.model_number')
             ->orderBy('vessel_configurations.capacity')
             ->select('vessel_configurations.*')
-            ->paginate(20)
-            ->withQueryString();
+            ->get();
 
         // Get filter options
         $products = Product::where('has_vessel_options', true)->orderBy('name')->get();

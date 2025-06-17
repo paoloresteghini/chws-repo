@@ -49,8 +49,7 @@ class TemperatureProfileController extends Controller
         // Order by primary flow temperature, then secondary flow temperature
         $profiles = $query->orderBy('primary_flow_temp')
             ->orderBy('secondary_flow_temp')
-            ->paginate(20)
-            ->withQueryString();
+            ->get();
 
         // Get statistics for dashboard
         $stats = [
