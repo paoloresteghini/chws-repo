@@ -18,29 +18,29 @@ class ProductPerformanceResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = [
-            'Heat Input (kW)' => round($this->heat_input_kw, 0),
-            'Primary Flow Temp' => round($this->temperatureProfile?->primary_flow_temp ?? 0, 0),
-            'Primary Return Temp' => round($this->temperatureProfile?->primary_return_temp ?? 0, 0),
-            'Primary Flow Rate (l/s)' => round($this->primary_flow_rate_ls, 2),
-            'Secondary Flow Temp' => round($this->temperatureProfile?->secondary_flow_temp ?? 0, 0),
-            'Secondary Return Temp' => round($this->temperatureProfile?->secondary_return_temp ?? 0, 0),
-            'Secondary Flow Rate (l/s)' => round($this->secondary_flow_rate_ls, 2),
-            'Pressure Drop (kPA)' => round($this->pressure_drop_kpa, 0),
+            'Heat Input (kW)' => (int) round($this->heat_input_kw),
+            'Primary Flow Temp' => (int) round($this->temperatureProfile?->primary_flow_temp ?? 0),
+            'Primary Return Temp' => (int) round($this->temperatureProfile?->primary_return_temp ?? 0),
+            'Primary Flow Rate (l/s)' => (float) sprintf('%.2f', $this->primary_flow_rate_ls),
+            'Secondary Flow Temp' => (int) round($this->temperatureProfile?->secondary_flow_temp ?? 0),
+            'Secondary Return Temp' => (int) round($this->temperatureProfile?->secondary_return_temp ?? 0),
+            'Secondary Flow Rate (l/s)' => (float) sprintf('%.2f', $this->secondary_flow_rate_ls),
+            'Pressure Drop (kPA)' => (int) round($this->pressure_drop_kpa),
             'Model' => $this->version?->model_number ?? null,
         ];
 
         // Add vessel capacity if available
         if ($this->vesselConfiguration) {
-            $data['Vessel Capacity'] = round($this->vesselConfiguration->capacity, 0);
+            $data['Vessel Capacity'] = (int) round($this->vesselConfiguration->capacity);
         }
 
         // Add DHW specific fields if available (for Aquafast-type products)
         if ($this->first_hour_dhw_supply !== null) {
-            $data['First Hour DHW Supply'] = round($this->first_hour_dhw_supply, 0);
+            $data['First Hour DHW Supply'] = (int) round($this->first_hour_dhw_supply);
         }
 
         if ($this->subsequent_hour_dhw_supply !== null) {
-            $data['Subsequent Hour DHW Supply'] = round($this->subsequent_hour_dhw_supply, 0);
+            $data['Subsequent Hour DHW Supply'] = (int) round($this->subsequent_hour_dhw_supply);
         }
 
         // Add additional metrics if available
