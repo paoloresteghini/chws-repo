@@ -33,90 +33,102 @@
                             <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
-                                    <div class="md:col-span-2">
-                                        <label for="product_id" class="kt-label">Product *</label>
-                                        <select name="product_id" id="product_id"
-                                                class="kt-select @error('product_id') border-danger @enderror"
-                                                required onchange="loadCategories()">
-                                            <option value="">Select a product</option>
-                                            @foreach($products as $product)
-                                                <option value="{{ $product->id }}"
-                                                        data-type="{{ $product->type }}"
-                                                        data-has-vessels="{{ $product->has_vessel_options ? 'true' : 'false' }}"
-                                                    {{ (old('product_id', $version->product_id) == $product->id) ? 'selected' : '' }}>
-                                                    {{ $product->name }} ({{ $product->type }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('product_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="md:col-span-2 kt-form-item">
+                                        <label for="product_id" class="kt-form-label">Product *</label>
+                                        <div class="kt-form-control">
+                                            <select name="product_id" id="product_id"
+                                                    class="kt-select @error('product_id') border-danger @enderror"
+                                                    required onchange="loadCategories()">
+                                                <option value="">Select a product</option>
+                                                @foreach($products as $product)
+                                                    <option value="{{ $product->id }}"
+                                                            data-type="{{ $product->type }}"
+                                                            data-has-vessels="{{ $product->has_vessel_options ? 'true' : 'false' }}"
+                                                        {{ (old('product_id', $version->product_id) == $product->id) ? 'selected' : '' }}>
+                                                        {{ $product->name }} ({{ $product->type }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('product_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Model Number -->
-                                    <div>
-                                        <label for="model_number" class="kt-label">Model Number *</label>
-                                        <input type="text" name="model_number" id="model_number"
-                                               class="kt-input @error('model_number') border-danger @enderror"
-                                               value="{{ old('model_number', $version->model_number) }}"
-                                               required>
-                                        @error('model_number')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Unique identifier for this version</div>
+                                    <div class="kt-form-item">
+                                        <label for="model_number" class="kt-form-label">Model Number *</label>
+                                        <div class="kt-form-control">
+                                            <input type="text" name="model_number" id="model_number"
+                                                   class="kt-input @error('model_number') border-danger @enderror"
+                                                   value="{{ old('model_number', $version->model_number) }}"
+                                                   required>
+                                            @error('model_number')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Unique identifier for this version</div>
+                                        </div>
                                     </div>
 
                                     <!-- Display Name -->
-                                    <div>
-                                        <label for="name" class="kt-label">Display Name</label>
-                                        <input type="text" name="name" id="name"
-                                               class="kt-input @error('name') border-danger @enderror"
-                                               value="{{ old('name', $version->name) }}">
-                                        @error('name')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
-                                        <div class="text-xs text-gray-500 mt-1">Human-readable name (optional)</div>
+                                    <div class="kt-form-item">
+                                        <label for="name" class="kt-form-label">Display Name</label>
+                                        <div class="kt-form-control">
+                                            <input type="text" name="name" id="name"
+                                                   class="kt-input @error('name') border-danger @enderror"
+                                                   value="{{ old('name', $version->name) }}">
+                                            @error('name')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Human-readable name (optional)</div>
+                                        </div>
                                     </div>
 
                                     <!-- Category -->
-                                    <div>
-                                        <label for="category_id" class="kt-label">Category</label>
-                                        <select name="category_id" id="category_id"
-                                                class="kt-select @error('category_id') border-danger @enderror">
-                                            <option value="">Select a category</option>
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}"
-                                                    {{ (old('category_id', $version->category_id) == $category->id) ? 'selected' : '' }}>
-                                                    {{ $category->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('category_id')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="category_id" class="kt-form-label">Category</label>
+                                        <div class="kt-form-control">
+                                            <select name="category_id" id="category_id"
+                                                    class="kt-select @error('category_id') border-danger @enderror">
+                                                <option value="">Select a category</option>
+                                                @foreach($categories as $category)
+                                                    <option value="{{ $category->id }}"
+                                                        {{ (old('category_id', $version->category_id) == $category->id) ? 'selected' : '' }}>
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('category_id')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Status -->
-                                    <div>
-                                        <label for="status" class="kt-label">Status</label>
-                                        <select name="status" id="status" class="kt-select @error('status') border-danger @enderror">
-                                            <option value="1" {{ old('status', $version->status) == '1' ? 'selected' : '' }}>Active</option>
-                                            <option value="0" {{ old('status', $version->status) == '0' ? 'selected' : '' }}>Inactive</option>
-                                        </select>
-                                        @error('status')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="kt-form-item">
+                                        <label for="status" class="kt-form-label">Status</label>
+                                        <div class="kt-form-control">
+                                            <select name="status" id="status" class="kt-select @error('status') border-danger @enderror">
+                                                <option value="1" {{ old('status', $version->status) == '1' ? 'selected' : '' }}>Active</option>
+                                                <option value="0" {{ old('status', $version->status) == '0' ? 'selected' : '' }}>Inactive</option>
+                                            </select>
+                                            @error('status')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Description -->
-                                    <div class="md:col-span-2">
-                                        <label for="description" class="kt-label">Description</label>
-                                        <textarea name="description" id="description" rows="3"
-                                                  class="kt-textarea @error('description') border-danger @enderror"
-                                                  placeholder="Optional description of this version">{{ old('description', $version->description) }}</textarea>
-                                        @error('description')
-                                        <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                        @enderror
+                                    <div class="md:col-span-2 kt-form-item">
+                                        <label for="description" class="kt-form-label">Description</label>
+                                        <div class="kt-form-control">
+                                            <textarea name="description" id="description" rows="3"
+                                                      class="kt-textarea @error('description') border-danger @enderror"
+                                                      placeholder="Optional description of this version">{{ old('description', $version->description) }}</textarea>
+                                            @error('description')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -131,13 +143,17 @@
                             <div class="kt-card-body px-6 py-6">
                                 <!-- Vessel Options -->
                                 <div id="vessel-options">
-                                    <div class="flex items-center gap-3">
-                                        <input type="checkbox" name="has_vessel_options" id="has_vessel_options"
-                                               class="kt-checkbox" value="1"
-                                            {{ old('has_vessel_options', $version->has_vessel_options) ? 'checked' : '' }}>
-                                        <label for="has_vessel_options" class="kt-label mb-0">
-                                            This version supports vessel configurations
-                                        </label>
+                                    <div class="kt-form-item">
+                                        <div class="kt-form-control">
+                                            <div class="flex items-center gap-3">
+                                                <input type="checkbox" name="has_vessel_options" id="has_vessel_options"
+                                                       class="kt-checkbox" value="1"
+                                                    {{ old('has_vessel_options', $version->has_vessel_options) ? 'checked' : '' }}>
+                                                <label for="has_vessel_options" class="kt-form-label mb-0">
+                                                    This version supports vessel configurations
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-1">
                                         Enable this if the version can be configured with different vessel sizes
@@ -186,13 +202,15 @@
                                 </div>
 
                                 <!-- Raw JSON Input (Advanced) -->
-                                <div class="mt-6 pt-6 border-t border-gray-200">
-                                    <label class="kt-label">Raw JSON (Advanced)</label>
-                                    <textarea name="specifications_json" id="specifications_json" rows="4"
-                                              class="kt-textarea font-mono text-sm"
-                                              placeholder='{"key": "value", "another_key": "another_value"}'>{{ old('specifications_json', $version->specifications ? json_encode($version->specifications, JSON_PRETTY_PRINT) : '') }}</textarea>
-                                    <div class="text-xs text-gray-500 mt-1">
-                                        Optional: Enter specifications as JSON. This will override individual fields above.
+                                <div class="mt-6 pt-6 border-t border-gray-200 kt-form-item">
+                                    <label class="kt-form-label">Raw JSON (Advanced)</label>
+                                    <div class="kt-form-control">
+                                        <textarea name="specifications_json" id="specifications_json" rows="4"
+                                                  class="kt-textarea font-mono text-sm"
+                                                  placeholder='{"key": "value", "another_key": "another_value"}'>{{ old('specifications_json', $version->specifications ? json_encode($version->specifications, JSON_PRETTY_PRINT) : '') }}</textarea>
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            Optional: Enter specifications as JSON. This will override individual fields above.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -250,6 +268,26 @@
 
                     <!-- Sidebar -->
                     <div class="space-y-6">
+
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Update Version
+                                    </button>
+                                    <a href="{{ route('versions.show', $version->id) }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-eye"></i>
+                                        View Version
+                                    </a>
+                                    <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-outline w-full">
+                                        <i class="ki-filled ki-arrow-left"></i>
+                                        Back to List
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Current Version Info -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -284,24 +322,7 @@
                         </div>
 
                         <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Update Version
-                                    </button>
-                                    <a href="{{ route('versions.show', $version->id) }}" class="kt-btn kt-btn-outline w-full">
-                                        <i class="ki-filled ki-eye"></i>
-                                        View Version
-                                    </a>
-                                    <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-outline w-full">
-                                        <i class="ki-filled ki-arrow-left"></i>
-                                        Back to List
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!-- Danger Zone -->
                         <div class="kt-card border-danger">

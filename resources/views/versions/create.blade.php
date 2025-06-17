@@ -184,6 +184,21 @@
                             </div>
                         </div>
 
+                        <div class="kt-card">
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
+                                        <i class="ki-filled ki-check"></i>
+                                        Create Version
+                                    </button>
+                                    <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-secondary w-full">
+                                        <i class="ki-filled ki-cross"></i>
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Tips -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -212,20 +227,7 @@
                         </div>
 
                         <!-- Actions -->
-                        <div class="kt-card">
-                            <div class="kt-card-body px-6 py-6">
-                                <div class="flex flex-col gap-3">
-                                    <button type="submit" class="kt-btn kt-btn-primary w-full">
-                                        <i class="ki-filled ki-check"></i>
-                                        Create Version
-                                    </button>
-                                    <a href="{{ route('versions.index') }}" class="kt-btn kt-btn-secondary w-full">
-                                        <i class="ki-filled ki-cross"></i>
-                                        Cancel
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </form>
