@@ -46,7 +46,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <!-- Configuration Information Grid -->
                                 <div class="grid md:grid-cols-2 gap-8 mb-8">
                                     <!-- Basic Information -->
@@ -203,7 +203,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Configuration Stats</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <div class="text-center">
                                         <div class="text-3xl font-bold text-primary">{{ $vesselConfiguration->performanceData->count() }}</div>
@@ -235,7 +235,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Details</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-sm text-gray-600">Name:</span>
@@ -264,7 +264,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Related Information</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3">
                                     <div>
                                         <span class="text-sm font-medium text-gray-700">Product:</span>
@@ -311,7 +311,7 @@
                                 View All Performance Data
                             </a>
                         </div>
-                        <div class="kt-card-body">
+                        <div class="kt-card-body px-6 py-6">
                             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 @foreach($performanceByProfile as $profileData)
                                     <div class="border border-gray-200 rounded-lg p-6">
@@ -368,7 +368,7 @@
 
                 <!-- Actions -->
                 <div class="kt-card">
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-6 py-6">
                         <div class="flex justify-between items-center">
                             <div class="flex gap-3">
                                 <a href="{{ route('vessel-configurations.index') }}" class="kt-btn kt-btn-secondary">

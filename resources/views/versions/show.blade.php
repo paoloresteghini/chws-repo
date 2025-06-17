@@ -36,7 +36,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <div class="space-y-4">
                                         <div>
@@ -145,7 +145,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Performance Summary</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 @if($version->performanceData->count() > 0)
                                     <div class="space-y-4">
                                         <div class="grid grid-cols-2 gap-4">
@@ -191,7 +191,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Product Features</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3">
                                     <div class="flex items-center justify-between">
                                         <span class="text-sm text-gray-600">Temperature Profiles</span>
@@ -232,7 +232,7 @@
                                 <span class="text-sm text-gray-500 font-normal">({{ $version->vesselConfigurations->count() }} options)</span>
                             </h3>
                         </div>
-                        <div class="kt-card-body">
+                        <div class="kt-card-body px-6 py-6">
                             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                 @foreach($version->vesselConfigurations as $vessel)
                                     <div class="border border-gray-200 rounded-lg p-4">
@@ -272,7 +272,7 @@
                                 </a>
                             @endif
                         </div>
-                        <div class="kt-card-body">
+                        <div class="kt-card-body px-6 py-6">
                             <div class="space-y-6">
                                 @foreach($performanceByProfile->take(5) as $profileData)
                                     <div class="border border-gray-200 rounded-lg p-6">
@@ -335,7 +335,7 @@
 
                 <!-- Actions -->
                 <div class="kt-card">
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-6 py-6">
                         <div class="flex flex-wrap gap-3">
                             <a href="{{ route('versions.edit', $version->id) }}" class="kt-btn kt-btn-primary">
                                 <i class="ki-filled ki-pencil"></i>

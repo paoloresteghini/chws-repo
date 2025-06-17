@@ -27,7 +27,7 @@
                                 <h3 class="kt-card-title">Basic Information</h3>
                                 <div class="text-sm text-gray-500">Required fields are marked with *</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
                                     <div class="md:col-span-2">
@@ -121,7 +121,7 @@
                                 <h3 class="kt-card-title">Product Features</h3>
                                 <div class="text-sm text-gray-500">Configure product-specific options</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <!-- Vessel Options -->
                                 <div id="vessel-options" style="display: none;">
                                     <div class="flex items-center gap-3">
@@ -145,7 +145,7 @@
                                 <h3 class="kt-card-title">Specifications</h3>
                                 <div class="text-sm text-gray-500">Additional technical specifications (JSON format)</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div id="specifications-container">
                                     <div class="space-y-3" id="spec-fields">
                                         <!-- Specification fields will be added here -->
@@ -177,7 +177,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Product Information</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3" id="product-info">
                                     <!-- Product info will be populated via JavaScript -->
                                 </div>
@@ -189,7 +189,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Tips</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3 text-sm text-gray-600">
                                     <div class="flex gap-2">
                                         <i class="ki-filled ki-information-2 text-info mt-0.5"></i>
@@ -213,7 +213,7 @@
 
                         <!-- Actions -->
                         <div class="kt-card">
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="flex flex-col gap-3">
                                     <button type="submit" class="kt-btn kt-btn-primary w-full">
                                         <i class="ki-filled ki-check"></i>

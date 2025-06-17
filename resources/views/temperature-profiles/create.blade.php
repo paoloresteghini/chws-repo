@@ -27,7 +27,7 @@
                                 <h3 class="kt-card-title">Temperature Configuration</h3>
                                 <div class="text-sm text-gray-500">Set flow and return temperatures for primary and secondary circuits</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-8">
                                     <!-- Primary Circuit -->
                                     <div class="space-y-4">
@@ -164,7 +164,7 @@
                                 <h3 class="kt-card-title">Profile Information</h3>
                                 <div class="text-sm text-gray-500">Optional details and settings</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <!-- Auto-generated name preview -->
                                     <div>
@@ -221,7 +221,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Profile Preview</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <div>
                                         <div class="text-sm font-medium text-gray-700 mb-2">Generated Name</div>
@@ -258,7 +258,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Common Presets</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-2">
                                     <button type="button" onclick="applyPreset(80, 60, 10, 60)" class="w-full kt-btn kt-btn-sm kt-btn-secondary text-left">
                                         80-60,10-60 (High Temp)
@@ -282,7 +282,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Validation Rules</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3 text-sm text-gray-600">
                                     <div class="flex gap-2">
                                         <i class="ki-filled ki-information-2 text-info mt-0.5"></i>
@@ -306,7 +306,7 @@
 
                         <!-- Actions -->
                         <div class="kt-card">
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="flex flex-col gap-3">
                                     <button type="submit" class="kt-btn kt-btn-primary w-full">
                                         <i class="ki-filled ki-check"></i>

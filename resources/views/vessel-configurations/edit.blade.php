@@ -30,7 +30,7 @@
                                 <h3 class="kt-card-title">Basic Information</h3>
                                 <div class="text-sm text-gray-500">Update vessel size and capacity details</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-6">
                                     <!-- Product and Version Selection -->
                                     <div class="grid md:grid-cols-2 gap-6">
@@ -143,7 +143,7 @@
                                 <h3 class="kt-card-title">Additional Specifications</h3>
                                 <div class="text-sm text-gray-500">Technical specifications for this vessel</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div id="specifications-container">
                                     <div class="space-y-3" id="spec-fields">
                                         @if($vesselConfiguration->specifications)
@@ -198,7 +198,7 @@
                                 <div class="kt-card-header bg-info-light">
                                     <h3 class="kt-card-title text-info">Usage Information</h3>
                                 </div>
-                                <div class="kt-card-body">
+                                <div class="kt-card-body px-6 py-6">
                                     <div class="flex items-start gap-3">
                                         <i class="ki-filled ki-information-2 text-info mt-1"></i>
                                         <div>
@@ -227,7 +227,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Current Configuration</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-sm text-gray-600">Name:</span>
@@ -264,7 +264,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Selected Version</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3" id="version-info">
                                     <!-- Version info will be populated via JavaScript -->
                                 </div>
@@ -276,7 +276,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Name Suggestions</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-2" id="name-suggestions">
                                     <!-- Suggestions will be populated via JavaScript -->
                                 </div>
@@ -285,7 +285,7 @@
 
                         <!-- Actions -->
                         <div class="kt-card">
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="flex flex-col gap-3">
                                     <button type="submit" class="kt-btn kt-btn-primary w-full">
                                         <i class="ki-filled ki-check"></i>
@@ -309,7 +309,7 @@
                                 <div class="kt-card-header bg-danger-light">
                                     <h3 class="kt-card-title text-danger">Danger Zone</h3>
                                 </div>
-                                <div class="kt-card-body">
+                                <div class="kt-card-body px-6 py-6">
                                     <div class="space-y-3">
                                         <div class="text-sm text-gray-600">
                                             Delete this vessel configuration permanently. This action cannot be undone.
@@ -331,7 +331,7 @@
                                 <div class="kt-card-header bg-gray-50">
                                     <h3 class="kt-card-title text-gray-600">Delete Restricted</h3>
                                 </div>
-                                <div class="kt-card-body">
+                                <div class="kt-card-body px-6 py-6">
                                     <div class="flex items-start gap-3">
                                         <i class="ki-filled ki-shield-cross text-gray-400 mt-1"></i>
                                         <div class="text-sm text-gray-600">

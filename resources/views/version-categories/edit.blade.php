@@ -30,7 +30,7 @@
                                 <h3 class="kt-card-title">Basic Information</h3>
                                 <div class="text-sm text-gray-500">Required fields are marked with *</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
                                     <div class="md:col-span-2">
@@ -110,7 +110,7 @@
                                 <h3 class="kt-card-title">Category Specifications</h3>
                                 <div class="text-sm text-gray-500">Additional specifications for this category</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div id="specifications-container">
                                     <div class="space-y-3" id="spec-fields">
                                         @if($versionCategory->category_specs)
@@ -154,7 +154,7 @@
                                     <h3 class="kt-card-title">Associated Data</h3>
                                     <div class="text-sm text-gray-500">Data that will be affected by changes</div>
                                 </div>
-                                <div class="kt-card-body">
+                                <div class="kt-card-body px-6 py-6">
                                     <div class="grid md:grid-cols-2 gap-6">
                                         <div class="p-4 border border-gray-200 rounded-lg">
                                             <div class="flex items-center gap-2 mb-2">
@@ -195,7 +195,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Current Category</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-sm text-gray-600">Product:</span>
@@ -229,7 +229,7 @@
 
                         <!-- Actions -->
                         <div class="kt-card">
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="flex flex-col gap-3">
                                     <button type="submit" class="kt-btn kt-btn-primary w-full">
                                         <i class="ki-filled ki-check"></i>
@@ -253,7 +253,7 @@
                                 <div class="kt-card-header bg-danger-light">
                                     <h3 class="kt-card-title text-danger">Danger Zone</h3>
                                 </div>
-                                <div class="kt-card-body">
+                                <div class="kt-card-body px-6 py-6">
                                     <div class="space-y-3">
                                         <div class="text-sm text-gray-600">
                                             Delete this category permanently. This action cannot be undone.
@@ -275,7 +275,7 @@
                                 <div class="kt-card-header bg-warning-light">
                                     <h3 class="kt-card-title text-warning">Cannot Delete</h3>
                                 </div>
-                                <div class="kt-card-body">
+                                <div class="kt-card-body px-6 py-6">
                                     <div class="text-sm text-gray-600">
                                         This category cannot be deleted because it has {{ $versionCategory->versions_count }} associated version(s).
                                         Remove all versions from this category first.

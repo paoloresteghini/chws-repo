@@ -27,7 +27,7 @@
                                 <h3 class="kt-card-title">Product & Version Selection</h3>
                                 <div class="text-sm text-gray-500">Select the product version for this performance data</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
                                     <div>
@@ -132,7 +132,7 @@
                                 <h3 class="kt-card-title">Performance Metrics</h3>
                                 <div class="text-sm text-gray-500">Enter the measured performance values</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Heat Input -->
                                     <div>
@@ -218,7 +218,7 @@
                                 <h3 class="kt-card-title">DHW Performance</h3>
                                 <div class="text-sm text-gray-500">Domestic Hot Water specific performance metrics</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- First Hour DHW Supply -->
                                     <div>
@@ -270,7 +270,7 @@
                                 <h3 class="kt-card-title">Additional Metrics</h3>
                                 <div class="text-sm text-gray-500">Optional additional performance data</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div id="additional-metrics-container">
                                     <div class="space-y-3" id="metric-fields">
                                         <!-- Additional metric fields will be added here -->
@@ -298,7 +298,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Performance Preview</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <div>
                                         <div class="text-sm font-medium text-gray-700 mb-2">Selected Configuration</div>
@@ -356,7 +356,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Performance Benchmarks</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3 text-sm">
                                     <div class="flex items-center gap-2">
                                         <div class="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -386,7 +386,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Data Quality Tips</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3 text-sm text-gray-600">
                                     <div class="flex gap-2">
                                         <i class="ki-filled ki-information-2 text-info mt-0.5"></i>
@@ -410,7 +410,7 @@
 
                         <!-- Actions -->
                         <div class="kt-card">
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="flex flex-col gap-3">
                                     <button type="submit" class="kt-btn kt-btn-primary w-full">
                                         <i class="ki-filled ki-check"></i>

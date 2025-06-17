@@ -41,7 +41,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <!-- Temperature Values Grid -->
                                 <div class="grid md:grid-cols-2 gap-8 mb-8">
                                     <!-- Primary Circuit -->
@@ -177,7 +177,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Profile Statistics</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <div class="text-center">
                                         <div class="text-3xl font-bold text-primary">{{ $temperatureProfile->performance_data_count }}</div>
@@ -213,7 +213,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Profile Details</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-sm text-gray-600">Name:</span>
@@ -242,7 +242,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Temperature Analysis</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <!-- Efficiency Indicators -->
                                     <div>
@@ -298,7 +298,7 @@
                                 <span class="text-sm text-gray-500 font-normal">({{ $products->count() }} products)</span>
                             </h3>
                         </div>
-                        <div class="kt-card-body">
+                        <div class="kt-card-body px-6 py-6">
                             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 @foreach($products as $product)
                                     <div class="border border-gray-200 rounded-lg p-4">
@@ -333,7 +333,7 @@
                                 <span class="text-sm text-gray-500 font-normal">({{ $versions->count() }} versions)</span>
                             </h3>
                         </div>
-                        <div class="kt-card-body">
+                        <div class="kt-card-body px-6 py-6">
                             <div class="kt-scrollable-x-auto">
                                 <table class="kt-table kt-table-border">
                                     <thead>
@@ -399,7 +399,7 @@
 
                 <!-- Actions -->
                 <div class="kt-card">
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-6 py-6">
                         <div class="flex justify-between items-center">
                             <div class="flex gap-3">
                                 <a href="{{ route('temperature-profiles.index') }}" class="kt-btn kt-btn-secondary">

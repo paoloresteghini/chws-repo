@@ -36,7 +36,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <div class="space-y-4">
                                         <div>
@@ -106,7 +106,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Version Statistics</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <div class="grid grid-cols-2 gap-4">
                                         <div class="text-center">
@@ -153,7 +153,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Quick Actions</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3">
                                     <a href="{{ route('version-categories.edit', $versionCategory->id) }}" class="kt-btn kt-btn-sm kt-btn-primary w-full">
                                         <i class="ki-filled ki-pencil"></i>
@@ -193,7 +193,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="kt-card-body">
+                        <div class="kt-card-body px-6 py-6">
                             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                 @foreach($versionsByStatus->flatten() as $version)
                                     <div class="version-card border border-gray-200 rounded-lg p-4" data-status="{{ $version->status ? 'active' : 'inactive' }}">
@@ -249,7 +249,7 @@
                 @else
                     <!-- No Versions State -->
                     <div class="kt-card">
-                        <div class="kt-card-body">
+                        <div class="kt-card-body px-6 py-6">
                             <div class="text-center py-12">
                                 <i class="ki-filled ki-abstract-26 text-6xl text-gray-300"></i>
                                 <h3 class="text-lg font-medium text-gray-900 mt-4">No Versions Assigned</h3>
@@ -271,7 +271,7 @@
 
                 <!-- Actions -->
                 <div class="kt-card">
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-6 py-6">
                         <div class="flex justify-between items-center">
                             <div class="flex gap-3">
                                 <a href="{{ route('version-categories.index') }}" class="kt-btn kt-btn-secondary">

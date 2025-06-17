@@ -20,7 +20,7 @@
             <div class="space-y-6">
                 <!-- Version Summary -->
                 <div class="kt-card">
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-6 py-6">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-4">
                                 <div>
@@ -60,7 +60,7 @@
                     <div class="kt-card-header">
                         <h3 class="kt-card-title">Filter Performance Data</h3>
                     </div>
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-6 py-6">
                         <div class="flex flex-wrap gap-4 items-end">
                             <!-- Temperature Profile Filter -->
                             <div class="flex flex-col gap-2">
@@ -121,7 +121,7 @@
                                             {{ $version->has_vessel_options ? 'vessel configurations' : 'data point(s)' }}
                                         </div>
                                     </div>
-                                    <div class="kt-card-body">
+                                    <div class="kt-card-body px-6 py-6">
                                         @if($version->has_vessel_options)
                                             <!-- Grid for vessel configurations -->
                                             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -218,7 +218,7 @@
 
                         <!-- Table View (Hidden by default) -->
                         <div id="table-view" class="kt-card" style="display: none;">
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="kt-scrollable-x-auto">
                                     <table class="kt-table kt-table-border">
                                         <thead>
@@ -272,7 +272,7 @@
                     @else
                         <!-- No Data State -->
                         <div class="kt-card">
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="text-center py-12">
                                     <i class="ki-filled ki-chart-simple text-6xl text-gray-300"></i>
                                     <h3 class="text-lg font-medium text-gray-900 mt-4">No Performance Data Available</h3>
@@ -291,7 +291,7 @@
 
                 <!-- Actions -->
                 <div class="kt-card">
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-6 py-6">
                         <div class="flex justify-between items-center">
                             <div class="flex gap-3">
                                 <a href="{{ route('versions.show', $version->id) }}" class="kt-btn kt-btn-secondary">

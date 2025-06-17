@@ -30,7 +30,7 @@
                                 <h3 class="kt-card-title">Product & Version Information</h3>
                                 <div class="text-sm text-gray-500">Select the product and version for this performance data</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Product Selection -->
                                     <div>
@@ -113,7 +113,7 @@
                                 <h3 class="kt-card-title">Performance Metrics</h3>
                                 <div class="text-sm text-gray-500">Core heat exchanger performance data</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Heat Input -->
                                     <div>
@@ -172,7 +172,7 @@
                                 <h3 class="kt-card-title">DHW Performance Metrics</h3>
                                 <div class="text-sm text-gray-500">Domestic Hot Water specific metrics (for Aquafast-type products)</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- First Hour DHW Supply -->
                                     <div>
@@ -207,7 +207,7 @@
                                 <h3 class="kt-card-title">Additional Metrics</h3>
                                 <div class="text-sm text-gray-500">Optional additional performance data (JSON format)</div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div>
                                     <label for="additional_metrics" class="kt-label">Additional Metrics (JSON)</label>
                                     <textarea name="additional_metrics" id="additional_metrics" rows="4"
@@ -231,7 +231,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Current Data</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3 text-sm">
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Product:</span>
@@ -271,7 +271,7 @@
 
                         <!-- Actions -->
                         <div class="kt-card">
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="flex flex-col gap-3">
                                     <button type="submit" class="kt-btn kt-btn-primary w-full">
                                         <i class="ki-filled ki-check"></i>
@@ -294,7 +294,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Validation Rules</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-2 text-xs text-gray-600">
                                     <div>• Heat Input: 0 - 999,999 kW</div>
                                     <div>• Flow Rates: 0 - 9,999 l/s</div>
@@ -311,7 +311,7 @@
                             <div class="kt-card-header bg-danger-light">
                                 <h3 class="kt-card-title text-danger">Danger Zone</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-3">
                                     <div class="text-sm text-gray-600">
                                         Delete this performance data record permanently. This action cannot be undone.

@@ -45,7 +45,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <!-- Core Performance Metrics -->
                                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                                     <div class="text-center p-4 bg-primary-light border border-primary-200 rounded-lg">
@@ -212,7 +212,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Configuration</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <div>
                                         <div class="text-sm text-gray-600">Product</div>
@@ -282,7 +282,7 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Performance Rating</h3>
                             </div>
-                            <div class="kt-card-body">
+                            <div class="kt-card-body px-6 py-6">
                                 <div class="space-y-4">
                                     <!-- Efficiency Rating -->
                                     <div>
@@ -342,7 +342,7 @@
                                 <div class="kt-card-header">
                                     <h3 class="kt-card-title">Additional Metrics</h3>
                                 </div>
-                                <div class="kt-card-body">
+                                <div class="kt-card-body px-6 py-6">
                                     <div class="space-y-2">
                                         @foreach($performanceData->additional_metrics as $key => $value)
                                             <div class="flex justify-between">
@@ -366,7 +366,7 @@
                                 <span class="text-sm text-gray-500 font-normal">(Same version, different conditions)</span>
                             </h3>
                         </div>
-                        <div class="kt-card-body">
+                        <div class="kt-card-body px-6 py-6">
                             <div class="kt-scrollable-x-auto">
                                 <table class="kt-table kt-table-border">
                                     <thead>
@@ -435,7 +435,7 @@
 
                 <!-- Actions -->
                 <div class="kt-card">
-                    <div class="kt-card-body">
+                    <div class="kt-card-body px-6 py-6">
                         <div class="flex justify-between items-center">
                             <div class="flex gap-3">
                                 <a href="{{ route('performance-data.index') }}" class="kt-btn kt-btn-secondary">
