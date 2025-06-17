@@ -18,29 +18,29 @@ class ProductPerformanceResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = [
-            'Heat Input (kW)' => (float) $this->heat_input_kw,
-            'Primary Flow Temp' => $this->temperatureProfile?->primary_flow_temp ?? null,
-            'Primary Return Temp' => $this->temperatureProfile?->primary_return_temp ?? null,
-            'Primary Flow Rate (l/s)' => (float) $this->primary_flow_rate_ls,
-            'Secondary Flow Temp' => $this->temperatureProfile?->secondary_flow_temp ?? null,
-            'Secondary Return Temp' => $this->temperatureProfile?->secondary_return_temp ?? null,
-            'Secondary Flow Rate (l/s)' => (float) $this->secondary_flow_rate_ls,
-            'Pressure Drop (kPA)' => (float) $this->pressure_drop_kpa,
+            'Heat Input (kW)' => (float) number_format($this->heat_input_kw, 0),
+            'Primary Flow Temp' => (float) number_format($this->temperatureProfile?->primary_flow_temp ?? 0, 0),
+            'Primary Return Temp' => (float) number_format($this->temperatureProfile?->primary_return_temp ?? 0, 0),
+            'Primary Flow Rate (l/s)' => (float) number_format($this->primary_flow_rate_ls, 2),
+            'Secondary Flow Temp' => (float) number_format($this->temperatureProfile?->secondary_flow_temp ?? 0, 0),
+            'Secondary Return Temp' => (float) number_format($this->temperatureProfile?->secondary_return_temp ?? 0, 0),
+            'Secondary Flow Rate (l/s)' => (float) number_format($this->secondary_flow_rate_ls, 2),
+            'Pressure Drop (kPA)' => (float) number_format($this->pressure_drop_kpa, 0),
             'Model' => $this->version?->model_number ?? null,
         ];
 
         // Add vessel capacity if available
         if ($this->vesselConfiguration) {
-            $data['Vessel Capacity'] = (float) $this->vesselConfiguration->capacity;
+            $data['Vessel Capacity'] = (float) number_format($this->vesselConfiguration->capacity, 0);
         }
 
         // Add DHW specific fields if available (for Aquafast-type products)
         if ($this->first_hour_dhw_supply !== null) {
-            $data['First Hour DHW Supply'] = (float) $this->first_hour_dhw_supply;
+            $data['First Hour DHW Supply'] = (float) number_format($this->first_hour_dhw_supply, 0);
         }
 
         if ($this->subsequent_hour_dhw_supply !== null) {
-            $data['Subsequent Hour DHW Supply'] = (float) $this->subsequent_hour_dhw_supply;
+            $data['Subsequent Hour DHW Supply'] = (float) number_format($this->subsequent_hour_dhw_supply, 0);
         }
 
         // Add additional metrics if available
