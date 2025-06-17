@@ -65,7 +65,7 @@
                             <!-- Temperature Profile Filter -->
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-medium text-gray-700">Temperature Profile</label>
-                                <select id="profile-filter" class="kt-select w-64" onchange="filterData()">
+                                <select id="profile-filter" class="kt-select w-64">
                                     <option value="">All Profiles</option>
                                     @foreach($performanceMatrix as $profileId => $profileData)
                                         <option value="{{ $profileId }}">{{ $profileData['profile']->name }}</option>
@@ -77,7 +77,7 @@
                                 <!-- Vessel Filter -->
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-medium text-gray-700">Vessel Configuration</label>
-                                    <select id="vessel-filter" class="kt-select w-48" onchange="filterData()">
+                                    <select id="vessel-filter" class="kt-select w-48">
                                         <option value="">All Vessels</option>
                                         @foreach($version->vesselConfigurations as $vessel)
                                             <option value="{{ $vessel->id }}">{{ $vessel->name }}</option>
@@ -89,7 +89,7 @@
                             <!-- View Mode -->
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-medium text-gray-700">View Mode</label>
-                                <select id="view-mode" class="kt-select w-32" onchange="toggleViewMode()">
+                                <select id="view-mode" class="kt-select w-32">
                                     <option value="cards">Cards</option>
                                     <option value="table">Table</option>
                                 </select>
@@ -328,10 +328,14 @@
             const profileFilter = document.getElementById('profile-filter').value;
             const vesselFilter = document.getElementById('vessel-filter')?.value || '';
 
+            console.log('Filtering data - Profile:', profileFilter, 'Vessel:', vesselFilter);
+
             // Filter profile cards
             document.querySelectorAll('.profile-card').forEach(card => {
                 const profileId = card.dataset.profileId;
                 const showProfile = !profileFilter || profileId === profileFilter;
+
+                console.log('Profile card:', profileId, 'Show:', showProfile);
                 card.style.display = showProfile ? 'block' : 'none';
 
                 if (showProfile && vesselFilter) {
@@ -339,6 +343,7 @@
                     card.querySelectorAll('.vessel-card').forEach(vesselCard => {
                         const vesselId = vesselCard.dataset.vesselId;
                         const showVessel = !vesselFilter || vesselId === vesselFilter;
+                        console.log('Vessel card:', vesselId, 'Show:', showVessel);
                         vesselCard.style.display = showVessel ? 'block' : 'none';
                     });
                 } else if (showProfile) {
@@ -364,15 +369,17 @@
             const cardsView = document.getElementById('cards-view');
             const tableView = document.getElementById('table-view');
 
-            if (viewMode === 'table') {
-                cardsView.style.display = 'none';
-                tableView.style.display = 'block';
-            } else {
-                cardsView.style.display = 'block';
-                tableView.style.display = 'none';
-            }
+            console.log('Toggle view mode to:', viewMode);
+            console.log('Cards view element:', cardsView);
+            console.log('Table view element:', tableView);
 
-            console.log('View mode changed to:', viewMode);
+            if (viewMode === 'table') {
+                if (cardsView) cardsView.style.display = 'none';
+                if (tableView) tableView.style.display = 'block';
+            } else {
+                if (cardsView) cardsView.style.display = 'block';
+                if (tableView) tableView.style.display = 'none';
+            }
         }
 
         function resetFilters() {
@@ -383,20 +390,6 @@
             document.getElementById('view-mode').value = 'cards';
             filterData();
             toggleViewMode();
-        }
-
-        function toggleViewMode() {
-            const viewMode = document.getElementById('view-mode').value;
-            const cardsView = document.getElementById('cards-view');
-            const tableView = document.getElementById('table-view');
-
-            if (viewMode === 'table') {
-                cardsView.style.display = 'none';
-                tableView.style.display = 'block';
-            } else {
-                cardsView.style.display = 'block';
-                tableView.style.display = 'none';
-            }
         }
 
         function exportData() {
@@ -421,31 +414,33 @@
             @foreach($performanceMatrix as $profileId => $profileData)
             @foreach($profileData['vessel_data'] as $vesselId => $vesselData)
             @if($vesselData['performance'])
-            const row = [
-                "{{ $profileData['profile']->name }}",
-                "{{ $profileData['profile']->display_name }}"
-            ];
+            (function() {
+                const rowData = [
+                    "{{ $profileData['profile']->name }}",
+                    "{{ $profileData['profile']->display_name }}"
+                ];
 
-            @if($version->has_vessel_options)
-            row.push("{{ $vesselData['vessel']->name ?? 'N/A' }}");
-            @endif
+                @if($version->has_vessel_options)
+                rowData.push("{{ $vesselData['vessel']->name ?? 'N/A' }}");
+                @endif
 
-            row.push(
-                "{{ $vesselData['performance']->heat_input_kw }}",
-                "{{ $vesselData['performance']->primary_flow_rate_ls }}",
-                "{{ $vesselData['performance']->secondary_flow_rate_ls }}",
-                "{{ $vesselData['performance']->pressure_drop_kpa }}"
-            );
+                rowData.push(
+                    "{{ $vesselData['performance']->heat_input_kw }}",
+                    "{{ $vesselData['performance']->primary_flow_rate_ls }}",
+                    "{{ $vesselData['performance']->secondary_flow_rate_ls }}",
+                    "{{ $vesselData['performance']->pressure_drop_kpa }}"
+                );
 
-            @if($version->performanceData->whereNotNull('first_hour_dhw_supply')->count() > 0)
-            row.push(
-                "{{ $vesselData['performance']->first_hour_dhw_supply ?? '' }}",
-                "{{ $vesselData['performance']->subsequent_hour_dhw_supply ?? '' }}"
-            );
-            @endif
+                @if($version->performanceData->whereNotNull('first_hour_dhw_supply')->count() > 0)
+                rowData.push(
+                    "{{ $vesselData['performance']->first_hour_dhw_supply ?? '' }}",
+                    "{{ $vesselData['performance']->subsequent_hour_dhw_supply ?? '' }}"
+                );
+                @endif
 
-            row.push("{{ $vesselData['performance']->efficiency_ratio }}");
-            rows.push(row.join(','));
+                rowData.push("{{ $vesselData['performance']->efficiency_ratio }}");
+                rows.push(rowData.join(','));
+            })();
             @endif
             @endforeach
             @endforeach
@@ -467,6 +462,33 @@
             window.print();
         }
 
+        // Initialize event listeners when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing event listeners');
+
+            const profileFilter = document.getElementById('profile-filter');
+            const vesselFilter = document.getElementById('vessel-filter');
+            const viewModeSelect = document.getElementById('view-mode');
+
+            if (profileFilter) {
+                profileFilter.addEventListener('change', filterData);
+                console.log('Profile filter event listener added');
+            }
+
+            if (vesselFilter) {
+                vesselFilter.addEventListener('change', filterData);
+                console.log('Vessel filter event listener added');
+            }
+
+            if (viewModeSelect) {
+                viewModeSelect.addEventListener('change', toggleViewMode);
+                console.log('View mode event listener added');
+            }
+
+            // Initial setup
+            toggleViewMode();
+        });
+
         // Debugging function - call this in browser console to check filter setup
         function debugFilters() {
             console.log('=== FILTER DEBUG ===');
@@ -475,20 +497,20 @@
             const vesselFilter = document.getElementById('vessel-filter');
             const viewMode = document.getElementById('view-mode');
 
-            console.log('Profile filter element:', profileFilter);
-            console.log('Profile filter value:', profileFilter?.value);
-            console.log('Profile filter options:', Array.from(profileFilter?.options || []).map(o => ({value: o.value, text: o.text})));
-
-            console.log('Vessel filter element:', vesselFilter);
-            console.log('Vessel filter value:', vesselFilter?.value);
-            console.log('Vessel filter options:', Array.from(vesselFilter?.options || []).map(o => ({value: o.value, text: o.text})));
-
-            console.log('View mode element:', viewMode);
-            console.log('View mode value:', viewMode?.value);
-
-            console.log('Profile cards found:', document.querySelectorAll('.profile-card').length);
-            console.log('Vessel cards found:', document.querySelectorAll('.vessel-card').length);
-            console.log('Table rows found:', document.querySelectorAll('.performance-row').length);
+            // console.log('Profile filter element:', profileFilter);
+            // console.log('Profile filter value:', profileFilter?.value);
+            // console.log('Profile filter options:', Array.from(profileFilter?.options || []).map(o => ({value: o.value, text: o.text})));
+            //
+            // console.log('Vessel filter element:', vesselFilter);
+            // console.log('Vessel filter value:', vesselFilter?.value);
+            // console.log('Vessel filter options:', Array.from(vesselFilter?.options || []).map(o => ({value: o.value, text: o.text})));
+            //
+            // console.log('View mode element:', viewMode);
+            // console.log('View mode value:', viewMode?.value);
+            //
+            // console.log('Profile cards found:', document.querySelectorAll('.profile-card').length);
+            // console.log('Vessel cards found:', document.querySelectorAll('.vessel-card').length);
+            // console.log('Table rows found:', document.querySelectorAll('.performance-row').length);
 
             // Check data attributes
             document.querySelectorAll('.profile-card').forEach((card, index) => {
