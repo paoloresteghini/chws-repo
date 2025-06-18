@@ -154,9 +154,12 @@
                           </span>
                             <input class="kt-switch" data-kt-theme-switch-state="dark" data-kt-theme-switch-toggle="true" name="check" type="checkbox" value="1"/>
                         </div>
-                        <a class="kt-btn kt-btn-outline justify-center w-full" href="html/demo7/authentication/classic/sign-in.html">
-                            Log out
-                        </a>
+                        <form method="get" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="kt-btn kt-btn-outline justify-center w-full">
+                                Log out
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

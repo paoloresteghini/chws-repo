@@ -14,9 +14,7 @@
        <span class="text-sm text-secondary-foreground me-1.5">
         Need an account?
        </span>
-                        <a class="text-sm link" href="html/demo7/authentication/classic/sign-up.html">
-                            Sign up
-                        </a>
+
                     </div>
                 </div>
                 <div class="flex flex-col gap-1">

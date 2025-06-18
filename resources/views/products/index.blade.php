@@ -83,10 +83,10 @@
                                             </td>
                                             <td>
                                                 <div class="flex gap-1">
-                                                    <a href="{{ route('products.show', $product->id) }}" class="kt-btn kt-btn-sm kt-btn-light">
+                                                    <a href="{{ route('products.show', $product->id) }}" class="kt-btn kt-btn-xs kt-btn-outline">
                                                         <i class="ki-filled ki-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('products.edit', $product->id) }}" class="kt-btn kt-btn-sm kt-btn-primary">
+                                                    <a href="{{ route('products.edit', $product->id) }}" class="kt-btn kt-btn-xs kt-btn-primary">
                                                         <i class="ki-filled ki-pencil"></i>
                                                     </a>
                                                 </div>

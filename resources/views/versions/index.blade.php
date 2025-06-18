@@ -203,17 +203,18 @@
                                             </td>
                                             <td>
                                                 <div class="flex gap-1">
-                                                    <a href="{{ route('versions.show', $version->id) }}" class="kt-btn kt-btn-xs kt-btn-secondary" title="View Details">
+                                                    <a href="{{ route('versions.show', $version->id) }}" class="kt-btn kt-btn-xs kt-btn-outline" title="View Details">
                                                         <i class="ki-filled ki-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('versions.edit', $version->id) }}" class="kt-btn kt-btn-xs kt-btn-primary" title="Edit">
-                                                        <i class="ki-filled ki-pencil"></i>
-                                                    </a>
+
                                                     @if($version->performanceData->count() > 0)
-                                                        <a href="{{ route('versions.performance', $version->id) }}" class="kt-btn kt-btn-xs kt-btn-info" title="Performance Data">
+                                                        <a href="{{ route('versions.performance', $version->id) }}" class="kt-btn kt-btn-xs kt-btn-outline" title="Performance Data">
                                                             <i class="ki-filled ki-chart-simple"></i>
                                                         </a>
                                                     @endif
+                                                    <a href="{{ route('versions.edit', $version->id) }}" class="kt-btn kt-btn-xs kt-btn-primary" title="Edit">
+                                                        <i class="ki-filled ki-pencil"></i>
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>

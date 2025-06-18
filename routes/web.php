@@ -18,6 +18,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('logout', App\Http\Controllers\LogoutController::class)->name('logout');
 
     Route::prefix('documentation')->name('documentation.')->group(function () {
         Route::get('/', [DocumentationController::class, 'index'])->name('index');
@@ -29,7 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('products', App\Http\Controllers\ProductController::class);
     Route::resource('versions', VersionController::class);
-    
+
     // Attachment routes
     Route::delete('attachments/{attachment}', [App\Http\Controllers\AttachmentController::class, 'destroy'])->name('attachments.destroy');
     Route::get('attachments/{attachment}/preview', [App\Http\Controllers\AttachmentController::class, 'preview'])->name('attachments.preview');
@@ -73,7 +74,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 // Data Quality
     Route::get('performance-data-quality', [PerformanceDataController::class, 'dataQuality'])->name('performance-data.data-quality');
-    
+
 
     Route::post('performance-data/bulk-action', [PerformanceDataController::class, 'bulkAction'])->name('performance-data.bulk-action');
     Route::get('performance-data/compare', [PerformanceDataController::class, 'compare'])->name('performance-data.compare');

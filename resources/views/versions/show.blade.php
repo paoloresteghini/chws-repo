@@ -24,12 +24,8 @@
                             <div class="kt-card-header">
                                 <h3 class="kt-card-title">Version Information</h3>
                                 <div class="flex gap-2">
-                                    <a href="{{ route('versions.edit', $version->id) }}" class="kt-btn kt-btn-sm kt-btn-primary">
-                                        <i class="ki-filled ki-pencil"></i>
-                                        Edit
-                                    </a>
                                     @if($version->performanceData->count() > 0)
-                                        <a href="{{ route('versions.performance', $version->id) }}" class="kt-btn kt-btn-sm kt-btn-info">
+                                        <a href="{{ route('versions.performance', $version->id) }}" class="kt-btn kt-btn-sm kt-btn-outline">
                                             <i class="ki-filled ki-chart-simple"></i>
                                             Performance Data
                                         </a>
@@ -42,26 +38,27 @@
                                         <div>
                                             <label class="text-sm font-medium text-gray-700">Product</label>
                                             <div class="mt-1">
-                                                <span class="text-lg font-medium text-gray-900">{{ $version->product->name }}</span>
+                                                <span class="mt-1 text-sm text-gray-600">{{ $version->product->name }}</span>
                                                 <span class="ml-2 kt-badge kt-badge-sm kt-badge-outline">{{ $version->product->type }}</span>
                                             </div>
                                         </div>
 
                                         <div>
                                             <label class="text-sm font-medium text-gray-700">Model Number</label>
-                                            <div class="mt-1 text-2xl font-mono font-bold text-primary">{{ $version->model_number }}</div>
+                                            <div class="mt-1 text-sm text-gray-600">{{ $version->model_number }}</div>
                                         </div>
 
                                         <div>
                                             <label class="text-sm font-medium text-gray-700">Display Name</label>
-                                            <div class="mt-1 text-lg text-gray-900">{{ $version->name ?: 'Not set' }}</div>
+                                            <div class="mt-1 text-sm text-gray-600">{{ $version->name ?: 'Not set' }}</div>
                                         </div>
 
                                         @if($version->category)
                                             <div>
                                                 <label class="text-sm font-medium text-gray-700">Category</label>
-                                                <div class="mt-1">
-                                                    <span class="kt-badge kt-badge-lg kt-badge-info">{{ $version->category->name }}</span>
+
+                                                <div class="mt-1 text-sm text-gray-600">
+                                                    {{ $version->category->name }}
                                                 </div>
                                             </div>
                                         @endif
@@ -72,12 +69,12 @@
                                             <label class="text-sm font-medium text-gray-700">Status</label>
                                             <div class="mt-1">
                                                 @if($version->status)
-                                                    <span class="kt-badge kt-badge-lg kt-badge-success">
+                                                    <span class="kt-badge  kt-badge-outline kt-badge-success rounded-full">
                                                         <i class="ki-filled ki-check-circle"></i>
                                                         Active
                                                     </span>
                                                 @else
-                                                    <span class="kt-badge kt-badge-lg kt-badge-secondary">
+                                                    <span class="kt-badge  kt-badge-outline kt-badge-danger rounded-full">
                                                         <i class="ki-filled ki-cross-circle"></i>
                                                         Inactive
                                                     </span>
@@ -89,10 +86,10 @@
                                             <label class="text-sm font-medium text-gray-700">Vessel Options</label>
                                             <div class="mt-1">
                                                 @if($version->has_vessel_options)
-                                                    <span class="kt-badge kt-badge-lg kt-badge-success">
-                                                        <i class="ki-filled ki-check"></i>
+
+                                                    <div class="mt-1 text-sm text-gray-600">
                                                         {{ $version->vesselConfigurations->count() }} configurations
-                                                    </span>
+                                                    </div>
                                                 @else
                                                     <span class="kt-badge kt-badge-lg kt-badge-secondary">
                                                         <i class="ki-filled ki-cross"></i>
@@ -105,10 +102,9 @@
                                         <div>
                                             <label class="text-sm font-medium text-gray-700">Performance Records</label>
                                             <div class="mt-1">
-                                                <span class="kt-badge kt-badge-lg {{ $version->performanceData->count() > 0 ? 'kt-badge-success' : 'kt-badge-warning' }}">
-                                                    <i class="ki-filled ki-chart-simple"></i>
+                                                <div class="mt-1 text-sm text-gray-600">
                                                     {{ $version->performanceData->count() }} records
-                                                </span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -296,7 +292,7 @@
                                     <div class="border border-gray-200 rounded-lg p-4">
                                         <div class="flex items-center justify-between mb-2">
                                             <span class="font-medium text-gray-900">{{ $vessel->name }}</span>
-                                            <span class="kt-badge kt-badge-sm kt-badge-outline">
+                                            <span class="kt-badge  kt-badge-outline kt-badge-primary rounded-full">
                                                 {{ $vessel->performanceData->count() }} records
                                             </span>
                                         </div>
@@ -324,7 +320,7 @@
                                 <span class="text-sm text-gray-500 font-normal">({{ $performanceByProfile->count() }} profiles)</span>
                             </h3>
                             @if($version->performanceData->count() > 10)
-                                <a href="{{ route('versions.performance', $version->id) }}" class="kt-btn kt-btn-sm kt-btn-info">
+                                <a href="{{ route('versions.performance', $version->id) }}" class="kt-btn kt-btn-sm kt-btn-outlin">
                                     <i class="ki-filled ki-chart-simple"></i>
                                     View Full Performance Data
                                 </a>

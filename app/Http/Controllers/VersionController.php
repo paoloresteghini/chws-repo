@@ -6,12 +6,11 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Version;
 use App\Models\VersionCategory;
-use App\Models\Attachment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class VersionController extends Controller
 {
@@ -59,82 +58,6 @@ class VersionController extends Controller
         $categories = VersionCategory::with('product')->orderBy('name')->get();
 
         return view('versions.index', compact('versions', 'products', 'categories'));
-    }
-
-    /**
-     * Store a newly created version in storage
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'model_number' => 'required|string|max:255',
-            'name' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'nullable|exists:version_categories,id',
-            'has_vessel_options' => 'boolean',
-            'status' => 'boolean',
-            'spec_keys' => 'nullable|array',
-            'spec_values' => 'nullable|array',
-            'specifications_json' => 'nullable|string',
-        ]);
-
-        // Ensure model number is unique per product
-        $request->validate([
-            'model_number' => "unique:versions,model_number,NULL,id,product_id,{$validated['product_id']}"
-        ]);
-
-        // Process specifications
-        $specifications = null;
-        
-        // If JSON specifications are provided, use those
-        if (!empty($validated['specifications_json'])) {
-            $decoded = json_decode($validated['specifications_json'], true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $specifications = $decoded;
-            }
-        } else {
-            // Process key-value pairs
-            if (!empty($validated['spec_keys']) && !empty($validated['spec_values'])) {
-                $keys = $validated['spec_keys'];
-                $values = $validated['spec_values'];
-                $specifications = [];
-                
-                for ($i = 0; $i < count($keys); $i++) {
-                    $key = trim($keys[$i]);
-                    $value = isset($values[$i]) ? trim($values[$i]) : '';
-                    
-                    if (!empty($key) && !empty($value)) {
-                        $specifications[$key] = $value;
-                    }
-                }
-                
-                // If no valid specifications, set to null
-                if (empty($specifications)) {
-                    $specifications = null;
-                }
-            }
-        }
-
-        // Remove specification-related fields from validated data and add processed specifications
-        unset($validated['spec_keys'], $validated['spec_values'], $validated['specifications_json']);
-        $validated['specifications'] = $specifications;
-
-        $version = Version::create($validated);
-
-        return redirect()->route('versions.show', $version)
-            ->with('success', 'Version created successfully.');
-    }
-
-    /**
-     * Show the form for creating a new version
-     */
-    public function create(): View
-    {
-        $products = Product::orderBy('name')->get();
-        $categories = VersionCategory::with('product')->orderBy('name')->get();
-
-        return view('versions.create', compact('products', 'categories'));
     }
 
     /**
@@ -188,8 +111,9 @@ class VersionController extends Controller
     {
         $version->delete();
 
-        return redirect()->route('versions.index')
-            ->with('success', 'Version deleted successfully.');
+        toast('Record has been deleted','success');
+
+        return redirect()->route('versions.index');
     }
 
     /**
@@ -285,8 +209,9 @@ class VersionController extends Controller
                 break;
         }
 
-        return redirect()->route('versions.index')
-            ->with('success', $message);
+        toast($message,'success');
+
+        return redirect()->route('versions.index');
     }
 
     /**
@@ -317,7 +242,7 @@ class VersionController extends Controller
 
         // Process specifications
         $specifications = null;
-        
+
         // If JSON specifications are provided, use those
         if (!empty($validated['specifications_json'])) {
             $decoded = json_decode($validated['specifications_json'], true);
@@ -330,16 +255,16 @@ class VersionController extends Controller
                 $keys = $validated['spec_keys'];
                 $values = $validated['spec_values'];
                 $specifications = [];
-                
+
                 for ($i = 0; $i < count($keys); $i++) {
                     $key = trim($keys[$i]);
                     $value = isset($values[$i]) ? trim($values[$i]) : '';
-                    
+
                     if (!empty($key) && !empty($value)) {
                         $specifications[$key] = $value;
                     }
                 }
-                
+
                 // If no valid specifications, set to null
                 if (empty($specifications)) {
                     $specifications = null;
@@ -352,10 +277,10 @@ class VersionController extends Controller
         $validated['specifications'] = $specifications;
 
         DB::beginTransaction();
-        
+
         try {
             $version->update($validated);
-            
+
             // Handle attachment deletions
             if ($request->has('delete_attachments')) {
                 $attachmentsToDelete = $version->attachments()->whereIn('id', $request->delete_attachments)->get();
@@ -364,19 +289,19 @@ class VersionController extends Controller
                     $attachment->delete();
                 }
             }
-            
+
             // Handle new attachments
             if ($request->hasFile('attachments')) {
                 $attachments = $request->file('attachments');
                 $attachmentNames = $request->input('attachment_names', []);
-                
+
                 foreach ($attachments as $index => $file) {
                     if ($file) {
                         $path = $file->store('version-attachments/' . $version->id, 's3');
-                        $name = isset($attachmentNames[$index]) && !empty($attachmentNames[$index]) 
-                            ? $attachmentNames[$index] 
+                        $name = isset($attachmentNames[$index]) && !empty($attachmentNames[$index])
+                            ? $attachmentNames[$index]
                             : pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                        
+
                         $version->attachments()->create([
                             'name' => $name,
                             'file_path' => $path,
@@ -387,15 +312,96 @@ class VersionController extends Controller
                     }
                 }
             }
-            
+
             DB::commit();
-            
-            return redirect()->route('versions.show', $version)
-                ->with('success', 'Version updated successfully.');
+
+            toast('Record has been updated','success');
+
+            return redirect()->route('versions.show', $version);
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Failed to update version: ' . $e->getMessage());
+
+            toast($e->getMessage(),'error');
+
+            return redirect()->back();
         }
+    }
+
+    /**
+     * Store a newly created version in storage
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'model_number' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'category_id' => 'nullable|exists:version_categories,id',
+            'has_vessel_options' => 'boolean',
+            'status' => 'boolean',
+            'spec_keys' => 'nullable|array',
+            'spec_values' => 'nullable|array',
+            'specifications_json' => 'nullable|string',
+        ]);
+
+        // Ensure model number is unique per product
+        $request->validate([
+            'model_number' => "unique:versions,model_number,NULL,id,product_id,{$validated['product_id']}"
+        ]);
+
+        // Process specifications
+        $specifications = null;
+
+        // If JSON specifications are provided, use those
+        if (!empty($validated['specifications_json'])) {
+            $decoded = json_decode($validated['specifications_json'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $specifications = $decoded;
+            }
+        } else {
+            // Process key-value pairs
+            if (!empty($validated['spec_keys']) && !empty($validated['spec_values'])) {
+                $keys = $validated['spec_keys'];
+                $values = $validated['spec_values'];
+                $specifications = [];
+
+                for ($i = 0; $i < count($keys); $i++) {
+                    $key = trim($keys[$i]);
+                    $value = isset($values[$i]) ? trim($values[$i]) : '';
+
+                    if (!empty($key) && !empty($value)) {
+                        $specifications[$key] = $value;
+                    }
+                }
+
+                // If no valid specifications, set to null
+                if (empty($specifications)) {
+                    $specifications = null;
+                }
+            }
+        }
+
+        // Remove specification-related fields from validated data and add processed specifications
+        unset($validated['spec_keys'], $validated['spec_values'], $validated['specifications_json']);
+        $validated['specifications'] = $specifications;
+
+        $version = Version::create($validated);
+
+        toast('Record has been created','success');
+
+        return redirect()->route('versions.show', $version);
+    }
+
+    /**
+     * Show the form for creating a new version
+     */
+    public function create(): View
+    {
+        $products = Product::orderBy('name')->get();
+        $categories = VersionCategory::with('product')->orderBy('name')->get();
+
+        return view('versions.create', compact('products', 'categories'));
     }
 
     /**

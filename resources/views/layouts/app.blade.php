@@ -15,12 +15,10 @@
 @include('partials.theme-switcher')
 <div class="flex grow flex-col in-data-kt-[sticky-header=on]:pt-(--header-height-default)">
     @include('partials.header')
-
     @yield('content')
-
    @include('partials.footer')
 </div>
-
 @stack('scripts')
+@include('sweetalert::alert')
 </body>
 </html>
