@@ -26,7 +26,7 @@ class FlexibleProductSeeder extends Seeder
         $this->createProRapidProduct();
 
         $this->command->info('All products seeded successfully!');
-        $this->command->info('Next: Import performance data using: php artisan import:all-performance-data /path/to/excel/files');
+        $this->command->info('Next: Import performance data using: php artisan import:all-performance-data ./storage/app/excel');
     }
 
     private function createTemperatureProfiles()

@@ -558,7 +558,7 @@
         function removeAttachmentField(button) {
             const fieldGroup = button.closest('.attachment-field-group');
             const attachmentFields = document.getElementById('attachment-fields');
-            
+
             // Only remove if there's more than one field group
             if (attachmentFields.querySelectorAll('.attachment-field-group').length > 1) {
                 fieldGroup.remove();
