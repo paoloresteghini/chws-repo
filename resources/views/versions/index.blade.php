@@ -54,6 +54,12 @@
                                 </select>
                             </div>
 
+                            <!-- Version Number Search -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-medium text-gray-700">Model Number</label>
+                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search model number" class="kt-input w-48">
+                            </div>
+
                             <!-- Actions -->
                             <div class="flex gap-2">
                                 <button type="submit" class="kt-btn kt-btn-primary">
@@ -75,10 +81,10 @@
                         <h3 class="kt-card-title">
                             Product Versions
                         </h3>
-                        <div class="kt-input max-w-48">
-                            <i class="ki-filled ki-magnifier"></i>
-                            <input data-kt-datatable-search="#versions_table" placeholder="Search Versions" type="text">
-                        </div>
+{{--                        <div class="kt-input max-w-48">--}}
+{{--                            <i class="ki-filled ki-magnifier"></i>--}}
+{{--                            <input data-datatable-search="true" placeholder="Search Versions" type="text">--}}
+{{--                        </div>--}}
                     </div>
                     <div class="kt-card-table">
                         <div class="grid" data-kt-datatable="true" data-kt-datatable-page-size="10" id="versions_datatable">

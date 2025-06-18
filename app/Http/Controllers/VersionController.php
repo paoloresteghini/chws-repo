@@ -35,8 +35,8 @@ class VersionController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('model_number', 'like', "%{$search}%")
-                    ->orWhere('name', 'like', "%{$search}%")
+                $q->where('versions.model_number', 'like', "%{$search}%")
+                    ->orWhere('versions.name', 'like', "%{$search}%")
                     ->orWhereHas('product', function ($productQuery) use ($search) {
                         $productQuery->where('name', 'like', "%{$search}%");
                     });

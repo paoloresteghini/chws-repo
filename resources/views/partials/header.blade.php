@@ -35,48 +35,14 @@
                                 </a>
                             </div>
 
-
-                            <!-- Models (Versions) Dropdown -->
-                            <div class="kt-menu-item {{ request()->routeIs('versions.*') || request()->routeIs('version-categories.*') ? 'here' : '' }}"
-                                 data-kt-menu-item-offset="0,0|lg:-20px,10px"
-                                 data-kt-menu-item-offset-rtl="0,0|lg:20px,10px"
-                                 data-kt-menu-item-overflow="true"
-                                 data-kt-menu-item-placement="bottom-start"
-                                 data-kt-menu-item-placement-rtl="bottom-end"
-                                 data-kt-menu-item-toggle="dropdown"
-                                 data-kt-menu-item-trigger="click|lg:hover">
-                                <div class="kt-menu-link border-b border-b-transparent kt-menu-item-active:border-b-gray-400 kt-menu-item-here:border-b-gray-400">
-                        <span class="kt-menu-title text-sm text-foreground kt-menu-item-show:text-mono kt-menu-item-here:text-mono kt-menu-item-active:font-medium kt-menu-item-here:font-medium">
-                            Models
-                        </span>
-                                    <span class="kt-menu-arrow flex lg:hidden">
-                            <span class="flex kt-menu-item-show:hidden">
-                                <i class="ki-filled ki-plus text-xs text-muted-foreground"></i>
-                            </span>
-                            <span class="hidden kt-menu-item-show:inline-flex">
-                                <i class="ki-filled ki-minus text-xs text-muted-foreground"></i>
-                            </span>
-                        </span>
-                                </div>
-                                <div class="kt-menu-dropdown kt-menu-default py-2.5 w-full max-w-[240px]">
-                                    <div class="kt-menu-item {{ request()->routeIs('versions.*') ? 'here' : '' }}">
-                                        <a class="kt-menu-link" href="{{ route('versions.index') }}" tabindex="0">
-                                <span class="kt-menu-icon">
-                                    <i class="ki-filled ki-abstract-26"></i>
-                                </span>
-                                            <span class="kt-menu-title grow-0">List Models</span>
-                                        </a>
-                                    </div>
-                                    <div class="kt-menu-item {{ request()->routeIs('version-categories.*') ? 'here' : '' }}">
-                                        <a class="kt-menu-link" href="{{ route('version-categories.index') }}" tabindex="0">
-                                <span class="kt-menu-icon">
-                                    <i class="ki-filled ki-category"></i>
-                                </span>
-                                            <span class="kt-menu-title grow-0">Categories</span>
-                                        </a>
-                                    </div>
-                                </div>
+                            <!-- Versions -->
+                            <div class="kt-menu-item {{ request()->routeIs('versions.*') ? 'here' : '' }}">
+                                <a class="kt-menu-link border-b border-b-transparent kt-menu-item-active:border-b-gray-400 kt-menu-item-here:border-b-gray-400" href="{{ route('versions.index') }}">
+                                    <span class="kt-menu-title kt-menu-link-hover:text-mono text-sm text-foreground kt-menu-item-show:text-mono kt-menu-item-here:text-mono kt-menu-item-active:font-medium kt-menu-item-here:font-medium">Models</span>
+                                </a>
                             </div>
+
+
 
 
                             <!-- Performance & Configuration Dropdown -->
@@ -110,6 +76,14 @@
                                             <span class="kt-menu-title grow-0">Vessel Configurations</span>
                                         </a>
                                     </div>
+                                    <div class="kt-menu-item {{ request()->routeIs('version-categories.*') ? 'here' : '' }}">
+                                        <a class="kt-menu-link" href="{{ route('version-categories.index') }}" tabindex="0">
+                                <span class="kt-menu-icon">
+                                    <i class="ki-filled ki-category"></i>
+                                </span>
+                                            <span class="kt-menu-title grow-0">Model Categories</span>
+                                        </a>
+                                    </div>
                                     <div class="kt-menu-item {{ request()->routeIs('performance-data.*') ? 'here' : '' }}">
                                         <a class="kt-menu-link" href="{{ route('performance-data.index') }}" tabindex="0">
                                 <span class="kt-menu-icon">
@@ -118,6 +92,7 @@
                                             <span class="kt-menu-title grow-0">Performance Data</span>
                                         </a>
                                     </div>
+
                                     <div class="kt-menu-item {{ request()->routeIs('temperature-profiles.index.*') ? 'here' : '' }}">
                                         <a class="kt-menu-link" href="{{ route('temperature-profiles.index') }}" tabindex="0">
                                 <span class="kt-menu-icon">

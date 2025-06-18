@@ -134,6 +134,46 @@
                             </div>
                         </div>
 
+                        <!-- Calculation Method Selection -->
+                        <div class="kt-card">
+                            <div class="kt-card-header">
+                                <h3 class="kt-card-title">Calculation Method</h3>
+                                <div class="text-sm text-gray-500">Choose how to enter heat input and flow rate data</div>
+                            </div>
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="grid md:grid-cols-3 gap-4">
+                                    <label class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="calculation_method" value="heat_from_flow" class="kt-radio" onchange="toggleCalculationMethod()">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Calculate Heat from Flow</div>
+                                            <div class="text-sm text-gray-500">Enter flow rate, get heat input</div>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="calculation_method" value="flow_from_heat" class="kt-radio" onchange="toggleCalculationMethod()">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Calculate Flow from Heat</div>
+                                            <div class="text-sm text-gray-500">Enter heat input, get flow rate</div>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="radio" name="calculation_method" value="manual" class="kt-radio" onchange="toggleCalculationMethod()" checked>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Manual Entry</div>
+                                            <div class="text-sm text-gray-500">Enter both values manually</div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <!-- Formula Display -->
+                                <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded">
+                                    <div class="text-sm font-medium text-gray-700 mb-1">Formula Used:</div>
+                                    <div class="text-sm font-mono text-gray-600">Heat Input (kW) = Primary Flow Rate (l/s) × 209.36</div>
+                                    <div class="text-xs text-gray-500 mt-1">Based on standard heat transfer calculations</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Performance Metrics -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -144,49 +184,55 @@
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <!-- Heat Input -->
                                     <div class="kt-form-item">
-                                        <label for="heat_input_kw" class="kt-form-label">Heat Input (kW) *</label>
+                                        <label for="heat_input_kw" class="kt-form-label">
+                                            Heat Input (kW)
+                                            <span id="heat-required-indicator">*</span>
+                                            <span id="heat-calculated-indicator" class="text-blue-600 text-sm" style="display: none;">(Calculated)</span>
+                                        </label>
                                         <div class="kt-form-control">
-                                            <input type="number" name="heat_input_kw" id="heat_input_kw"
-                                                   class="kt-input @error('heat_input_kw') border-danger @enderror"
-                                                   value="{{ old('heat_input_kw') }}"
-                                                   step="0.1" min="0" max="999999" required
-                                                   onchange="calculateEfficiency()">
+                                            <div class="relative">
+                                                <input type="number" name="heat_input_kw" id="heat_input_kw"
+                                                       class="kt-input @error('heat_input_kw') border-danger @enderror"
+                                                       value="{{ old('heat_input_kw') }}"
+                                                       step="0.1" min="0" max="999999"
+                                                       oninput="calculateFromHeat()" onchange="calculateEfficiency()">
+                                                <button type="button" id="calculate-heat-btn" class="absolute right-2 top-1/2 transform -translate-y-1/2 kt-btn kt-btn-xs kt-btn-info" onclick="calculateHeatFromFlow()" style="display: none;">
+                                                    <i class="ki-filled ki-calculator"></i>
+                                                    Calculate
+                                                </button>
+                                            </div>
                                             @error('heat_input_kw')
                                             <div class="text-sm text-danger mt-1">{{ $message }}</div>
                                             @enderror
                                             <div class="text-xs text-gray-500 mt-1">Total heat input to the heat exchanger</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Pressure Drop -->
-                                    <div class="kt-form-item">
-                                        <label for="pressure_drop_kpa" class="kt-form-label">Pressure Drop (kPa) *</label>
-                                        <div class="kt-form-control">
-                                            <input type="number" name="pressure_drop_kpa" id="pressure_drop_kpa"
-                                                   class="kt-input @error('pressure_drop_kpa') border-danger @enderror"
-                                                   value="{{ old('pressure_drop_kpa') }}"
-                                                   step="0.1" min="0" max="9999" required
-                                                   onchange="calculateEfficiency()">
-                                            @error('pressure_drop_kpa')
-                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
-                                            @enderror
-                                            <div class="text-xs text-gray-500 mt-1">Pressure drop across the heat exchanger</div>
+                                            <div id="heat-validation" class="text-xs mt-1" style="display: none;"></div>
                                         </div>
                                     </div>
 
                                     <!-- Primary Flow Rate -->
                                     <div class="kt-form-item">
-                                        <label for="primary_flow_rate_ls" class="kt-form-label">Primary Flow Rate (l/s) *</label>
+                                        <label for="primary_flow_rate_ls" class="kt-form-label">
+                                            Primary Flow Rate (l/s)
+                                            <span id="flow-required-indicator">*</span>
+                                            <span id="flow-calculated-indicator" class="text-blue-600 text-sm" style="display: none;">(Calculated)</span>
+                                        </label>
                                         <div class="kt-form-control">
-                                            <input type="number" name="primary_flow_rate_ls" id="primary_flow_rate_ls"
-                                                   class="kt-input @error('primary_flow_rate_ls') border-danger @enderror"
-                                                   value="{{ old('primary_flow_rate_ls') }}"
-                                                   step="0.001" min="0" max="9999" required
-                                                   onchange="calculateEfficiency()">
+                                            <div class="relative">
+                                                <input type="number" name="primary_flow_rate_ls" id="primary_flow_rate_ls"
+                                                       class="kt-input @error('primary_flow_rate_ls') border-danger @enderror"
+                                                       value="{{ old('primary_flow_rate_ls') }}"
+                                                       step="0.001" min="0" max="9999"
+                                                       oninput="calculateFromFlow()" onchange="calculateEfficiency()">
+                                                <button type="button" id="calculate-flow-btn" class="absolute right-2 top-1/2 transform -translate-y-1/2 kt-btn kt-btn-xs kt-btn-info" onclick="calculateFlowFromHeat()" style="display: none;">
+                                                    <i class="ki-filled ki-calculator"></i>
+                                                    Calculate
+                                                </button>
+                                            </div>
                                             @error('primary_flow_rate_ls')
                                             <div class="text-sm text-danger mt-1">{{ $message }}</div>
                                             @enderror
                                             <div class="text-xs text-gray-500 mt-1">Primary circuit flow rate in liters per second</div>
+                                            <div id="flow-validation" class="text-xs mt-1" style="display: none;"></div>
                                         </div>
                                     </div>
 
@@ -205,6 +251,41 @@
                                             <div class="text-xs text-gray-500 mt-1">Secondary circuit flow rate in liters per second</div>
                                         </div>
                                     </div>
+
+                                    <!-- Pressure Drop -->
+                                    <div class="kt-form-item">
+                                        <label for="pressure_drop_kpa" class="kt-form-label">Pressure Drop (kPa) *</label>
+                                        <div class="kt-form-control">
+                                            <input type="number" name="pressure_drop_kpa" id="pressure_drop_kpa"
+                                                   class="kt-input @error('pressure_drop_kpa') border-danger @enderror"
+                                                   value="{{ old('pressure_drop_kpa') }}"
+                                                   step="0.1" min="0" max="9999" required
+                                                   onchange="calculateEfficiency()">
+                                            @error('pressure_drop_kpa')
+                                            <div class="text-sm text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <div class="text-xs text-gray-500 mt-1">Pressure drop across the heat exchanger</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Heat/Flow Relationship Validation -->
+                                <div id="relationship-validation" class="mt-6 p-4 border rounded" style="display: none;">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <i id="validation-icon" class="ki-filled ki-check-circle text-success"></i>
+                                        <div class="font-medium" id="validation-title">Heat/Flow Relationship</div>
+                                    </div>
+                                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <div class="text-gray-600">Theoretical Heat Input:</div>
+                                            <div class="font-medium" id="theoretical-heat">- kW</div>
+                                        </div>
+                                        <div>
+                                            <div class="text-gray-600">Variance:</div>
+                                            <div class="font-medium" id="heat-variance">- kW</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-2" id="validation-message"></div>
                                 </div>
 
                                 <!-- Calculated Metrics Display -->
@@ -333,6 +414,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <!-- Performance Preview -->
                         <div class="kt-card">
                             <div class="kt-card-header">
@@ -447,8 +529,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </form>
@@ -456,7 +536,140 @@
     </main>
 
     <script>
+        // Heat transfer constant
+        const HEAT_TRANSFER_CONSTANT = 209.36;
         let metricCount = 0;
+        let ignoreCalculations = false;
+
+        // Toggle calculation method
+        function toggleCalculationMethod() {
+            const method = document.querySelector('input[name="calculation_method"]:checked').value;
+            const heatInput = document.getElementById('heat_input_kw');
+            const flowRate = document.getElementById('primary_flow_rate_ls');
+            const heatBtn = document.getElementById('calculate-heat-btn');
+            const flowBtn = document.getElementById('calculate-flow-btn');
+            const heatRequired = document.getElementById('heat-required-indicator');
+            const flowRequired = document.getElementById('flow-required-indicator');
+            const heatCalculated = document.getElementById('heat-calculated-indicator');
+            const flowCalculated = document.getElementById('flow-calculated-indicator');
+
+            // Reset states
+            heatInput.readOnly = false;
+            flowRate.readOnly = false;
+            heatBtn.style.display = 'none';
+            flowBtn.style.display = 'none';
+            heatRequired.style.display = 'inline';
+            flowRequired.style.display = 'inline';
+            heatCalculated.style.display = 'none';
+            flowCalculated.style.display = 'none';
+            heatInput.required = true;
+            flowRate.required = true;
+
+            switch (method) {
+                case 'heat_from_flow':
+                    heatInput.readOnly = true;
+                    heatInput.required = false;
+                    heatBtn.style.display = 'block';
+                    heatRequired.style.display = 'none';
+                    heatCalculated.style.display = 'inline';
+                    break;
+                case 'flow_from_heat':
+                    flowRate.readOnly = true;
+                    flowRate.required = false;
+                    flowBtn.style.display = 'block';
+                    flowRequired.style.display = 'none';
+                    flowCalculated.style.display = 'inline';
+                    break;
+                case 'manual':
+                    // Both fields are editable and required
+                    break;
+            }
+        }
+
+        // Calculate heat from flow rate
+        function calculateHeatFromFlow() {
+            const flowRate = parseFloat(document.getElementById('primary_flow_rate_ls').value);
+            if (flowRate && flowRate > 0) {
+                const heatInput = flowRate * HEAT_TRANSFER_CONSTANT;
+                document.getElementById('heat_input_kw').value = heatInput.toFixed(2);
+                calculateEfficiency();
+                validateHeatFlowRelationship();
+            }
+        }
+
+        // Calculate flow from heat input
+        function calculateFlowFromHeat() {
+            const heatInput = parseFloat(document.getElementById('heat_input_kw').value);
+            if (heatInput && heatInput > 0) {
+                const flowRate = heatInput / HEAT_TRANSFER_CONSTANT;
+                document.getElementById('primary_flow_rate_ls').value = flowRate.toFixed(4);
+                calculateEfficiency();
+                validateHeatFlowRelationship();
+            }
+        }
+
+        // Calculate from flow rate input (real-time)
+        function calculateFromFlow() {
+            const method = document.querySelector('input[name="calculation_method"]:checked').value;
+            if (method === 'heat_from_flow' && !ignoreCalculations) {
+                calculateHeatFromFlow();
+            } else if (method === 'manual') {
+                validateHeatFlowRelationship();
+            }
+        }
+
+        // Calculate from heat input (real-time)
+        function calculateFromHeat() {
+            const method = document.querySelector('input[name="calculation_method"]:checked').value;
+            if (method === 'flow_from_heat' && !ignoreCalculations) {
+                calculateFlowFromHeat();
+            } else if (method === 'manual') {
+                validateHeatFlowRelationship();
+            }
+        }
+
+        // Validate heat/flow relationship
+        function validateHeatFlowRelationship() {
+            const heatInput = parseFloat(document.getElementById('heat_input_kw').value);
+            const flowRate = parseFloat(document.getElementById('primary_flow_rate_ls').value);
+            const validationDiv = document.getElementById('relationship-validation');
+            const validationIcon = document.getElementById('validation-icon');
+            const validationTitle = document.getElementById('validation-title');
+            const validationMessage = document.getElementById('validation-message');
+
+            if (heatInput && flowRate && heatInput > 0 && flowRate > 0) {
+                const theoreticalHeat = flowRate * HEAT_TRANSFER_CONSTANT;
+                const variance = Math.abs(heatInput - theoreticalHeat);
+                const percentageError = (variance / theoreticalHeat) * 100;
+
+                document.getElementById('theoretical-heat').textContent = theoreticalHeat.toFixed(2) + ' kW';
+                document.getElementById('heat-variance').textContent = variance.toFixed(2) + ' kW (' + percentageError.toFixed(1) + '%)';
+
+                if (variance <= 5) {
+                    // Accurate relationship
+                    validationDiv.className = 'mt-6 p-4 border border-green-200 bg-green-50 rounded';
+                    validationIcon.className = 'ki-filled ki-check-circle text-success';
+                    validationTitle.textContent = 'Heat/Flow Relationship: Accurate';
+                    validationMessage.textContent = 'The heat input and flow rate values are consistent with the expected relationship.';
+                } else if (variance <= 15) {
+                    // Minor variance
+                    validationDiv.className = 'mt-6 p-4 border border-yellow-200 bg-yellow-50 rounded';
+                    validationIcon.className = 'ki-filled ki-triangle-exclamation text-warning';
+                    validationTitle.textContent = 'Heat/Flow Relationship: Minor Variance';
+                    validationMessage.textContent = 'Small deviation detected. This may be within acceptable tolerances depending on operating conditions.';
+                } else {
+                    // Major variance
+                    validationDiv.className = 'mt-6 p-4 border border-red-200 bg-red-50 rounded';
+                    validationIcon.className = 'ki-filled ki-cross-circle text-danger';
+                    validationTitle.textContent = 'Heat/Flow Relationship: Major Variance';
+                    validationMessage.textContent = 'Significant deviation detected. Please verify your measurements or consider using calculated values.';
+                }
+
+                validationDiv.style.display = 'block';
+            } else {
+                validationDiv.style.display = 'none';
+            }
+        }
 
         // Load versions when product changes
         function loadVersions() {
@@ -661,7 +874,18 @@
             const formData = new FormData(form);
 
             // Basic validation
-            const requiredFields = ['version_id', 'heat_input_kw', 'primary_flow_rate_ls', 'secondary_flow_rate_ls', 'pressure_drop_kpa'];
+            const method = document.querySelector('input[name="calculation_method"]:checked').value;
+            let requiredFields = ['version_id', 'secondary_flow_rate_ls', 'pressure_drop_kpa'];
+
+            // Add required fields based on calculation method
+            if (method === 'heat_from_flow') {
+                requiredFields.push('primary_flow_rate_ls');
+            } else if (method === 'flow_from_heat') {
+                requiredFields.push('heat_input_kw');
+            } else {
+                requiredFields.push('heat_input_kw', 'primary_flow_rate_ls');
+            }
+
             const missingFields = requiredFields.filter(field => !formData.get(field));
 
             if (missingFields.length > 0) {
@@ -674,6 +898,9 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Set default calculation method
+            toggleCalculationMethod();
+
             @if($selectedVersion)
             loadVersions();
             setTimeout(() => {

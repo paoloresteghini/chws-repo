@@ -48,12 +48,39 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('vessel-configurations/export', [VesselConfigurationController::class, 'export'])->name('vessel-configurations.export');
 
     Route::resource('performance-data', PerformanceDataController::class);
+
+    Route::resource('performance-data', PerformanceDataController::class);
+
+// AJAX Calculation Endpoints
+    Route::post('api/calculate-heat-input', [PerformanceDataController::class, 'calculateHeatInput']);
+    Route::post('api/calculate-flow-rate', [PerformanceDataController::class, 'calculateFlowRate']);
+    Route::post('api/validate-heat-flow', [PerformanceDataController::class, 'validateHeatFlowRelationship']);
+
+// AJAX Data Endpoints
+    Route::get('api/versions-for-product', [PerformanceDataController::class, 'getVersionsForProduct']);
+    Route::get('api/vessel-configurations', [PerformanceDataController::class, 'getVesselConfigurations']);
+
+// Auto-correction Routes
+    Route::patch('performance-data/{performanceData}/auto-correct-heat', [PerformanceDataController::class, 'autoCorrectHeat'])->name('performance-data.auto-correct-heat');
+    Route::patch('performance-data/{performanceData}/auto-correct-flow', [PerformanceDataController::class, 'autoCorrectFlow'])->name('performance-data.auto-correct-flow');
+
+// Bulk Operations
+    Route::post('performance-data/bulk-auto-correct', [PerformanceDataController::class, 'bulkAutoCorrect'])->name('performance-data.bulk-auto-correct');
+
+// Data Quality
+    Route::get('performance-data-quality', [PerformanceDataController::class, 'dataQuality'])->name('performance-data.data-quality');
+    
+
     Route::post('performance-data/bulk-action', [PerformanceDataController::class, 'bulkAction'])->name('performance-data.bulk-action');
     Route::get('performance-data/compare', [PerformanceDataController::class, 'compare'])->name('performance-data.compare');
     Route::get('performance-data/analytics', [PerformanceDataController::class, 'analytics'])->name('performance-data.analytics');
     Route::get('performance-data/export', [PerformanceDataController::class, 'exportPerformanceData'])->name('performance-data.export');
     Route::get('api/versions-for-product', [PerformanceDataController::class, 'getVersionsForProduct']);
     Route::get('api/vessel-configurations', [PerformanceDataController::class, 'getVesselConfigurations']);
+    // In web.php
+    Route::post('api/calculate-heat-input', [PerformanceDataController::class, 'calculateHeatInput']);
+    Route::post('api/calculate-flow-rate', [PerformanceDataController::class, 'calculateFlowRate']);
+    Route::post('api/validate-heat-flow', [PerformanceDataController::class, 'validateHeatFlowRelationship']);
 
     Route::get('versions/{version}/performance', [VersionController::class, 'performance'])->name('versions.performance');
     Route::post('versions/bulk-action', [VersionController::class, 'bulkAction'])->name('versions.bulk-action');

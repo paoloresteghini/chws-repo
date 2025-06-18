@@ -16,12 +16,7 @@
                         <h3 class="kt-card-title">
                             System Products
                         </h3>
-                        <div class="kt-input max-w-48">
-                            <i class="ki-filled ki-magnifier">
-                            </i>
-                            <input data-kt-datatable-search="#products_table" placeholder="Search Products" type="text">
-                            </input>
-                        </div>
+
                     </div>
                     <div class="kt-card-table">
                         <div class="grid" data-kt-datatable="true" data-kt-datatable-page-size="5" id="products_datatable">

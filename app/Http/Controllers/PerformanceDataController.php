@@ -155,65 +155,6 @@ class PerformanceDataController extends Controller
     }
 
     /**
-     * Store newly created performance data
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'version_id' => 'required|exists:versions,id',
-            'temperature_profile_id' => 'nullable|exists:temperature_profiles,id',
-            'vessel_configuration_id' => 'nullable|exists:vessel_configurations,id',
-            'heat_input_kw' => 'required|numeric|min:0|max:999999',
-            'primary_flow_rate_ls' => 'required|numeric|min:0|max:9999',
-            'secondary_flow_rate_ls' => 'required|numeric|min:0|max:9999',
-            'pressure_drop_kpa' => 'required|numeric|min:0|max:9999',
-            'first_hour_dhw_supply' => 'nullable|numeric|min:0|max:999999',
-            'subsequent_hour_dhw_supply' => 'nullable|numeric|min:0|max:999999',
-            'additional_metrics' => 'nullable|array',
-        ]);
-
-        // Validate vessel configuration belongs to version
-        if ($validated['vessel_configuration_id']) {
-            $vesselConfig = VesselConfiguration::find($validated['vessel_configuration_id']);
-            if ($vesselConfig->version_id !== $validated['version_id']) {
-                return back()->withErrors(['vessel_configuration_id' => 'Vessel configuration does not belong to the selected version.'])->withInput();
-            }
-        }
-
-        // Check for duplicate performance data
-        $existing = PerformanceData::where([
-            'version_id' => $validated['version_id'],
-            'temperature_profile_id' => $validated['temperature_profile_id'],
-            'vessel_configuration_id' => $validated['vessel_configuration_id'],
-        ])->first();
-
-        if ($existing) {
-            return back()->withErrors(['version_id' => 'Performance data already exists for this combination of version, temperature profile, and vessel configuration.'])->withInput();
-        }
-
-        $performanceData = PerformanceData::create($validated);
-
-        return redirect()->route('performance-data.show', $performanceData)
-            ->with('success', 'Performance data created successfully.');
-    }
-
-    /**
-     * Show the form for creating new performance data
-     */
-    public function create(Request $request): View
-    {
-        $products = Product::orderBy('name')->get();
-        $temperatureProfiles = TemperatureProfile::where('is_active', true)->orderBy('name')->get();
-
-        // Pre-select version if provided
-        $selectedVersion = $request->filled('version_id')
-            ? Version::with(['product', 'vesselConfigurations'])->find($request->version_id)
-            : null;
-
-        return view('performance-data.create', compact('products', 'temperatureProfiles', 'selectedVersion'));
-    }
-
-    /**
      * Display the specified performance data
      */
     public function show($id): View
@@ -270,9 +211,6 @@ class PerformanceDataController extends Controller
     /**
      * Show the form for editing performance data
      */
-    /**
-     * Show the form for editing performance data
-     */
     public function edit($id): View
     {
         // Find the performance data record with relationships
@@ -307,7 +245,134 @@ class PerformanceDataController extends Controller
     }
 
     /**
-     * Update the specified performance data
+     * Show the form for editing performance data
+     */
+
+public function store(Request $request): RedirectResponse
+{
+    $validated = $request->validate([
+        'version_id' => 'required|exists:versions,id',
+        'temperature_profile_id' => 'nullable|exists:temperature_profiles,id',
+        'vessel_configuration_id' => 'nullable|exists:vessel_configurations,id',
+        'heat_input_kw' => 'nullable|numeric|min:0|max:999999',
+        'primary_flow_rate_ls' => 'nullable|numeric|min:0|max:9999',
+        'secondary_flow_rate_ls' => 'required|numeric|min:0|max:9999',
+        'pressure_drop_kpa' => 'required|numeric|min:0|max:9999',
+        'first_hour_dhw_supply' => 'nullable|numeric|min:0|max:999999',
+        'subsequent_hour_dhw_supply' => 'nullable|numeric|min:0|max:999999',
+        'additional_metrics' => 'nullable|array',
+        'calculation_method' => 'nullable|in:heat_from_flow,flow_from_heat,manual'
+    ]);
+
+    // Validate that either heat input OR flow rate is provided (but not necessarily both)
+    if (empty($validated['heat_input_kw']) && empty($validated['primary_flow_rate_ls'])) {
+        return back()->withErrors([
+            'heat_input_kw' => 'Either heat input or primary flow rate must be provided.',
+            'primary_flow_rate_ls' => 'Either heat input or primary flow rate must be provided.'
+        ])->withInput();
+    }
+
+    // Validate vessel configuration belongs to version
+    if ($validated['vessel_configuration_id']) {
+        $vesselConfig = VesselConfiguration::find($validated['vessel_configuration_id']);
+        if ($vesselConfig->version_id !== $validated['version_id']) {
+            return back()->withErrors(['vessel_configuration_id' => 'Vessel configuration does not belong to the selected version.'])->withInput();
+        }
+    }
+
+    // Check for duplicate performance data
+    $existing = PerformanceData::where([
+        'version_id' => $validated['version_id'],
+        'temperature_profile_id' => $validated['temperature_profile_id'],
+        'vessel_configuration_id' => $validated['vessel_configuration_id'],
+    ])->first();
+
+    if ($existing) {
+        return back()->withErrors(['version_id' => 'Performance data already exists for this combination of version, temperature profile, and vessel configuration.'])->withInput();
+    }
+
+    // Handle calculation method
+    $calculationMethod = $validated['calculation_method'] ?? $this->determineCalculationMethod($validated);
+
+    switch ($calculationMethod) {
+        case 'heat_from_flow':
+            if (empty($validated['primary_flow_rate_ls'])) {
+                return back()->withErrors(['primary_flow_rate_ls' => 'Primary flow rate is required to calculate heat input.'])->withInput();
+            }
+            $validated['heat_input_kw'] = PerformanceData::calculateHeatInputFromFlowRate($validated['primary_flow_rate_ls']);
+            break;
+
+        case 'flow_from_heat':
+            if (empty($validated['heat_input_kw'])) {
+                return back()->withErrors(['heat_input_kw' => 'Heat input is required to calculate flow rate.'])->withInput();
+            }
+            $validated['primary_flow_rate_ls'] = PerformanceData::calculateFlowRateFromHeatInput($validated['heat_input_kw']);
+            break;
+
+        case 'manual':
+            // Validate both values are provided and check relationship
+            if (!empty($validated['heat_input_kw']) && !empty($validated['primary_flow_rate_ls'])) {
+                $theoretical = PerformanceData::calculateHeatInputFromFlowRate($validated['primary_flow_rate_ls']);
+                $variance = abs($validated['heat_input_kw'] - $theoretical);
+
+                if ($variance > 10) { // More than 10 kW difference
+                    return back()->withInput()->with('warning',
+                        "Warning: Heat input ({$validated['heat_input_kw']} kW) differs from theoretical value ({$theoretical} kW) by {$variance} kW. Please verify your values."
+                    );
+                }
+            }
+            break;
+    }
+
+    $performanceData = PerformanceData::create($validated);
+
+    $message = 'Performance data created successfully.';
+    if ($calculationMethod !== 'manual') {
+        $calculatedField = $calculationMethod === 'heat_from_flow' ? 'heat input' : 'flow rate';
+        $message .= " The {$calculatedField} was automatically calculated.";
+    }
+
+    return redirect()->route('performance-data.show', $performanceData)
+        ->with('success', $message);
+}
+
+    /**
+     * Determine calculation method based on provided values
+     */
+    private function determineCalculationMethod(array $validated): string
+    {
+        $hasHeat = !empty($validated['heat_input_kw']);
+        $hasFlow = !empty($validated['primary_flow_rate_ls']);
+
+        if ($hasHeat && $hasFlow) {
+            return 'manual'; // Both provided, manual entry
+        } elseif ($hasFlow && !$hasHeat) {
+            return 'heat_from_flow'; // Calculate heat from flow
+        } elseif ($hasHeat && !$hasFlow) {
+            return 'flow_from_heat'; // Calculate flow from heat
+        }
+
+        return 'manual'; // Default
+    }
+
+    /**
+     * Show the form for creating new performance data
+     */
+    public function create(Request $request): View
+    {
+        $products = Product::orderBy('name')->get();
+        $temperatureProfiles = TemperatureProfile::where('is_active', true)->orderBy('name')->get();
+
+        // Pre-select version if provided
+        $selectedVersion = $request->filled('version_id')
+            ? Version::with(['product', 'vesselConfigurations'])->find($request->version_id)
+            : null;
+
+        return view('performance-data.create', compact('products', 'temperatureProfiles', 'selectedVersion'));
+    }
+
+    /**
+     * Update performance data with automatic calculations
      */
     public function update(Request $request, PerformanceData $performanceData): RedirectResponse
     {
@@ -315,14 +380,23 @@ class PerformanceDataController extends Controller
             'version_id' => 'required|exists:versions,id',
             'temperature_profile_id' => 'nullable|exists:temperature_profiles,id',
             'vessel_configuration_id' => 'nullable|exists:vessel_configurations,id',
-            'heat_input_kw' => 'required|numeric|min:0|max:999999',
-            'primary_flow_rate_ls' => 'required|numeric|min:0|max:9999',
+            'heat_input_kw' => 'nullable|numeric|min:0|max:999999',
+            'primary_flow_rate_ls' => 'nullable|numeric|min:0|max:9999',
             'secondary_flow_rate_ls' => 'required|numeric|min:0|max:9999',
             'pressure_drop_kpa' => 'required|numeric|min:0|max:9999',
             'first_hour_dhw_supply' => 'nullable|numeric|min:0|max:999999',
             'subsequent_hour_dhw_supply' => 'nullable|numeric|min:0|max:999999',
             'additional_metrics' => 'nullable|array',
+            'calculation_method' => 'nullable|in:heat_from_flow,flow_from_heat,manual'
         ]);
+
+        // Validate that either heat input OR flow rate is provided
+        if (empty($validated['heat_input_kw']) && empty($validated['primary_flow_rate_ls'])) {
+            return back()->withErrors([
+                'heat_input_kw' => 'Either heat input or primary flow rate must be provided.',
+                'primary_flow_rate_ls' => 'Either heat input or primary flow rate must be provided.'
+            ])->withInput();
+        }
 
         // Validate vessel configuration belongs to version
         if ($validated['vessel_configuration_id']) {
@@ -343,10 +417,225 @@ class PerformanceDataController extends Controller
             return back()->withErrors(['version_id' => 'Performance data already exists for this combination of version, temperature profile, and vessel configuration.'])->withInput();
         }
 
+        // Handle calculation method
+        $calculationMethod = $validated['calculation_method'] ?? $this->determineCalculationMethod($validated);
+
+        switch ($calculationMethod) {
+            case 'heat_from_flow':
+                if (empty($validated['primary_flow_rate_ls'])) {
+                    return back()->withErrors(['primary_flow_rate_ls' => 'Primary flow rate is required to calculate heat input.'])->withInput();
+                }
+                $validated['heat_input_kw'] = $performanceData->calculateHeatInputFromFlowRate($validated['primary_flow_rate_ls']);
+                break;
+
+            case 'flow_from_heat':
+                if (empty($validated['heat_input_kw'])) {
+                    return back()->withErrors(['heat_input_kw' => 'Heat input is required to calculate flow rate.'])->withInput();
+                }
+                $validated['primary_flow_rate_ls'] = $performanceData->calculateFlowRateFromHeatInput($validated['heat_input_kw']);
+                break;
+
+            case 'manual':
+                // Validate both values are provided and check relationship
+                if (!empty($validated['heat_input_kw']) && !empty($validated['primary_flow_rate_ls'])) {
+                    $theoretical = $performanceData->calculateHeatInputFromFlowRate($validated['primary_flow_rate_ls']);
+                    $variance = abs($validated['heat_input_kw'] - $theoretical);
+
+                    if ($variance > 10) { // More than 10 kW difference
+                        return back()->withInput()->with('warning',
+                            "Warning: Heat input ({$validated['heat_input_kw']} kW) differs from theoretical value ({$theoretical} kW) by {$variance} kW. Please verify your values."
+                        );
+                    }
+                }
+                break;
+        }
+
         $performanceData->update($validated);
 
+        $message = 'Performance data updated successfully.';
+        if ($calculationMethod !== 'manual') {
+            $calculatedField = $calculationMethod === 'heat_from_flow' ? 'heat input' : 'flow rate';
+            $message .= " The {$calculatedField} was automatically calculated.";
+        }
+
         return redirect()->route('performance-data.show', $performanceData)
-            ->with('success', 'Performance data updated successfully.');
+            ->with('success', $message);
+    }
+
+    /**
+     * Calculate heat input from flow rate (AJAX endpoint)
+     */
+    public function calculateHeatInput(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate(['flow_rate' => 'required|numeric|min:0']);
+
+        $flowRate = $request->flow_rate;
+        $heatInput = PerformanceData::calculateHeatInputFromFlowRate($flowRate);
+
+        return response()->json([
+            'heat_input' => $heatInput,
+            'formula' => "Heat Input = {$flowRate} l/s × " . PerformanceData::HEAT_TRANSFER_CONSTANT . " = {$heatInput} kW"
+        ]);
+    }
+
+    /**
+     * Calculate flow rate from heat input (AJAX endpoint)
+     */
+    public function calculateFlowRate(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate(['heat_input' => 'required|numeric|min:0']);
+
+        $heatInput = $request->heat_input;
+        $flowRate = PerformanceData::calculateFlowRateFromHeatInput($heatInput);
+
+        return response()->json([
+            'flow_rate' => $flowRate,
+            'formula' => "Flow Rate = {$heatInput} kW ÷ " . PerformanceData::HEAT_TRANSFER_CONSTANT . " = {$flowRate} l/s"
+        ]);
+    }
+
+    /**
+     * Validate heat/flow relationship (AJAX endpoint)
+     */
+    public function validateHeatFlowRelationship(Request $request)
+    {
+        $request->validate([
+            'heat_input' => 'required|numeric|min:0',
+            'flow_rate' => 'required|numeric|min:0'
+        ]);
+
+        $heatInput = $request->heat_input;
+        $flowRate = $request->flow_rate;
+
+        $theoretical = PerformanceData::calculateHeatInputFromFlowRate($flowRate);
+        $variance = abs($heatInput - $theoretical);
+        $percentageError = ($theoretical > 0) ? ($variance / $theoretical) * 100 : 0;
+
+        $isAccurate = $variance <= 5; // 5 kW tolerance
+
+        return response()->json([
+            'is_accurate' => $isAccurate,
+            'theoretical_heat' => $theoretical,
+            'actual_heat' => $heatInput,
+            'variance' => $variance,
+            'percentage_error' => round($percentageError, 2),
+            'message' => $isAccurate
+                ? 'Heat input and flow rate relationship is accurate.'
+                : "Heat input differs from theoretical value by {$variance} kW ({$percentageError}% error)."
+        ]);
+    }
+
+    /**
+     * Auto-correct performance data based on flow rate
+     */
+    public function autoCorrectHeat(PerformanceData $performanceData): RedirectResponse
+    {
+        if (!$performanceData->primary_flow_rate_ls) {
+            return back()->with('error', 'Cannot auto-correct: no flow rate data available.');
+        }
+
+        $oldHeat = $performanceData->heat_input_kw;
+        $corrected = $performanceData->autoCorrectHeatInput();
+
+        if ($corrected) {
+            $performanceData->save();
+            $newHeat = $performanceData->heat_input_kw;
+
+            return back()->with('success',
+                "Heat input auto-corrected from {$oldHeat} kW to {$newHeat} kW based on flow rate ({$performanceData->primary_flow_rate_ls} l/s)."
+            );
+        }
+
+        return back()->with('info', 'Heat input is already accurate, no correction needed.');
+    }
+
+    /**
+     * Auto-correct performance data based on heat input
+     */
+    public function autoCorrectFlow(PerformanceData $performanceData): RedirectResponse
+    {
+        if (!$performanceData->heat_input_kw) {
+            return back()->with('error', 'Cannot auto-correct: no heat input data available.');
+        }
+
+        $oldFlow = $performanceData->primary_flow_rate_ls;
+        $corrected = $performanceData->autoCorrectFlowRate();
+
+        if ($corrected) {
+            $performanceData->save();
+            $newFlow = $performanceData->primary_flow_rate_ls;
+
+            return back()->with('success',
+                "Flow rate auto-corrected from {$oldFlow} l/s to {$newFlow} l/s based on heat input ({$performanceData->heat_input_kw} kW)."
+            );
+        }
+
+        return back()->with('info', 'Flow rate is already accurate, no correction needed.');
+    }
+
+    /**
+     * Bulk auto-correct heat/flow relationships
+     */
+    public function bulkAutoCorrect(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'correction_type' => 'required|in:heat_from_flow,flow_from_heat',
+            'performance_data_ids' => 'required|array',
+            'performance_data_ids.*' => 'exists:performance_data,id'
+        ]);
+
+        $performanceDataRecords = PerformanceData::whereIn('id', $validated['performance_data_ids'])->get();
+        $correctedCount = 0;
+
+        foreach ($performanceDataRecords as $record) {
+            $corrected = false;
+
+            if ($validated['correction_type'] === 'heat_from_flow') {
+                $corrected = $record->autoCorrectHeatInput();
+            } else {
+                $corrected = $record->autoCorrectFlowRate();
+            }
+
+            if ($corrected) {
+                $record->save();
+                $correctedCount++;
+            }
+        }
+
+        $field = $validated['correction_type'] === 'heat_from_flow' ? 'heat input values' : 'flow rate values';
+        $message = "Auto-corrected {$correctedCount} {$field} out of " . count($performanceDataRecords) . " selected records.";
+
+        return redirect()->route('performance-data.index')->with('success', $message);
+    }
+
+    /**
+     * Show data quality report
+     */
+    public function dataQuality(): View
+    {
+        $stats = [
+            'total_records' => PerformanceData::count(),
+            'accurate_records' => PerformanceData::withAccurateHeatFlow()->count(),
+            'inaccurate_records' => PerformanceData::withHeatFlowMismatch()->count(),
+            'missing_heat' => PerformanceData::whereNull('heat_input_kw')->count(),
+            'missing_flow' => PerformanceData::whereNull('primary_flow_rate_ls')->count(),
+        ];
+
+        // Get records with largest variances
+        $problematicRecords = PerformanceData::with(['version.product', 'temperatureProfile'])
+            ->withHeatFlowMismatch(5)
+            ->limit(20)
+            ->get()
+            ->map(function ($record) {
+                return [
+                    'record' => $record,
+                    'theoretical_heat' => $record->theoretical_heat_input,
+                    'variance' => $record->heat_input_variance
+                ];
+            })
+            ->sortByDesc('variance');
+
+        return view('performance-data.data-quality', compact('stats', 'problematicRecords'));
     }
 
     /**
@@ -451,7 +740,7 @@ class PerformanceDataController extends Controller
     /**
      * Compare performance data
      */
-    public function compare(Request $request): View
+    public function compare(Request $request)
     {
         $performanceDataIds = $request->input('ids', []);
 
