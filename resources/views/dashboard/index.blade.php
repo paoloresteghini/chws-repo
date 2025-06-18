@@ -112,21 +112,17 @@
                             <h3 class="kt-card-title">Versions by Product</h3>
                         </div>
                         <div class="kt-card-body px-6 py-6">
-                            <div class="space-y-4">
+                            <div class="flex items-center justify-center" style="height: 300px;">
+                                <canvas id="versionsByProductChart"></canvas>
+                            </div>
+                            <div class="mt-6 space-y-2">
                                 @foreach($stats['versions']['by_product'] as $product => $count)
                                     @php
                                         $percentage = $stats['versions']['total'] > 0 ? round(($count / $stats['versions']['total']) * 100) : 0;
-                                        $colors = ['primary', 'success', 'info', 'warning'];
-                                        $color = $colors[$loop->index % count($colors)];
                                     @endphp
-                                    <div>
-                                        <div class="flex justify-between items-center mb-2">
-                                            <span class="text-sm font-medium text-gray-700">{{ $product }}</span>
-                                            <span class="text-sm text-gray-600">{{ $count }} ({{ number_format($percentage, 1) }}%)</span>
-                                        </div>
-                                        <div class="kt-progress">
-                                            <div class="kt-progress-indicator w-[{{ $percentage }}%]"></div>
-                                        </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm font-medium text-gray-700">{{ $product }}</span>
+                                        <span class="text-sm text-gray-600">{{ $count }} ({{ number_format($percentage, 1) }}%)</span>
                                     </div>
                                 @endforeach
                             </div>
@@ -139,21 +135,17 @@
                             <h3 class="kt-card-title">Performance Data Distribution</h3>
                         </div>
                         <div class="kt-card-body px-6 py-6">
-                            <div class="space-y-4">
+                            <div class="flex items-center justify-center" style="height: 300px;">
+                                <canvas id="performanceDataChart"></canvas>
+                            </div>
+                            <div class="mt-6 space-y-2">
                                 @foreach($stats['performance_data']['by_product'] as $product => $count)
                                     @php
                                         $percentage = $stats['performance_data']['total'] > 0 ? round(($count / $stats['performance_data']['total']) * 100) : 0;
-                                        $colors = ['success', 'info', 'warning', 'primary'];
-                                        $color = $colors[$loop->index % count($colors)];
                                     @endphp
-                                    <div>
-                                        <div class="flex justify-between items-center mb-2">
-                                            <span class="text-sm font-medium text-gray-700">{{ $product }}</span>
-                                            <span class="text-sm text-gray-600">{{ number_format($count) }} ({{ number_format($percentage, 1) }}%)</span>
-                                        </div>
-                                        <div class="kt-progress">
-                                            <div class="kt-progress-indicator w-[{{ $percentage }}%]"></div>
-                                        </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm font-medium text-gray-700">{{ $product }}</span>
+                                        <span class="text-sm text-gray-600">{{ number_format($count) }} ({{ number_format($percentage, 1) }}%)</span>
                                     </div>
                                 @endforeach
                             </div>
@@ -351,3 +343,122 @@
         </div>
     </main>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Versions by Product Pie Chart
+    const versionsByProductCtx = document.getElementById('versionsByProductChart').getContext('2d');
+    const versionsByProductData = {
+        labels: {!! json_encode(array_keys($stats['versions']['by_product'])) !!},
+        datasets: [{
+            data: {!! json_encode(array_values($stats['versions']['by_product'])) !!},
+            backgroundColor: [
+                '#3B82F6', // Blue
+                '#10B981', // Green
+                '#F59E0B', // Amber
+                '#EF4444', // Red
+                '#8B5CF6', // Purple
+                '#EC4899', // Pink
+                '#14B8A6', // Teal
+                '#F97316'  // Orange
+            ],
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    };
+    
+    new Chart(versionsByProductCtx, {
+        type: 'pie',
+        data: versionsByProductData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            label += value + ' (' + percentage + '%)';
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // Performance Data Distribution Pie Chart
+    const performanceDataCtx = document.getElementById('performanceDataChart').getContext('2d');
+    const performanceDataData = {
+        labels: {!! json_encode(array_keys($stats['performance_data']['by_product'])) !!},
+        datasets: [{
+            data: {!! json_encode(array_values($stats['performance_data']['by_product'])) !!},
+            backgroundColor: [
+                '#10B981', // Green
+                '#3B82F6', // Blue
+                '#F59E0B', // Amber
+                '#EF4444', // Red
+                '#8B5CF6', // Purple
+                '#EC4899', // Pink
+                '#14B8A6', // Teal
+                '#F97316'  // Orange
+            ],
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    };
+    
+    new Chart(performanceDataCtx, {
+        type: 'pie',
+        data: performanceDataData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            label += value + ' (' + percentage + '%)';
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+@endpush

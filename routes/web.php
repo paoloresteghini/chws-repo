@@ -29,6 +29,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('products', App\Http\Controllers\ProductController::class);
     Route::resource('versions', VersionController::class);
+    
+    // Attachment routes
+    Route::delete('attachments/{attachment}', [App\Http\Controllers\AttachmentController::class, 'destroy'])->name('attachments.destroy');
+    Route::get('attachments/{attachment}/preview', [App\Http\Controllers\AttachmentController::class, 'preview'])->name('attachments.preview');
 
     Route::resource('temperature-profiles', TemperatureProfileController::class);
     Route::resource('temperature-profiles', TemperatureProfileController::class);
@@ -85,6 +89,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('versions/{version}/performance', [VersionController::class, 'performance'])->name('versions.performance');
     Route::post('versions/bulk-action', [VersionController::class, 'bulkAction'])->name('versions.bulk-action');
     Route::get('versions/export', [VersionController::class, 'export'])->name('versions.export');
+    Route::get('api/versions-by-product/{productId}', [VersionController::class, 'getVersionsByProduct']);
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

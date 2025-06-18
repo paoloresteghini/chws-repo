@@ -7,13 +7,18 @@
         'buttonUrl' => route('temperature-profiles.index'),
     ])
     <main class="grow" id="content" role="content">
+
         <div class="kt-container-fixed">
+
             <!-- Breadcrumb -->
             <div class="flex items-center gap-2 text-sm text-gray-600 mb-6">
                 <a href="{{ route('temperature-profiles.index') }}" class="hover:text-primary">Temperature Profiles</a>
                 <i class="ki-filled ki-right text-xs"></i>
                 <span class="text-gray-900">Create New Profile</span>
             </div>
+
+            @include('partials.errorsbag')
+
 
             <form method="POST" action="{{ route('temperature-profiles.store') }}" class="space-y-6">
                 @csrf

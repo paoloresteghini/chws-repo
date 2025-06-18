@@ -17,7 +17,7 @@
                 <span class="text-gray-900">Edit</span>
             </div>
 
-            <form method="POST" action="{{ route('versions.update', $version->id) }}" class="space-y-6">
+            <form method="POST" action="{{ route('versions.update', $version->id) }}" class="space-y-6" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -211,6 +211,84 @@
                                         <div class="text-xs text-gray-500 mt-1">
                                             Optional: Enter specifications as JSON. This will override individual fields above.
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attachments -->
+                        <div class="kt-card">
+                            <div class="kt-card-header">
+                                <h3 class="kt-card-title">Attachments</h3>
+                                <div class="text-sm text-gray-500">Upload documents, PDFs, and other files</div>
+                            </div>
+                            <div class="kt-card-body px-6 py-6">
+                                <div class="max-w-full">
+                                    @if(isset($version) && $version->attachments->count() > 0)
+                                        <div class="mb-4">
+                                            <p class="text-sm text-muted-foreground mb-2">Current attachments:</p>
+                                            <div class="space-y-2">
+                                                @foreach($version->attachments as $attachment)
+                                                    <div class="flex items-center justify-between p-3 bg-secondary rounded-lg">
+                                                        <div class="flex items-center gap-3">
+                                                            @if($attachment->is_image)
+                                                                <i class="ki-duotone ki-picture text-lg">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                </i>
+                                                            @elseif($attachment->is_pdf)
+                                                                <i class="ki-duotone ki-file-pdf text-lg">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                </i>
+                                                            @else
+                                                                <i class="ki-duotone ki-file text-lg">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                </i>
+                                                            @endif
+                                                            <div>
+                                                                <p class="font-medium">{{ $attachment->name }}</p>
+                                                                <p class="text-xs text-muted-foreground">{{ $attachment->file_name }} ({{ number_format($attachment->file_size / 1024, 2) }} KB)</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center gap-2">
+                                                            @if($attachment->is_image || $attachment->is_pdf)
+                                                                <a href="{{ route('attachments.preview', $attachment) }}" target="_blank" class="kt-btn kt-btn-sm kt-btn-info" title="Preview">
+                                                                    <i class="ki-filled ki-eye"></i>
+                                                                </a>
+                                                            @endif
+{{--                                                            <a href="{{ $attachment->url }}" target="_blank" class="kt-btn kt-btn-sm kt-btn-secondary" title="Download">--}}
+{{--                                                                <i class="ki-filled ki-download"></i>--}}
+{{--                                                            </a>--}}
+                                                            <button type="button" onclick="deleteAttachment({{ $attachment->id }})" class="kt-btn kt-btn-sm kt-btn-destructive" title="Delete">
+                                                                <i class="ki-filled ki-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="space-y-3">
+                                        <div id="attachment-fields" class="space-y-2">
+                                            <div class="attachment-field-group flex gap-2 items-center">
+                                                <div class="kt-input flex-1">
+                                                    <input class="input" type="text" name="attachment_names[]" placeholder="Attachment name">
+                                                </div>
+                                                <div class="kt-input flex-1">
+                                                    <input class="input" type="file" name="attachments[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.gif">
+                                                </div>
+                                                <button type="button" onclick="removeAttachmentField(this)" class="kt-btn kt-btn-sm kt-btn-icon kt-btn-danger" title="Remove">
+                                                    <i class="ki-filled ki-cross"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <button type="button" id="add-attachment" class="kt-btn kt-btn-sm kt-btn-secondary">
+                                            <i class="ki-filled ki-plus-circle"></i>
+                                            Add Another Attachment
+                                        </button>
+                                        <p class="text-xs text-muted-foreground">Supported formats: PDF, DOC, DOCX, XLS, XLSX, TXT, PNG, JPG, JPEG, GIF</p>
                                     </div>
                                 </div>
                             </div>
@@ -454,6 +532,65 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Set initial state based on current product
             loadCategories();
+
+            // Add attachment functionality
+            const addButton = document.getElementById('add-attachment');
+            const attachmentFields = document.getElementById('attachment-fields');
+
+            addButton.addEventListener('click', function() {
+                const newFieldGroup = document.createElement('div');
+                newFieldGroup.className = 'attachment-field-group flex gap-2 items-center';
+                newFieldGroup.innerHTML = `
+                    <div class="kt-input flex-1">
+                        <input class="input" type="text" name="attachment_names[]" placeholder="Attachment name">
+                    </div>
+                    <div class="kt-input flex-1">
+                        <input class="input" type="file" name="attachments[]" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.gif">
+                    </div>
+                    <button type="button" onclick="removeAttachmentField(this)" class="kt-btn kt-btn-sm kt-btn-icon kt-btn-danger" title="Remove">
+                        <i class="ki-filled ki-cross"></i>
+                    </button>
+                `;
+                attachmentFields.appendChild(newFieldGroup);
+            });
         });
+
+        function removeAttachmentField(button) {
+            const fieldGroup = button.closest('.attachment-field-group');
+            const attachmentFields = document.getElementById('attachment-fields');
+            
+            // Only remove if there's more than one field group
+            if (attachmentFields.querySelectorAll('.attachment-field-group').length > 1) {
+                fieldGroup.remove();
+            } else {
+                // Clear the inputs if it's the last one
+                fieldGroup.querySelectorAll('input').forEach(input => input.value = '');
+            }
+        }
+
+        function deleteAttachment(id) {
+            if (confirm('Are you sure you want to delete this attachment?')) {
+                fetch(`/attachments/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the attachment element from the DOM
+                        location.reload();
+                    } else {
+                        alert('Failed to delete attachment');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to delete attachment');
+                });
+            }
+        }
     </script>
 @endsection

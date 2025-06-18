@@ -29,10 +29,6 @@
                                 <table class="kt-table kt-table-border table-fixed" data-kt-datatable-table="true" id="version_categories_table">
                                     <thead>
                                     <tr>
-                                        <th class="w-[50px]">
-                                            <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-check="true" type="checkbox">
-                                            </input>
-                                        </th>
                                         <th class="w-[150px]">
                  <span class="kt-table-col">
                   <span class="kt-table-col-label">
@@ -83,10 +79,6 @@
                                     <tbody>
                                     @foreach($categories as $category)
                                         <tr>
-                                            <td>
-                                                <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-row-check="true" type="checkbox" value="1">
-                                                </input>
-                                            </td>
                                             <td>
                                                 <div class="flex flex-col gap-2">
                                                     <span class="leading-none font-medium text-sm text-mono">

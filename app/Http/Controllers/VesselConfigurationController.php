@@ -65,7 +65,12 @@ class VesselConfigurationController extends Controller
 
         // Get filter options
         $products = Product::where('has_vessel_options', true)->orderBy('name')->get();
-        $versions = Version::where('has_vessel_options', true)->with('product')->orderBy('model_number')->get();
+        $versions = $request->filled('product_id')
+            ? Version::where('product_id', $request->product_id)
+                ->where('has_vessel_options', true)
+                ->orderBy('model_number')
+                ->get()
+            : collect();
         $capacityUnits = VesselConfiguration::distinct()->pluck('capacity_unit');
 
         // Get statistics

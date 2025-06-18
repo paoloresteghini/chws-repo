@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Product extends Model
 {
@@ -27,6 +28,8 @@ class Product extends Model
         'product_specific_fields' => 'array',
     ];
 
+    protected $appends = ['image_url'];
+
     // RELATIONSHIPS
 
     public function versions(): HasMany
@@ -42,6 +45,11 @@ class Product extends Model
     public function categories(): HasMany
     {
         return $this->hasMany(VersionCategory::class);
+    }
+
+    public function attachments(): MorphMany
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 
     public function hasFeature(string $featureKey): bool
@@ -89,5 +97,15 @@ class Product extends Model
     public function scopeByType($query, $type)
     {
         return $query->where('type', $type);
+    }
+
+    // ACCESSORS
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            return \Storage::disk('public')->url($this->image);
+        }
+        return null;
     }
 }

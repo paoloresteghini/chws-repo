@@ -11,17 +11,104 @@
         </div>
         <div class="kt-container-fixed">
             <div class="grid gap-5 lg:gap-7.5">
+                <!-- Filter Section -->
+                <div class="kt-card">
+                    <div class="kt-card-header">
+                        <h3 class="kt-card-title">Filters</h3>
+                    </div>
+                    <div class="kt-card-body px-5 py-5">
+                        <form method="GET" action="{{ route('temperature-profiles.index') }}" class="flex flex-wrap gap-4 items-end">
+                            <!-- Primary Temperature Range -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-medium text-gray-700">Primary Temperature (°C)</label>
+                                <div class="flex gap-2 items-center">
+                                    <input type="number" name="primary_temp_min" value="{{ request('primary_temp_min') }}" placeholder="Min" class="kt-input w-20" step="1">
+                                    <span class="text-gray-500">-</span>
+                                    <input type="number" name="primary_temp_max" value="{{ request('primary_temp_max') }}" placeholder="Max" class="kt-input w-20" step="1">
+                                </div>
+                            </div>
+
+                            <!-- Secondary Temperature Range -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-medium text-gray-700">Secondary Temperature (°C)</label>
+                                <div class="flex gap-2 items-center">
+                                    <input type="number" name="secondary_temp_min" value="{{ request('secondary_temp_min') }}" placeholder="Min" class="kt-input w-20" step="1">
+                                    <span class="text-gray-500">-</span>
+                                    <input type="number" name="secondary_temp_max" value="{{ request('secondary_temp_max') }}" placeholder="Max" class="kt-input w-20" step="1">
+                                </div>
+                            </div>
+
+                            <!-- Status Filter -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-medium text-gray-700">Status</label>
+                                <select name="status" class="kt-select w-32">
+                                    <option value="">All Status</option>
+                                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inactive</option>
+                                </select>
+                            </div>
+
+                            <!-- Search -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-medium text-gray-700">Search</label>
+                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search profiles..." class="kt-input w-48">
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex gap-2">
+                                <button type="submit" class="kt-btn kt-btn-primary">
+                                    <i class="ki-filled ki-magnifier"></i>
+                                    Filter
+                                </button>
+                                <a href="{{ route('temperature-profiles.index') }}" class="kt-btn kt-btn-secondary">
+                                    <i class="ki-filled ki-cross"></i>
+                                    Reset
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+{{--                <!-- Statistics Card -->--}}
+{{--                @if(isset($stats))--}}
+{{--                <div class="kt-card">--}}
+{{--                    <div class="kt-card-body">--}}
+{{--                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">--}}
+{{--                            <div class="flex flex-col">--}}
+{{--                                <span class="text-xs text-gray-500 uppercase">Total Profiles</span>--}}
+{{--                                <span class="text-2xl font-semibold">{{ $stats['total_profiles'] }}</span>--}}
+{{--                            </div>--}}
+{{--                            <div class="flex flex-col">--}}
+{{--                                <span class="text-xs text-gray-500 uppercase">Active Profiles</span>--}}
+{{--                                <span class="text-2xl font-semibold text-success">{{ $stats['active_profiles'] }}</span>--}}
+{{--                            </div>--}}
+{{--                            <div class="flex flex-col">--}}
+{{--                                <span class="text-xs text-gray-500 uppercase">Used in Tests</span>--}}
+{{--                                <span class="text-2xl font-semibold text-primary">{{ $stats['used_profiles'] }}</span>--}}
+{{--                            </div>--}}
+{{--                            <div class="flex flex-col">--}}
+{{--                                <span class="text-xs text-gray-500 uppercase">Temperature Range</span>--}}
+{{--                                <div class="text-sm">--}}
+{{--                                    <div>Primary: {{ $stats['temp_range']['primary_min'] }}° - {{ $stats['temp_range']['primary_max'] }}°</div>--}}
+{{--                                    <div>Secondary: {{ $stats['temp_range']['secondary_min'] }}° - {{ $stats['temp_range']['secondary_max'] }}°</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                @endif--}}
+
                 <div class="kt-card kt-card-grid h-full min-w-full">
                     <div class="kt-card-header">
                         <h3 class="kt-card-title">
                             Temperature Profiles
                         </h3>
-                        <div class="kt-input max-w-48">
-                            <i class="ki-filled ki-magnifier">
-                            </i>
-                            <input data-kt-datatable-search="#temperature_profiles_table" placeholder="Search Profiles" type="text">
-                            </input>
-                        </div>
+    {{--                        <div class="kt-input max-w-48">--}}
+    {{--                            <i class="ki-filled ki-magnifier">--}}
+    {{--                            </i>--}}
+    {{--                            <input data-kt-datatable-search="#temperature_profiles_table" placeholder="Search Profiles" type="text">--}}
+    {{--                            </input>--}}
+    {{--                        </div>--}}
                     </div>
                     <div class="kt-card-table">
                         <div class="grid" data-kt-datatable="true" data-kt-datatable-page-size="5" id="temperature_profiles_datatable">
@@ -29,10 +116,7 @@
                                 <table class="kt-table kt-table-border table-fixed" data-kt-datatable-table="true" id="temperature_profiles_table">
                                     <thead>
                                     <tr>
-                                        <th class="w-[50px]">
-                                            <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-check="true" type="checkbox">
-                                            </input>
-                                        </th>
+
                                         <th class="w-[200px]">
                  <span class="kt-table-col">
                   <span class="kt-table-col-label">
@@ -83,10 +167,6 @@
                                     <tbody>
                                     @foreach($profiles as $profile)
                                         <tr>
-                                            <td>
-                                                <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-row-check="true" type="checkbox" value="1">
-                                                </input>
-                                            </td>
                                             <td>
                                                 <div class="flex flex-col gap-2">
                                                     <a class="leading-none font-medium text-sm text-mono hover:text-primary" href="{{ route('temperature-profiles.show', $profile->id) }}">

@@ -75,6 +75,8 @@
                                         </div>
                                     </div>
 
+                                </div>
+                                <div class="grid md:grid-cols-1 gap-6 mt-6">
                                     <!-- Temperature Profile -->
                                     <div class="kt-form-item">
                                         <label for="temperature_profile_id" class="kt-form-label">Temperature Profile</label>
@@ -145,14 +147,14 @@
                                     <label class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                                         <input type="radio" name="calculation_method" value="heat_from_flow" class="kt-radio" onchange="toggleCalculationMethod()">
                                         <div>
-                                            <div class="font-medium text-gray-900">Calculate Heat from Flow</div>
+                                            <div class="font-medium text-gray-900">Heat from Flow</div>
                                             <div class="text-sm text-gray-500">Enter flow rate, get heat input</div>
                                         </div>
                                     </label>
                                     <label class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                                         <input type="radio" name="calculation_method" value="flow_from_heat" class="kt-radio" onchange="toggleCalculationMethod()">
                                         <div>
-                                            <div class="font-medium text-gray-900">Calculate Flow from Heat</div>
+                                            <div class="font-medium text-gray-900">Flow from Heat</div>
                                             <div class="text-sm text-gray-500">Enter heat input, get flow rate</div>
                                         </div>
                                     </label>

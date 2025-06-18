@@ -92,9 +92,6 @@
                                 <table class="kt-table kt-table-border table-fixed" data-kt-datatable-table="true" id="versions_table">
                                     <thead>
                                     <tr>
-                                        <th class="w-[50px]">
-                                            <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-check="true" type="checkbox">
-                                        </th>
                                         <th class="w-[120px]">
                                             <span class="kt-table-col">
                                                 <span class="kt-table-col-label">Product</span>
@@ -147,9 +144,6 @@
                                     <tbody>
                                     @foreach($versions as $version)
                                         <tr>
-                                            <td>
-                                                <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-row-check="true" type="checkbox" value="{{ $version->id }}">
-                                            </td>
                                             <td>
                                                 <div class="flex items-center gap-2">
                                                     <div class="flex flex-col">

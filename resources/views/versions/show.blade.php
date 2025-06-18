@@ -223,6 +223,64 @@
                     </div>
                 </div>
 
+                <!-- Attachments -->
+                @if($version->attachments->count() > 0)
+                    <div class="kt-card">
+                        <div class="kt-card-header">
+                            <h3 class="kt-card-title">
+                                Attachments
+                                <span class="text-sm text-gray-500 font-normal">({{ $version->attachments->count() }} files)</span>
+                            </h3>
+                            <a href="{{ route('versions.edit', $version->id) }}#attachments" class="kt-btn kt-btn-sm kt-btn-primary">
+                                <i class="ki-filled ki-plus"></i>
+                                Add More
+                            </a>
+                        </div>
+                        <div class="kt-card-body px-6 py-6">
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                @foreach($version->attachments as $attachment)
+                                    <div class="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors">
+                                        <div class="flex items-start gap-3">
+                                            <div class="flex-shrink-0">
+                                                @if($attachment->is_image)
+                                                    <i class="ki-duotone ki-picture text-2xl text-info">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                    </i>
+                                                @elseif($attachment->is_pdf)
+                                                    <i class="ki-duotone ki-file-pdf text-2xl text-danger">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                    </i>
+                                                @else
+                                                    <i class="ki-duotone ki-file text-2xl text-gray-500">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                    </i>
+                                                @endif
+                                            </div>
+                                            <div class="flex-grow min-w-0">
+                                                <p class="font-medium text-gray-900 truncate">{{ $attachment->name }}</p>
+                                                <p class="text-xs text-gray-500">{{ $attachment->file_name }}</p>
+                                                <p class="text-xs text-gray-400">{{ number_format($attachment->file_size / 1024, 2) }} KB</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-3">
+                                            @if($attachment->is_image || $attachment->is_pdf)
+                                                <a href="{{ route('attachments.preview', $attachment) }}" target="_blank"
+                                                   class="kt-btn kt-btn-sm kt-btn-outline w-full" title="Preview">
+                                                    <i class="ki-filled ki-eye"></i>
+                                                    Preview
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Vessel Configurations -->
                 @if($version->has_vessel_options && $version->vesselConfigurations->count() > 0)
                     <div class="kt-card">

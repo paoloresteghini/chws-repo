@@ -6,9 +6,12 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Version;
 use App\Models\VersionCategory;
+use App\Models\Attachment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class VersionController extends Controller
 {
@@ -144,7 +147,8 @@ class VersionController extends Controller
             'category',
             'vesselConfigurations',
             'performanceData.temperatureProfile',
-            'performanceData.vesselConfiguration'
+            'performanceData.vesselConfiguration',
+            'attachments'
         ]);
 
         // Get performance data grouped by temperature profiles
@@ -168,6 +172,7 @@ class VersionController extends Controller
      */
     public function edit(Version $version): View
     {
+        $version->load('attachments');
         $products = Product::orderBy('name')->get();
         $categories = VersionCategory::where('product_id', $version->product_id)
             ->orderBy('name')
@@ -232,6 +237,24 @@ class VersionController extends Controller
     }
 
     /**
+     * Get versions for a specific product (AJAX endpoint)
+     */
+    public function getVersionsByProduct($productId, Request $request)
+    {
+        $query = Version::where('product_id', $productId);
+
+        // Check if we need to filter by has_vessel_options
+        if ($request->has('has_vessel_options')) {
+            $query->where('has_vessel_options', true);
+        }
+
+        $versions = $query->orderBy('model_number')
+            ->get(['id', 'model_number', 'name']);
+
+        return response()->json($versions);
+    }
+
+    /**
      * Bulk operations on versions
      */
     public function bulkAction(Request $request): RedirectResponse
@@ -282,6 +305,9 @@ class VersionController extends Controller
             'spec_keys' => 'nullable|array',
             'spec_values' => 'nullable|array',
             'specifications_json' => 'nullable|string',
+            'attachments.*' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,txt,png,jpg,jpeg,gif|max:10240',
+            'attachment_names.*' => 'nullable|string|max:255',
+            'delete_attachments.*' => 'nullable|exists:attachments,id',
         ]);
 
         // Ensure model number is unique per product (excluding current version)
@@ -325,10 +351,51 @@ class VersionController extends Controller
         unset($validated['spec_keys'], $validated['spec_values'], $validated['specifications_json']);
         $validated['specifications'] = $specifications;
 
-        $version->update($validated);
-
-        return redirect()->route('versions.show', $version)
-            ->with('success', 'Version updated successfully.');
+        DB::beginTransaction();
+        
+        try {
+            $version->update($validated);
+            
+            // Handle attachment deletions
+            if ($request->has('delete_attachments')) {
+                $attachmentsToDelete = $version->attachments()->whereIn('id', $request->delete_attachments)->get();
+                foreach ($attachmentsToDelete as $attachment) {
+                    Storage::disk('s3')->delete($attachment->file_path);
+                    $attachment->delete();
+                }
+            }
+            
+            // Handle new attachments
+            if ($request->hasFile('attachments')) {
+                $attachments = $request->file('attachments');
+                $attachmentNames = $request->input('attachment_names', []);
+                
+                foreach ($attachments as $index => $file) {
+                    if ($file) {
+                        $path = $file->store('version-attachments/' . $version->id, 's3');
+                        $name = isset($attachmentNames[$index]) && !empty($attachmentNames[$index]) 
+                            ? $attachmentNames[$index] 
+                            : pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                        
+                        $version->attachments()->create([
+                            'name' => $name,
+                            'file_path' => $path,
+                            'file_name' => $file->getClientOriginalName(),
+                            'mime_type' => $file->getMimeType(),
+                            'file_size' => $file->getSize(),
+                        ]);
+                    }
+                }
+            }
+            
+            DB::commit();
+            
+            return redirect()->route('versions.show', $version)
+                ->with('success', 'Version updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Failed to update version: ' . $e->getMessage());
+        }
     }
 
     /**

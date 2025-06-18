@@ -3,7 +3,11 @@
     "allow": [
       "Bash(grep:*)",
       "WebFetch(domain:ktui.io)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(php artisan make:migration:*)",
+      "Bash(php artisan make:resource:*)",
+      "Bash(php artisan:*)",
+      "Bash(composer:*)"
     ],
     "deny": []
   }

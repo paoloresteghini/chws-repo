@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         $query = Product::with(['versions' => function($q) {
             $q->where('status', true);
-        }]);
+        }, 'attachments']);
 
         // Optional filtering
         if ($request->filled('type')) {
@@ -213,7 +213,7 @@ class ProductController extends Controller
     {
         $models = $product->versions()
             ->where('status', true)
-            ->with(['vesselConfigurations', 'performanceData'])
+            ->with(['vesselConfigurations', 'performanceData', 'attachments'])
             ->orderBy('model_number')
             ->get()
             ->map(function($version) {
@@ -228,6 +228,20 @@ class ProductController extends Controller
                             'name' => $vessel->name,
                             'capacity' => $vessel->capacity,
                             'capacity_unit' => $vessel->capacity_unit,
+                        ];
+                    }),
+                    'attachments' => $version->attachments->map(function ($attachment) {
+                        return [
+                            'id' => $attachment->id,
+                            'name' => $attachment->name,
+                            'file_name' => $attachment->file_name,
+                            'mime_type' => $attachment->mime_type,
+                            'file_size' => $attachment->file_size,
+                            'url' => $attachment->url,
+                            'is_image' => $attachment->is_image,
+                            'is_pdf' => $attachment->is_pdf,
+                            'is_document' => $attachment->is_document,
+                            'created_at' => $attachment->created_at->toISOString(),
                         ];
                     }),
                     'performance_records_count' => $version->performanceData->count(),

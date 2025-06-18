@@ -24,10 +24,7 @@
                                 <table class="kt-table kt-table-border table-fixed" data-kt-datatable-table="true" id="products_table">
                                     <thead>
                                     <tr>
-                                        <th class="w-[50px]">
-                                            <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-check="true" type="checkbox">
-                                            </input>
-                                        </th>
+
                                         <th class="w-[150px]">
                  <span class="kt-table-col">
                   <span class="kt-table-col-label">
@@ -70,12 +67,8 @@
                                     @foreach($products as $product)
                                         <tr>
                                             <td>
-                                                <input class="kt-checkbox kt-checkbox-sm" data-kt-datatable-row-check="true" type="checkbox" value="1">
-                                                </input>
-                                            </td>
-                                            <td>
                                                 <div class="flex flex-col gap-2">
-                                                    <a class="leading-none font-medium text-sm text-mono hover:text-primary" href="#">
+                                                    <a class="leading-none font-medium text-sm text-mono hover:text-primary" href="{{ route('products.show', $product->id) }}">
                                                         {{ $product->name }}
                                                     </a>
                                                 </div>
@@ -89,10 +82,14 @@
                                                 {{ $product->created_at->format('d M Y') }}
                                             </td>
                                             <td>
-                                                <a href="{{ route('products.edit', $product->id) }}" class="kt-btn kt-btn-sm kt-btn-primary">
-                                                    <i class="ki-filled ki-pencil"></i>
-                                                    Edit
-                                                </a>
+                                                <div class="flex gap-1">
+                                                    <a href="{{ route('products.show', $product->id) }}" class="kt-btn kt-btn-sm kt-btn-light">
+                                                        <i class="ki-filled ki-eye"></i>
+                                                    </a>
+                                                    <a href="{{ route('products.edit', $product->id) }}" class="kt-btn kt-btn-sm kt-btn-primary">
+                                                        <i class="ki-filled ki-pencil"></i>
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

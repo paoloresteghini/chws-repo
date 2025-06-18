@@ -1,12 +1,11 @@
 <?php
 
-// File: app/Http/Resources/ProductResource.php
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class VersionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,20 +16,17 @@ class ProductResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'model_number' => $this->model_number,
             'name' => $this->name,
-            'type' => $this->type,
             'description' => $this->description,
-            'has_temperature_profiles' => $this->has_temperature_profiles,
+            'status' => $this->status,
             'has_vessel_options' => $this->has_vessel_options,
-            'features' => $this->when($this->relationLoaded('features'), function () {
-                return $this->features->map(function ($feature) {
-                    return [
-                        'key' => $feature->feature_key,
-                        'name' => $feature->feature_name,
-                        'enabled' => $feature->is_enabled,
-                        'config' => $feature->feature_config,
-                    ];
-                });
+            'specifications' => $this->specifications,
+            'category' => $this->when($this->relationLoaded('category'), function () {
+                return [
+                    'id' => $this->category->id,
+                    'name' => $this->category->name,
+                ];
             }),
             'attachments' => $this->when($this->relationLoaded('attachments'), function () {
                 return $this->attachments->map(function ($attachment) {
@@ -46,16 +42,6 @@ class ProductResource extends JsonResource
                         'is_document' => $attachment->is_document,
                         'created_at' => $attachment->created_at->toISOString(),
                     ];
-                });
-            }),
-            'versions_count' => $this->when($this->relationLoaded('versions'), function () {
-                return $this->versions->where('status', true)->count();
-            }),
-            'performance_records_count' => $this->when($this->relationLoaded('versions'), function () {
-                return $this->versions->sum(function ($version) {
-                    return $version->relationLoaded('performanceData')
-                        ? $version->performanceData->count()
-                        : 0;
                 });
             }),
             'created_at' => $this->created_at->toISOString(),
